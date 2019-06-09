@@ -1,0 +1,23 @@
+mat-panel-title {
+  align-self: center
+}
+
+mat-panel-description {
+	justify-content: flex-end;
+}
+
+mat-panel-description span {
+	align-self: center;
+}
+
+.mat-expansion-panel-spacing {
+  margin: 16px 0px !important;
+}
+
+:host:first-child .mat-expansion-panel-spacing {
+  margin-top: 0px !important;
+}
+
+:host:last-child .mat-expansion-panel-spacing {
+  margin-bottom: 0px !important;
+}

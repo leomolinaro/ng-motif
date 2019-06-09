@@ -1,0 +1,49 @@
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.log-row {
+  height: auto !important;
+  padding: 0!important;
+  font-size: 10px
+}
+
+.log-row.round { font-size: 20px }
+.log-row.nation-turn { font-size: 15px }
+.log-row.phase { font-size: 13px }
+
+.log-row /deep/.mat-list-item-content {
+  padding: 0 0!important;
+}
+
+.left-sidenav {
+  padding: 10px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.left-sidenav mat-list {
+  width: 100%
+}
+
+.nation-sidenav {
+  width: 500px;
+  max-width: 100%;
+}
+
+mat-toolbar {
+  position: fixed;
+  height: 50px;
+  z-index: 1000;
+}
+
+mat-sidenav-content {
+  margin-top: 50px;
+  /* margin-right: 200px */
+}
+
+::ng-deep .mat-drawer-backdrop {
+  display: none!important;
+}

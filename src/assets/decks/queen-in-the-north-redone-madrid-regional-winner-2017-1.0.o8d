@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="30c200c9-6c98-49a4-a293-106c06295c05" sleeveid="0">
+  <section name="Faction" shared="False">
+    <card qty="1" id="8e8d97bb-fc50-4830-86b9-a09c64308641">House Stark</card>
+  </section>
+  <section name="Agenda" shared="False">
+    <card qty="1" id="83754e87-8448-49af-a20f-bc4dc72d1dba">Fealty</card>
+  </section>
+  <section name="Plots" shared="False">
+    <card qty="1" id="34e54ffc-9806-49da-a8a0-d38a17f6753d">Building Orders</card>
+    <card qty="1" id="446ac0b9-746f-4aa3-b8bf-f132d2b29499">Confiscation</card>
+    <card qty="1" id="a380b0e0-610c-47f9-ac9f-ae12163b45fd">Summons</card>
+    <card qty="1" id="8afd45ae-22de-4569-8c69-cb34d618c7f6">A Time For Wolves</card>
+    <card qty="1" id="987542a3-65f3-4af8-9907-d701f4139f13">Winter Festival</card>
+    <card qty="1" id="acd6cfc8-f2aa-4b08-baf1-aad44a7c56ad">Ghosts of Harrenhal</card>
+    <card qty="1" id="3d6f90f0-f1b5-45a5-895e-8f8bc1a33763">Late Summer Feast</card>
+  </section>
+  <section name="Characters" shared="False">
+    <card qty="3" id="abf9c701-f480-4576-a5c0-44b4e9b04e6c">Arya Stark</card>
+    <card qty="3" id="9e56783a-c133-4f81-9914-4e81b92ba5d1">Bran Stark</card>
+    <card qty="3" id="d892faa0-09c4-41ec-8705-abe2c1c87c83">Robb Stark</card>
+    <card qty="3" id="64cc68a4-6484-4178-a4a6-ddb24978fe09">Sansa Stark</card>
+    <card qty="2" id="713ee651-63b9-4eee-aebe-62163b394cd6">Summer</card>
+    <card qty="3" id="ea996816-e75f-4c13-ac0f-97b96818b220">Winterfell Steward</card>
+    <card qty="1" id="a1532c17-62ab-49b2-b5f3-cbb5f2d5d590">Maester Luwin</card>
+    <card qty="1" id="c8c63b0d-d3ea-4529-8022-1447655e740f">Hodor</card>
+    <card qty="1" id="8372e3e1-b4ce-439e-81d2-a697234a2463">Septa Mordane</card>
+    <card qty="3" id="6713798f-9130-4a48-8eb8-e79bd28915b6">Catelyn Stark</card>
+    <card qty="3" id="290db749-0990-4d89-9393-e71a6f75def9">Jon Snow</card>
+    <card qty="3" id="76394813-4c7b-468b-89e2-84d55f2affec">Jory Cassel</card>
+    <card qty="1" id="e10b3d09-765f-4a93-ba53-f3b7fd0348f8">Osha</card>
+    <card qty="1" id="dc23a59b-b27b-45fb-b6bb-18e1ae6c43d8">Donella Hornwood</card>
+    <card qty="1" id="2a1b1309-03f5-4bc6-be60-ce75d69af53c">Jojen Reed</card>
+    <card qty="1" id="0805e26b-4a01-4397-9ad3-5b1d26b970fd">Dacey Mormont</card>
+    <card qty="1" id="583c3350-7b21-4f12-8da2-1b4923e7b290">Jeyne Poole</card>
+  </section>
+  <section name="Locations" shared="False">
+    <card qty="1" id="32b0d392-802e-4b0b-9df5-dd0eeee256b9">The Iron Throne</card>
+    <card qty="3" id="51a3e04f-3f44-4417-8d7c-1f116acd5c80">The Roseroad</card>
+    <card qty="3" id="5f5c0380-034b-4fa0-9da5-9c53b098baed">Heart Tree Grove</card>
+    <card qty="3" id="8be65781-8e10-489f-9d5c-a7e1583cafaf">Winterfell</card>
+    <card qty="3" id="c9a89843-da1a-4b7b-a950-c7131b4098fe">Great Hall</card>
+    <card qty="2" id="d44f725d-c630-4ef3-8c4a-06d0234ee468">Flea Bottom</card>
+  </section>
+  <section name="Attachments" shared="False">
+    <card qty="3" id="f5173e6f-1ec3-4ee0-8274-755160c57c0e">Bodyguard</card>
+    <card qty="3" id="a8bebc54-d01c-424d-8839-460ec09b733f">Milk of the Poppy</card>
+    <card qty="1" id="d4827a8a-6403-4d47-bb47-813073b78b49">Lady</card>
+    <card qty="2" id="2b3f8c07-5602-4dc0-9929-5c1f8ca9cfd6">Frozen Solid</card>
+    <card qty="2" id="20f6acbc-608c-43fb-b781-7f614d656bd6">Marriage Pact</card>
+  </section>
+  <section name="Events" shared="False">
+  </section>
+<notes><![CDATA[]]></notes>
+</deck>

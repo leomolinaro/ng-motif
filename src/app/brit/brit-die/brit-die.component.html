@@ -1,0 +1,15 @@
+<ng-container *ngIf="unit$ | async as unit">
+  <img
+    [src]="unit.imageSource"
+    height="30px" width="30px">
+</ng-container>
+<img
+  *ngIf="die.result"
+  [src]="'../../assets/brit/dice/' + die.result + '.png'"
+  height="30px" width="30px"
+  style="border-radius: 4px; margin-left: 4px;">
+<img
+  *ngIf="!die.result"
+  src="../../assets/brit/dice/null.png"
+  height="30px" width="30px"
+  style="border-radius: 4px; margin-left: 4px;">

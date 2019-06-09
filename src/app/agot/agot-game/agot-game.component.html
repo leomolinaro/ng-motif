@@ -1,0 +1,41 @@
+<mat-toolbar>
+  <button mat-icon-button style="margin-right: 16px;" (click)="openSidenav ()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Agot LCG</span>
+  <span class="toolbar-spacer"></span>
+  <button mat-icon-button style="margin-right: 16px;" (click)="debugState ()">
+    <mat-icon>bug_report</mat-icon>
+  </button>
+  <button mat-button>
+    <mat-icon>person</mat-icon>
+    {{ user }}
+  </button>
+</mat-toolbar>
+<img
+  style="position: fixed; z-index:2001;"
+  src="http://lcg-cdn.fantasyflightgames.com/got2nd/GT01_11.jpg"
+  *ngIf="cardHover$ | async"
+  [style.right]="(cardHover$ | async).left ? null : 0"
+  [src]="(cardHover$ | async).card.imageSource"
+>
+<mat-sidenav-container (backdropClick)="closeSidenav ()">
+  <mat-sidenav #sidenav (keydown.escape)="closeSidenav ()" style="width: 500px;" fixedInViewport="true" fixedTopGap="50">
+    <agot-actions (dispatch)="dispatch ($event)"></agot-actions>
+  </mat-sidenav>
+  <mat-sidenav class="log-sidenav" id="log-sidenav" mode="side" opened="true" position="end" fixedInViewport="true" fixedTopGap="50">
+    <mat-list>
+      <mat-list-item
+        class="log-row"
+        *ngFor="let logRow of logRows$ | async"
+        [ngClass]="{'round': logRow.type == 'ROUND', 'phase': logRow.type == 'PHASE', 'step': logRow.type == 'STEP'}">
+        {{logRow.message}}
+      </mat-list-item>
+    </mat-list>
+    <agot-button-list></agot-button-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <agot-table *ngIf="gameStarted$ | async"></agot-table>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

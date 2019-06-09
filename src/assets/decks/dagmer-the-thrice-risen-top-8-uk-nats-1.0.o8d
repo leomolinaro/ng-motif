@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="30c200c9-6c98-49a4-a293-106c06295c05" sleeveid="0">
+  <section name="Faction" shared="False">
+    <card qty="1" id="0eb74218-f78e-43ed-898f-a9175883a437">House Greyjoy</card>
+  </section>
+  <section name="Agenda" shared="False">
+    <card qty="1" id="83754e87-8448-49af-a20f-bc4dc72d1dba">Fealty</card>
+  </section>
+  <section name="Plots" shared="False">
+    <card qty="1" id="de88edda-f5a4-4985-8ac1-2b8205c13416">A Clash of Kings</card>
+    <card qty="1" id="0fb3ad4b-5cf3-49e9-a33f-484ecafeabf8">A Noble Cause</card>
+    <card qty="1" id="446ac0b9-746f-4aa3-b8bf-f132d2b29499">Confiscation</card>
+    <card qty="2" id="1b362220-c8c2-4600-b204-06342e58b09c">Counting Coppers</card>
+    <card qty="1" id="3d6b03c9-34d4-4baf-9403-67930d71ca2d">The First Snow of Winter</card>
+    <card qty="1" id="99ff1e49-02ae-4606-bffe-0c614ed5e5dd">Valar Morghulis</card>
+  </section>
+  <section name="Characters" shared="False">
+    <card qty="3" id="c4fbe19b-fe3b-4f5c-b1c6-065c13c4a9db">Aeron Damphair</card>
+    <card qty="3" id="912e5447-89b3-4896-903c-6f5ed78113e1">Euron Crow&#039;s Eye</card>
+    <card qty="3" id="1ea5aae7-d6c0-4589-afe1-c190743ebdbf">Iron Islands Fishmonger</card>
+    <card qty="3" id="23ca65d8-2c23-4d39-8c21-72323af0fc93">Lordsport Shipwright</card>
+    <card qty="1" id="b84d32df-3796-4f8c-b26f-be68a763a3eb">The Reader</card>
+    <card qty="3" id="da4f827e-f5d1-4317-b243-1b3767b677d0">Dagmer Cleftjaw</card>
+    <card qty="3" id="a3400087-4d9d-450f-ad75-78de71a60ace">Balon Greyjoy</card>
+    <card qty="3" id="47a18fe0-a296-4d1b-9936-319a1089ad3c">Esgred</card>
+    <card qty="3" id="e5ac9f1c-e422-441d-b155-109040e45b27">Victarion Greyjoy</card>
+    <card qty="3" id="12f3b812-c96f-4008-a3e2-870aebebd7cc">Wex Pyke</card>
+    <card qty="3" id="1b2641e2-95c7-48d0-9b43-00fff73f8af7">Theon Greyjoy</card>
+    <card qty="2" id="98a9b8e9-55af-437f-88dd-8a2cf6ba48c6">Silence&#039;s Crew</card>
+  </section>
+  <section name="Locations" shared="False">
+    <card qty="2" id="32b0d392-802e-4b0b-9df5-dd0eeee256b9">The Iron Throne</card>
+    <card qty="3" id="51a3e04f-3f44-4417-8d7c-1f116acd5c80">The Roseroad</card>
+    <card qty="1" id="014da37c-9903-418d-a043-ee2191b9d169">Great Kraken</card>
+    <card qty="3" id="6357f740-5434-4d09-957a-87af33f9b57b">Iron Fleet Scout</card>
+    <card qty="3" id="3bcc0681-2362-4c2a-8e17-e20e23dbda3c">Sea Tower</card>
+    <card qty="3" id="5ad0b950-40c8-4a29-8128-10c81eb862e0">Iron Mines</card>
+    <card qty="2" id="845ea31e-ffcd-4fc5-b272-4811f986eacb">Iron Islands Market</card>
+    <card qty="3" id="c9a89843-da1a-4b7b-a950-c7131b4098fe">Great Hall</card>
+  </section>
+  <section name="Attachments" shared="False">
+  </section>
+  <section name="Events" shared="False">
+    <card qty="2" id="c5d78fb6-ff52-4012-ac95-547ed9feec0f">The Hand&#039;s Judgment</card>
+    <card qty="3" id="0e42b4fb-8a0e-40d1-a398-fd9c0f7912a4">Risen from the Sea</card>
+    <card qty="2" id="62570a84-3203-468d-9529-37dbbc6d191c">We Do Not Sow</card>
+  </section>
+<notes><![CDATA[]]></notes>
+</deck>

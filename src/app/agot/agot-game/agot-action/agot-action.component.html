@@ -1,0 +1,13 @@
+<mat-expansion-panel hideToggle="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{title}}</mat-panel-title>
+    <mat-panel-description>
+      <span>{{description}}</span>
+      <mat-icon>{{icon}}</mat-icon>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <ng-content></ng-content>
+  <mat-action-row>
+    <button mat-button color="primary" (click)="executeAction ()">Ok</button>
+  </mat-action-row>
+</mat-expansion-panel>

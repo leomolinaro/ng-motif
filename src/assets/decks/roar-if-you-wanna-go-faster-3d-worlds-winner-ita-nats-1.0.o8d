@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="30c200c9-6c98-49a4-a293-106c06295c05" sleeveid="0">
+  <section name="Faction" shared="False">
+    <card qty="1" id="a48612c4-cf38-44c6-94af-d1470a48ebed">House Lannister</card>
+  </section>
+  <section name="Agenda" shared="False">
+    <card qty="1" id="f1841168-04de-4aa3-a2f0-8d3b1b8047b2">The Lord of the Crossing</card>
+  </section>
+  <section name="Plots" shared="False">
+    <card qty="1" id="1b362220-c8c2-4600-b204-06342e58b09c">Counting Coppers</card>
+    <card qty="2" id="424194c0-ad9c-473b-b254-40b1274152ba">Heads on Spikes</card>
+    <card qty="1" id="bc3547ae-82fc-4da1-a375-209ba0c07748">Trading with the Pentoshi</card>
+    <card qty="1" id="3d6b03c9-34d4-4baf-9403-67930d71ca2d">The First Snow of Winter</card>
+    <card qty="1" id="d5804d93-40aa-466a-aa79-88b72e574c2a">Weapons at the Door</card>
+    <card qty="1" id="987542a3-65f3-4af8-9907-d701f4139f13">Winter Festival</card>
+  </section>
+  <section name="Characters" shared="False">
+    <card qty="2" id="be9304f2-bb5d-4d19-8fbe-4efb6ee24f29">Rattleshirt&#039;s Raiders</card>
+    <card qty="1" id="66e4dd85-8a1d-4ea1-b3c6-3d3c7069a783">Grand Maester Pycelle</card>
+    <card qty="3" id="a8854084-67e5-4955-89db-3d9cb1337789">Ser Jaime Lannister</card>
+    <card qty="3" id="102c0746-2205-425a-ab85-90dc41a031e3">Tyrion Lannister</card>
+    <card qty="3" id="390a8cf7-8bc4-45c1-bea5-e6a694e9f2d5">Tywin Lannister</card>
+    <card qty="3" id="30769686-a69f-4088-8939-7b9a4c4f7f76">Burned Men</card>
+    <card qty="3" id="d2b926e3-2c0a-4575-b144-bf27ced1e5b3">Lannisport Merchant</card>
+    <card qty="3" id="200bd056-3e5d-4ed6-a337-ea2667618605">The Hound</card>
+    <card qty="1" id="72f0baa9-2df4-432b-bc64-416dd987a95c">Ser Gregor Clegane</card>
+    <card qty="1" id="d8f39831-ef30-4f90-a8cb-8bbc4c659c7d">Bronn</card>
+    <card qty="3" id="7274c2f1-54a6-4646-84f0-b53d3ae02541">Shae</card>
+    <card qty="1" id="ec454ee8-b7b1-4c8d-af44-3dea1ce48b24">Ser Amory Lorch</card>
+    <card qty="1" id="3e27b104-7b92-401e-b270-952d882e7cde">Podrick Payne</card>
+    <card qty="3" id="e5ac9f1c-e422-441d-b155-109040e45b01">Cersei Lannister</card>
+    <card qty="1" id="19655e93-fb18-4827-9244-dbb4c6cbeb6f">Ser Osmund Kettleblack</card>
+    <card qty="1" id="c3fed1cb-4237-4e69-8809-29d73aa2c2a6">Genna Frey</card>
+  </section>
+  <section name="Locations" shared="False">
+    <card qty="3" id="90452d99-6a6f-4d0d-b3a1-bb92e7110d1d">The Kingsroad</card>
+    <card qty="3" id="2267fe81-fd34-49e6-bcf5-5aa2733ac298">Casterly Rock</card>
+    <card qty="3" id="35c97ac8-de68-4de7-a2a8-f18dbf139041">Western Fiefdom</card>
+    <card qty="3" id="c9a89843-da1a-4b7b-a950-c7131b4098fe">Great Hall</card>
+  </section>
+  <section name="Attachments" shared="False">
+    <card qty="3" id="f5173e6f-1ec3-4ee0-8274-755160c57c0e">Bodyguard</card>
+  </section>
+  <section name="Events" shared="False">
+    <card qty="2" id="8e9b06da-991e-4608-a16b-caf96209641a">Superior Claim</card>
+    <card qty="3" id="2ad9b318-4ff7-4ace-91ee-81e223fd176c">Hear Me Roar!</card>
+    <card qty="3" id="3fbc7d75-3d0b-49df-8841-c92566a8c6d3">Treachery</card>
+    <card qty="3" id="7f6b25ff-02de-41ad-9f10-70d6b23996c3">I Never Bet Against My Family</card>
+    <card qty="1" id="e5ac9f1c-e422-441d-b155-109040e45b22">A Lannister Always Pays His Debts</card>
+  </section>
+<notes><![CDATA[]]></notes>
+</deck>

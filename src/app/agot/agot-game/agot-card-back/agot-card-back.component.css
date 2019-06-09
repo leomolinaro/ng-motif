@@ -1,0 +1,22 @@
+:host > span {
+	position: relative;
+	display: inline-block;
+}
+
+.card {
+  z-index:10;
+  position: relative;
+  /* cursor: pointer; */
+  -webkit-transition: transform 0.3s; /* Safari 3.1 to 6.0 */
+  transition: transform 0.3s;
+  display: grid;
+  border-radius: 8px;
+}
+
+.card .card-image {
+  border-radius: 4px;
+}
+
+.card.vertical-card .card-image { width: 120px; }
+.card.horizontal-card .card-image { height: 120px; }
+.card.hint { border: 4px #ffca28 solid; }

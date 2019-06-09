@@ -1,0 +1,33 @@
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.log-row {
+  height: auto !important;
+  padding: 0!important;
+  font-size: 10px
+}
+
+.log-row.round { font-size: 20px }
+.log-row.phase { font-size: 15px }
+.log-row.step { font-size: 13px }
+
+.log-row /deep/.mat-list-item-content {
+  padding: 0 0!important;
+}
+
+.log-sidenav {
+  padding: 10px;
+  width: 200px;
+}
+
+mat-toolbar {
+  position: fixed;
+  height: 50px;
+  z-index: 1000;
+}
+
+mat-sidenav-content {
+  margin-top: 50px;
+  margin-right: 200px
+}

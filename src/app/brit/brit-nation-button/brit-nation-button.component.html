@@ -1,0 +1,6 @@
+<ng-container *ngIf="nation | async as nation">
+  <button mat-button class="nation-btn" (click)="onClick()">
+    <img [src]="nation.infantryImageSource" alt="">
+    {{nation.name}}
+  </button>
+</ng-container>

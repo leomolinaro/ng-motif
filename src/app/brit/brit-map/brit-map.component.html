@@ -1,0 +1,52 @@
+<svg version="1.1" id="mysvg"
+  width="100%" height="96.1%"
+  viewBox="0 0 854.66669 1279.3333" 
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  preserveAspectRatio="xMinYMin"><!--style="border: 1px solid #cccccc;"-->
+  <defs>
+    <!-- <filter id="shadow" x="0" y="0" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceGraphic" dx="5" dy="5" />
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="2" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+    <filter id="selected" x="0" y="0" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceGraphic" dx="5" dy="5" />
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="2" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter> -->
+  </defs>
+  <svg:g
+    id="mymap"
+    [attr.transform]="currentMapTransform$ | async"
+    (mousewheel)="onMouseWheel($event)"
+    (mousedown)="onMouseDown($event)"
+    (mouseup)="onMouseUp($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseleave)="onMouseLeave($event)"
+    (focus)="onFocus ($event)"
+    (keypress)="onKeyPress ($event)"
+    [ngClass]="{
+      grabbing: grabbing
+    }">
+    <svg:image
+      x="0" y="0" width="100%" height="100%"
+      preserveAspectRatio="xMidYMid meet"
+      xlink:href="assets/brit/britannia-map.png"/>
+    <svg:g *ngFor="let areaId of areaIds$ | async">
+      <svg:g brit-area [id]="areaId" (areaClick)="onAreaClick (areaId, $event)"/>
+    </svg:g>
+    <svg:g *ngFor="let nationId of nationIds$ | async">
+      <svg:g brit-pop-marker [id]="nationId"/>
+    </svg:g>
+    <!-- <svg:g *ngFor="let rnd of rounds" >
+      <svg:path
+        class="britannia-area"
+        [attr.d]="rnd.svgAtd">
+      </svg:path>
+      <svg:path *ngFor="let natTrn of rnd.natTrnLst"
+        class="britannia-area"
+        [attr.d]="natTrn.svgAtd">
+      </svg:path>
+    </svg:g> -->
+  </svg:g>
+</svg>

@@ -1,0 +1,7 @@
+<ng-container *ngIf="unit$ | async as unit">
+  <img
+    [src]="unit.imageSource"
+    width="50px"
+    alt="unit"
+    (click)="onUnitClick (unit)">
+</ng-container>

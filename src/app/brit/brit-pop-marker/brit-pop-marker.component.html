@@ -1,0 +1,8 @@
+<ng-container *ngIf="nation$ | async as nation"><!--[attr.class]="'britannia-clickable' + (nat.isSelected () ? ' britannia-selected' : '')"-->
+  <svg:image
+    *ngIf="nation.popMarkerActive"
+    [attr.x]="nation.popMarkerSvgX - 10" [attr.y]="nation.popMarkerSvgY - 10"
+    width="20"
+    [attr.xlink:href]="nation.popMarkerImageSource"
+  />
+</ng-container>

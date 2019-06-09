@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="30c200c9-6c98-49a4-a293-106c06295c05" sleeveid="0">
+  <section name="Faction" shared="False">
+    <card qty="1" id="fd2a37d8-a528-456e-a0de-33846469b1ea">House Martell</card>
+  </section>
+  <section name="Agenda" shared="False">
+    <card qty="1" id="f1841168-04de-4aa3-a2f0-8d3b1b8047b2">The Lord of the Crossing</card>
+  </section>
+  <section name="Plots" shared="False">
+    <card qty="1" id="34e54ffc-9806-49da-a8a0-d38a17f6753d">Building Orders</card>
+    <card qty="1" id="3a3577a4-5ee1-4e9f-a674-49e9f9e81568">Calling the Banners</card>
+    <card qty="1" id="a9f2fccd-11f3-4562-aa5a-76d606712311">Marched to the Wall</card>
+    <card qty="1" id="d10a1ced-df94-419b-af8e-4eadc2eb4688">Wildfire Assault</card>
+    <card qty="1" id="06b34127-fbb3-4d9c-94e2-bf00001a2b09">The Long Plan</card>
+    <card qty="1" id="ee29ff89-a03a-4f18-92d4-bd8e942c0f27">Battle of Oxcross</card>
+    <card qty="1" id="75321c8d-10ba-482e-bda2-c583655727cc">Retaliation</card>
+  </section>
+  <section name="Characters" shared="False">
+    <card qty="1" id="be9304f2-bb5d-4d19-8fbe-4efb6ee24f29">Rattleshirt&#039;s Raiders</card>
+    <card qty="2" id="fa34ed25-de84-45c9-89c1-1428ec505458">Arianne Martell</card>
+    <card qty="3" id="e0abbec3-188e-4cc1-8a86-5142a47367cd">Greenblood Trader</card>
+    <card qty="3" id="7f066373-ab06-4601-943f-3fcd0e7eabf3">House Dayne Knight</card>
+    <card qty="3" id="8e5687ab-2605-49d1-9af9-785dc32dc07b">Palace Spearman</card>
+    <card qty="3" id="fcba07e6-a15f-46d8-821c-8a14a4983284">Bastard Daughter</card>
+    <card qty="1" id="09ff3aa5-b660-4085-9dc8-f79f46ff1f28">Wildling Scout</card>
+    <card qty="1" id="96919f4b-a0bd-4613-be0b-d4527b48c22f">Young Spearwife</card>
+    <card qty="2" id="60c2339f-a882-423a-9e58-185c776508ab">Elia Sand</card>
+    <card qty="1" id="e5ac9f1c-e422-441d-b155-109040e45b41">Wildling Bandit</card>
+    <card qty="2" id="2209c19e-88c3-4172-858d-6bab561dc5b0">Ricasso</card>
+    <card qty="1" id="a3a6f31a-63ec-42b6-ace1-f71228491e69">Ygritte</card>
+    <card qty="3" id="bfab0646-3be5-4cb5-a2f4-ccae6b35acc9">Frey Lordling</card>
+    <card qty="2" id="d6830eff-1cd9-42df-8f1c-7486212a7cd2">Rattleshirt</card>
+    <card qty="1" id="578ef746-ad1e-432d-815d-934fb123b42f">Dalla</card>
+    <card qty="3" id="8529f6e7-eadd-4945-a2d3-76cd37a08a86">Crow Killers</card>
+  </section>
+  <section name="Locations" shared="False">
+    <card qty="3" id="90452d99-6a6f-4d0d-b3a1-bb92e7110d1d">The Kingsroad</card>
+    <card qty="2" id="f2772a6e-2ed4-4fb9-8699-5497aee496e3">Sunspear</card>
+    <card qty="3" id="b3cf0188-d889-4d5d-ae89-e17730685318">The Boneway</card>
+    <card qty="3" id="e5ac9f1c-e422-441d-b155-109040e45b42">Ocean Road</card>
+    <card qty="3" id="1b57ce43-4b51-40c2-a8e8-c74882be0935">Dornish Fiefdom</card>
+    <card qty="2" id="686d7c81-fd03-488a-a8a4-633650df3c52">The Twins</card>
+  </section>
+  <section name="Attachments" shared="False">
+    <card qty="1" id="9e6bf142-159b-4a3b-9d4c-d8bf233a6f0c">Dawn</card>
+    <card qty="1" id="552d61be-b2ef-4dd5-8821-0de008efc9be">King Beyond the Wall</card>
+    <card qty="1" id="a5d72e84-baaa-4f24-95f0-7cbf30a151f9">Weirwood Bow</card>
+  </section>
+  <section name="Events" shared="False">
+    <card qty="1" id="427a5213-1be5-4b36-94be-04a5b3486575">Doran&#039;s Game</card>
+    <card qty="1" id="9aafaad7-3f74-4aff-ba0c-bf19e5de0bdf">Confinement</card>
+    <card qty="3" id="1d57651e-d2c9-4eea-9ed3-a80894660bb0">In Doran&#039;s Name</card>
+    <card qty="1" id="b6a02e7e-8bc7-43dd-82b3-1cdf89079fea">Vengeance for Elia</card>
+    <card qty="1" id="75e89567-1815-437a-bbab-0ddbac560fff">Burning on the Sand</card>
+    <card qty="1" id="43551dd3-5187-4e19-ab02-3d6e6b2bca39">The Prince&#039;s Plan</card>
+    <card qty="1" id="70bbb724-4bba-49fd-bf35-ef006efb5bb0">Secret Schemes</card>
+  </section>
+<notes><![CDATA[]]></notes>
+</deck>

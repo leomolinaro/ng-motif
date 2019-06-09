@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="30c200c9-6c98-49a4-a293-106c06295c05" sleeveid="0">
+  <section name="Faction" shared="False">
+    <card qty="1" id="44538ee5-b015-4522-b709-c2658c49c65b">The Night&#039;s Watch</card>
+  </section>
+  <section name="Agenda" shared="False">
+    <card qty="1" id="6f1e41d7-ab6f-45c2-a471-e6c8f8f4fb81">The Brotherhood Without Banners</card>
+  </section>
+  <section name="Plots" shared="False">
+    <card qty="1" id="424194c0-ad9c-473b-b254-40b1274152ba">Heads on Spikes</card>
+    <card qty="1" id="05c62b13-053b-4b81-a0a8-bf1d3f19210f">The Winds of Winter</card>
+    <card qty="1" id="fc066770-d985-45dd-bfd3-354add73c516">For the Watch!</card>
+    <card qty="2" id="987542a3-65f3-4af8-9907-d701f4139f13">Winter Festival</card>
+    <card qty="1" id="e5ac9f1c-e422-441d-b155-109040e45b52">Early Frost</card>
+    <card qty="1" id="3d6f90f0-f1b5-45a5-895e-8f8bc1a33763">Late Summer Feast</card>
+  </section>
+  <section name="Characters" shared="False">
+    <card qty="2" id="be9304f2-bb5d-4d19-8fbe-4efb6ee24f29">Rattleshirt&#039;s Raiders</card>
+    <card qty="2" id="21dda206-536e-4944-8158-b3d174e2b872">Wildling Horde</card>
+    <card qty="2" id="09ff3aa5-b660-4085-9dc8-f79f46ff1f28">Wildling Scout</card>
+    <card qty="3" id="663e88f5-4f95-48e9-95e5-e46808e55fcc">Mance Rayder</card>
+    <card qty="3" id="2f333bab-95c1-4a85-aa4e-72c5d0c1eb1a">Qhorin Halfhand</card>
+    <card qty="2" id="60682738-f811-4526-8838-78110801e93f">Northern Refugee</card>
+    <card qty="2" id="e5ac9f1c-e422-441d-b155-109040e45b41">Wildling Bandit</card>
+    <card qty="2" id="a3a6f31a-63ec-42b6-ace1-f71228491e69">Ygritte</card>
+    <card qty="3" id="5491846e-c205-49df-ba23-053bced7ba23">Jon Snow</card>
+    <card qty="3" id="d0b85e70-eff4-4968-9299-b9c4ccabcc7f">Builder at the Wall</card>
+    <card qty="3" id="d6830eff-1cd9-42df-8f1c-7486212a7cd2">Rattleshirt</card>
+    <card qty="2" id="578ef746-ad1e-432d-815d-934fb123b42f">Dalla</card>
+    <card qty="2" id="8529f6e7-eadd-4945-a2d3-76cd37a08a86">Crow Killers</card>
+    <card qty="2" id="a0b953a2-7c6c-407b-aa8c-09d88d43ce28">Mag the Mighty</card>
+  </section>
+  <section name="Locations" shared="False">
+    <card qty="3" id="9db838d6-50c2-4f70-8c14-d93fee867361">White Tree</card>
+    <card qty="1" id="111a39bb-3251-4cb0-a508-b91275643a9b">Isle of Ravens</card>
+    <card qty="3" id="e5ac9f1c-e422-441d-b155-109040e45b42">Ocean Road</card>
+    <card qty="2" id="c9a89843-da1a-4b7b-a950-c7131b4098fe">Great Hall</card>
+    <card qty="3" id="b9533590-a84f-4cd1-82c3-d678a785a2a2">Underground Vault</card>
+    <card qty="2" id="5c51ec0f-d6b7-405f-a059-f8556a76f2a5">The Frozen Shore</card>
+  </section>
+  <section name="Attachments" shared="False">
+    <card qty="3" id="641d02df-9a6b-4b7e-ba28-c9f25f36ed40">Craven</card>
+    <card qty="2" id="a5d72e84-baaa-4f24-95f0-7cbf30a151f9">Weirwood Bow</card>
+  </section>
+  <section name="Events" shared="False">
+    <card qty="2" id="c466db77-e618-430d-80c3-d9cacf963bcf">A Meager Contribution</card>
+    <card qty="2" id="9d81eee2-2281-4bad-933c-9915b9eb9aca">Nightmares</card>
+    <card qty="2" id="0dc5b41a-0634-4fcd-8fea-d9359a4767ab">Tarred Heads</card>
+    <card qty="2" id="5031a04a-7dcd-457f-b23d-6c4815947cd6">Scaling the Wall</card>
+  </section>
+<notes><![CDATA[]]></notes>
+</deck>

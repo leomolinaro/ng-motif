@@ -1,0 +1,25 @@
+<!-- <div fxLayout="row" fxLayoutAlign="start center">
+  <div fxFlex fxLayoutAlign="center" fxLayoutWrap>
+    <ng-container *ngFor="let fireCard of cards; let i = index">
+      <agot-card *ngIf="fireCard.crd$ | async as card" [card]="card" [show]="true" [enableMenu]="!!actions" (onCardClick)="onCardClick (card)" [horizontal]="horizontal">
+        <agot-card-action *ngFor="let action of actions" (action)="onCardAction (card, action.uid)" [label]="action.label"></agot-card-action>
+        <agot-attachments *ngIf="fireCard.attLst$">
+          <ng-container *ngFor="let fireAtt of fireCard.attLst$ | async">
+            <agot-card *ngIf="fireAtt.crd$ | async as att" [card]="att" [enableMenu]="false" (onCardClick)="onCardClick (att)">
+              <agot-card-action *ngFor="let action of actions" (action)="onCardAction (att, action.uid)" [label]="action.label"></agot-card-action>
+            </agot-card>
+          </ng-container>
+        </agot-attachments>
+      </agot-card>
+    </ng-container>
+  </div>
+</div> -->
+<!-- <p>
+  ciao
+</p> -->
+
+<div fxFlex fxLayoutAlign="center" fxLayoutWrap>
+  <ng-container *ngFor="let cardId of cardIds$ | async">
+    <agot-card [cardId]="cardId" [horizontal]="horizontal"></agot-card>
+  </ng-container>
+</div>

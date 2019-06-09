@@ -1,0 +1,18 @@
+<ng-container *ngIf="area$ | async as area">
+  <svg:path
+    class="brit-area colored"
+    [ngClass]="{
+      selectable: selectable$ | async,
+      highlight: highlight$ | async,
+      yellow: (color$ | async) == 'yellow',
+      red: (color$ | async) == 'red',
+      green: (color$ | async) == 'green',
+      blue: (color$ | async) == 'blue',
+      free: !(color$ | async) }"
+    [attr.d]="area.svgD"
+    (click)="onAreaClick (area, $event)">
+  </svg:path>
+  <svg:g *ngFor="let unitId of area.unitIds">
+    <svg:g brit-unit-garrison [id]="unitId"/>
+  </svg:g>
+</ng-container>

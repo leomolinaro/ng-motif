@@ -1,0 +1,30 @@
+@import "../../../motif-variables.scss";
+
+.brit-area {
+  fill-opacity: 0.1;
+  fill: transparent;
+  stroke: #fff;
+  stroke-opacity: 0;
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  /* stroke:#000000;
+  stroke-width:1px;
+  stroke-linecap:butt;
+  stroke-linejoin:miter;
+  stroke-opacity:1 */
+}
+.brit-area.colored.yellow { fill: $brit-yellow }
+.brit-area.colored.red { fill: $brit-red }
+.brit-area.colored.green { fill: $brit-green }
+.brit-area.colored.blue { fill: $brit-blue }
+.brit-area.colored.free { fill: transparent;  }
+.brit-area:hover { fill-opacity: 0.3; }
+.brit-area.free:hover { fill: #000; }
+.brit-area.selectable {
+  cursor: pointer;
+  stroke-opacity: 1;
+}
+.brit-area.highlight {
+  stroke-dasharray: 0;
+  stroke-opacity: 1;
+}

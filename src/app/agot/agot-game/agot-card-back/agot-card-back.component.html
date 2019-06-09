@@ -1,0 +1,12 @@
+<span>
+  <span
+    class="card"
+    [ngClass]="{'horizontal-card': horizontal, 'vertical-card': !horizontal, 'hint': hint }">
+    <img alt="card"
+      class="card-image"  
+      [src]="imageSource"
+      (click)="onClick ()">
+    <!--[src]="(card.crdRvl || show) ? card.imgSrc : (horizontal ? './assets/plot-back.jpg' : './assets/card-back.jpg')" alt="card"-->
+    <!-- <img *ngFor="let i of getPowerTokens ()" [class]="'power-token power-token-' + i" src="./assets/power-token.png"> -->
+  </span>
+</span>

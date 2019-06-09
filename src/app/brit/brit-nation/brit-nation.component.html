@@ -1,0 +1,6 @@
+<mat-card *ngIf="nation$ | async as nation">
+  <img mat-card-image [src]="nation.cardImageSource" [alt]="nation.id">
+  <mat-card-content>
+    <brit-unit-reinforcement *ngFor="let unitId of nation.reinforcementIds" [id]="unitId"></brit-unit-reinforcement>
+  </mat-card-content>
+</mat-card>

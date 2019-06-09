@@ -1,0 +1,7 @@
+#mymap:hover {
+  cursor: grab
+}
+
+#mymap.grabbing:hover {
+  cursor: grabbing
+}

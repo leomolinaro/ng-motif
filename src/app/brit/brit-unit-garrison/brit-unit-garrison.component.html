@@ -1,0 +1,23 @@
+<ng-container *ngIf="unit$ | async as unit">
+  <!-- [attr.class]="'britannia-clickable' + (unit.isSelected () ? ' britannia-selected' : '')" -->
+  <svg:g
+    class="brit-unit"
+    [ngClass]="{
+      selectable: selectable$ | async,
+      highlight: unit.moving }"
+    (click)="onUnitClick(unit)">
+    <svg:image
+      [attr.x]="unit.svgX - 17.5"
+      [attr.y]="unit.svgY - 17.5"
+      width="35"
+      [attr.xlink:href]="unit.imageSource"/>
+    <svg:rect
+      class="border"
+      width="35"
+      height="35"
+      [attr.x]="unit.svgX - 17.5"
+      [attr.y]="unit.svgY - 17.5"
+    />
+    <svg:text *ngIf="unit.movementPoints" [attr.x]="unit.svgX - 15" [attr.y]="unit.svgY + 15" fill="white">{{unit.movementPoints}}</svg:text>
+  </svg:g>
+</ng-container>

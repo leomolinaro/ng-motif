@@ -1,0 +1,140 @@
+<ng-container *ngIf="playerUIs">
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <!-- OPPONENT HAND -->
+    <div fxFlex fxLayoutAlign="center" fxLayoutWrap>
+      <ng-container *ngFor="let cardId of playerUIs[0].hand$ | async">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center">
+  <!-- OPPONENT DISCARD PILE -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[0].discardPileTop$ | async as cardId">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- OPPONENT DRAW DECK -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="!(playerUIs[0].drawDeckEmpty$ | async)">
+        <agot-card-back></agot-card-back>
+      </ng-container>
+      <ng-container *ngTemplateOutlet="tplDrawDeck; context: { drawTop$: playerUIs[0].drawTop$ }"></ng-container>
+    </div>
+  <!-- OPPONENT DEAD PILE -->
+    <div fxFlex="20%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[0].deadPileTop$ | async as cardId">
+        <agot-card [cardId]="cardId" class="dead-card"></agot-card> <!--[horizontal]="true"-->
+      </ng-container>
+    </div>
+  <!-- OPPONENT LOCATIONS -->
+    <div fxFlex="48%" fxLayoutAlign="center" fxLayoutWrap>
+      <ng-container *ngFor="let cardId of playerUIs[0].locations$ | async">
+        <agot-card  [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- OPPONENT TRESURE -->
+    <div fxFlex fxLayoutAlign="center" fxLayoutWrap>
+      <img *ngFor="let i of playerUIs[0].goldArray" class="gold-token" src="./assets/gold-token.png">
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center">
+  <!-- OPPONENT FACTION AREA -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[0].faction$ | async as cardId">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- OPPONENT AGENDA -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[0].agenda$ | async as cardId">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- OPPONENT CHARACTERS -->
+    <div fxFlex="64%" fxLayoutAlign="center" fxLayoutWrap>
+      <ng-container *ngFor="let cardId of playerUIs[0].characters$ | async">
+        <agot-card  [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- OPPONENT PLOTS -->
+    <div fxFlex fxLayoutAlign="start center" fxLayout="column">
+      <div fxFlex *ngIf="playerUIs[0].plotDeck$ | async as deck">
+        <agot-card-back *ngIf="deck.length > 0" horizontal="true"></agot-card-back>
+      </div>
+      <div fxFlex *ngIf="playerUIs[0].revealedPlot$ | async as cardId">
+        <agot-card [cardId]="cardId" horizontal="true"></agot-card>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<mat-divider></mat-divider>
+<ng-container *ngIf="playerUIs">
+  <div fxLayout="row" fxLayoutAlign="start center">
+  <!-- PLAYER PLOTS -->
+    <div fxFlex="16%" fxLayoutAlign="start center" fxLayout="column">
+      <div fxFlex *ngIf="playerUIs[1].plotDeck$ | async as deck">
+        <agot-card-back class="clickable" *ngIf="deck.length > 0" horizontal="true" (cardClick)="onPlayerPlotDeckClick (1)"></agot-card-back>
+      </div>
+      <div fxFlex *ngIf="playerUIs[1].revealedPlot$ | async as cardId">
+        <agot-card [cardId]="cardId" horizontal="true"></agot-card>
+      </div>
+    </div>
+  <!-- PLAYER CHARACTERS -->
+    <div fxFlex="64%" fxLayoutAlign="center" fxLayoutWrap>
+      <ng-container *ngFor="let cardId of playerUIs[1].characters$ | async">
+        <agot-card  [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- PLAYER AGENDA -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[1].agenda$ | async as cardId">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- PLAYER FACTION AREA -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[1].faction$ | async as cardId">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center">
+  <!-- PLAYER TRESURE -->
+    <div fxFlex fxLayoutAlign="center">
+        <img *ngFor="let i of playerUIs[1].goldArray" class="gold-token" src="./assets/gold-token.png">
+    </div>
+  <!-- PLAYER LOCATIONS -->
+    <div fxFlex="48%" fxLayoutAlign="center" fxLayoutWrap>
+      <ng-container *ngFor="let cardId of playerUIs[1].locations$ | async">
+        <agot-card  [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  <!-- PLAYER DEAD PILE -->
+    <div fxFlex="20%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[1].deadPileTop$ | async as cardId">
+        <agot-card [cardId]="cardId" class="dead-card"></agot-card><!--[horizontal]="true"-->
+      </ng-container>
+    </div>
+  <!-- PLAYER DRAW DECK -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="!(playerUIs[1].drawDeckEmpty$ | async)">
+        <agot-card-back></agot-card-back>
+      </ng-container>
+    </div>
+  <!-- PLAYER DISCARD PILE -->
+    <div fxFlex="10%" fxLayoutAlign="center">
+      <ng-container *ngIf="playerUIs[1].discardPileTop$ | async as cardId">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start center">
+  <!-- PLAYER HAND -->
+    <div fxFlex fxLayoutAlign="center" fxLayoutWrap>
+      <ng-container *ngFor="let cardId of playerUIs[1].hand$ | async">
+        <agot-card [cardId]="cardId"></agot-card>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
