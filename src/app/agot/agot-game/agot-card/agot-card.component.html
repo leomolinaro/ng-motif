@@ -1,7 +1,5 @@
-<span [class]="
-    (attSpan ? ('attachments-' + attSpan) : '') +
-    (dupSpan ? (' duplicates-' + dupSpan) : '')
-  ">
+<span 
+  [class]="'attachments-' + attSpan + ' duplicates-' + (dupSpan$ | async)">
   <span
     class="card"
     [ngClass]="{'kneeling': card.kneeling, 'horizontal-card': horizontal, 'vertical-card': !horizontal, 'hint clickable': active }">
@@ -13,9 +11,9 @@
       <!-- <div [matMenuTriggerFor]="actionMenu"></div> -->
     <img class="card-image"  
       [src]="card.imageSource"
-      (click)="onClick ($event)"
-      (mouseenter)="onMouseEnter ($event)"
-      (mouseleave)="onMouseLeave ($event)"
+      (click)="onClick($event)"
+      (mouseenter)="onMouseEnter(card, $event)"
+      (mouseleave)="onMouseLeave(card, $event)"
       alt="card">
     <!--[src]="(card.crdRvl || show) ? card.imgSrc : (horizontal ? './assets/plot-back.jpg' : './assets/card-back.jpg')" alt="card"-->
     <img *ngFor="let i of powerArray" [class]="'power-token power-token-' + i" src="./assets/power-token.png">
@@ -28,6 +26,6 @@
       {{choice.cardAction}}
     </button>
   </mat-menu>
-  <agot-card agotDuplicate *ngFor="let duplicateId of duplicateIds; let i = index" [class]="'duplicate duplicate-' + (i + 1)" [cardId]="duplicateId"></agot-card>
-  <agot-card agotAttachment *ngFor="let attachmentId of attachmentIds; let i = index" [class]="'attachment attachment-' + (i + 1)" [cardId]="attachmentId"></agot-card>
+  <agot-card agotDuplicate *ngFor="let duplicate of duplicates$ | async; let i = index" [class]="'duplicate duplicate-' + (i + 1)" [card]="duplicate"></agot-card>
+  <agot-card agotAttachment *ngFor="let attachment of attachments$ | async; let i = index" [class]="'attachment attachment-' + (i + 1)" [card]="attachment"></agot-card>
 </span>

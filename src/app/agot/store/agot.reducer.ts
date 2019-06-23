@@ -178,32 +178,30 @@ export function reducer (
   return state;
 } // reducer
 
-export const selectAgot = createFeatureSelector<AgotState> ('agot');
-
-export const selectState = createSelector (selectAgot, state => state);
-//export const selectContext = createSelector (selectAgot, state => state.context);
-export const selectGameStarted = createSelector (selectAgot, state => state.game.started);
-export const selectGamePhase = createSelector (selectAgot, state => state.game.phase);
-export const selectGameRound = createSelector (selectAgot, state => state.game.round);
-export const selectGameStep = createSelector (selectAgot, state => state.game.step);
-export const selectGameLog = createSelector (selectAgot, state => state.game.log);
-export const selectCardById = (id: number) => createSelector (selectAgot, state => state.game.cardMap[id]);
-export const selectDuplicateIdsByCard = (cardId: number) => createSelector (selectCardById (cardId), card => card.duplicateIds);
-export const selectPlayerByUsername = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username]);
-export const selectPlayerIds = createSelector (selectAgot, state => state.game.playerIds);
-//export const selectPlayer = createSelector (selectAgot, state => state.userPlayerIds[0]);
-//export const selectOpponent = createSelector (selectAgot, state => state.userPlayerIds[1]);
-export const selectFaction = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].factionId);
-export const selectAgenda = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].agendaId);
-export const selectHand = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].handIds);
-export const selectCharacters = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].charactersIds);
-export const selectLocations = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].locationsIds);
-export const selectDiscardPile = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].discardPileIds);
-export const selectDrawDeckEmpty = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].drawDeckEmpty);
-export const selectPlotDeck = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].plotDeckIds);
-export const selectUsedPlotPile = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].usedPlotPileIds);
-export const selectRevealedPlot = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].revealedPlotId);
-export const selectDeadPile = (username: string) => createSelector (selectAgot, state => state.game.playerMap[username].deadPileIds);
-export const selectGold = (username: string) => createSelector (selectAgot, state => (state.game.playerMap[username] ? state.game.playerMap[username].gold : 0));
-
+export const selectAgot = createFeatureSelector<AgotState>('agot');
+export const selectGame = createSelector(selectAgot, state => state.game);
+export const selectGameStarted = createSelector(selectGame, game => game.started);
+export const selectGamePhase = createSelector(selectGame, game => game.phase);
+export const selectGameRound = createSelector(selectGame, game => game.round);
+export const selectGameStep = createSelector(selectGame, game => game.step);
+export const selectGameLog = createSelector(selectGame, game => game.log);
+export const selectCardMap = createSelector(selectGame, game => game.cardMap);
+export const selectCardById = (cardId: number) => createSelector(selectCardMap, cardMap => cardMap[cardId]);
+export const selectPlayerById = (playerId: string) => createSelector(selectGame, game => game.playerMap[playerId]);
+export const selectPlayerIds = createSelector(selectGame, game => game.playerIds);
+export const selectFaction = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => cardMap[player.factionId]);
+export const selectAgenda = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => cardMap[player.agendaId]);
+export const selectRevealedPlot = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => cardMap[player.revealedPlotId]);
+export const selectHand = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.handIds.map(handId => cardMap[handId]));
+export const selectCharacters = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.charactersIds.map(handId => cardMap[handId]));
+export const selectLocations = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.locationsIds.map(handId => cardMap[handId]));
+export const selectDiscardPile = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.discardPileIds.map(handId => cardMap[handId]));
+export const selectPlotDeck = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.plotDeckIds.map(handId => cardMap[handId]));
+export const selectUsedPlotPile = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.usedPlotPileIds.map(handId => cardMap[handId]));
+export const selectDeadPile = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.deadPileIds.map(handId => cardMap[handId]));
+export const selectDrawDeckEmpty = (playerId: string) => createSelector(selectPlayerById(playerId), player => player.drawDeckEmpty);
+export const selectGold = (playerId: string) => createSelector(selectPlayerById(playerId), player => (player ? player.gold : 0));
+export const selectAttachments = (attachmentIds: number[]) => createSelector(selectCardMap, cardMap => attachmentIds ? attachmentIds.map(attId => cardMap[attId]) : []);
+export const selectDuplicates = (duplicateIds: number[]) => createSelector(selectCardMap, cardMap => duplicateIds ? duplicateIds.map(dupId => cardMap[dupId]) : []);
 export const selectNewRequest = createSelector (selectAgot, state => state.request);
+

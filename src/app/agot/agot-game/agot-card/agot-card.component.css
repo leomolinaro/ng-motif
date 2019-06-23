@@ -1,15 +1,15 @@
 :host > span {
-	position: relative;
-	display: inline-block;
+  display: flex;
+  position: relative;
 }
 
-.duplicates-1 { padding-right: 15px; }
-.duplicates-2 { padding-right: 30px; }
-.duplicates-3 { padding-right: 45px; }
+.duplicates-1 { padding-right: 10px; }
+.duplicates-2 { padding-right: 20px; }
+.duplicates-3 { padding-right: 30px; }
 
-.attachments-1 { padding-bottom: 25px; }
-.attachments-2 { padding-bottom: 45px; }
-.attachments-3 { padding-bottom: 65px; }
+.attachments-1 { padding-bottom: 15px; }
+.attachments-2 { padding-bottom: 30px; }
+.attachments-3 { padding-bottom: 45px; }
 
 .card {
   z-index:10;
@@ -26,19 +26,19 @@
 }
 
 agot-card[agotDuplicate] { position: absolute; top:0; }
-agot-card[agotDuplicate].duplicate-1 { padding-left: 15px; z-index: 9 }
-agot-card[agotDuplicate].duplicate-2 { padding-left: 30px; z-index: 8 }
-agot-card[agotDuplicate].duplicate-3 { padding-left: 45px; z-index: 7 }
-agot-card[agotDuplicate].duplicate-4 { padding-left: 60px; z-index: 6 }
+agot-card[agotDuplicate].duplicate-1 { padding-left: 10px; z-index: 9 }
+agot-card[agotDuplicate].duplicate-2 { padding-left: 20px; z-index: 8 }
+agot-card[agotDuplicate].duplicate-3 { padding-left: 30px; z-index: 7 }
+agot-card[agotDuplicate].duplicate-4 { padding-left: 40px; z-index: 6 }
 
 agot-card[agotAttachment] { position: absolute; top:0; }
-agot-card[agotAttachment].attachment-1 { padding-top:10px; z-index:9 }
+agot-card[agotAttachment].attachment-1 { padding-top:15px; z-index:9 }
 agot-card[agotAttachment].attachment-2 { padding-top:30px; z-index:8 }
-agot-card[agotAttachment].attachment-3 { padding-top:50px; z-index:7 }
-agot-card[agotAttachment].attachment-4 { padding-top:70px; z-index:6 }
+agot-card[agotAttachment].attachment-3 { padding-top:45px; z-index:7 }
+agot-card[agotAttachment].attachment-4 { padding-top:60px; z-index:6 }
 
-.card.vertical-card .card-image { width: 120px; }
-.card.horizontal-card .card-image { height: 120px; }
+.card.vertical-card .card-image { width: 80px; }
+.card.horizontal-card .card-image { height: 80px; }
 
 .card.hint {  background-color: #673ab7; }
 

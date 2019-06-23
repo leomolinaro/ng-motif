@@ -1,3 +1,5 @@
+import { AgotDemoService } from './services/agot-demo.service';
+import { InitState } from './../store/agot.actions';
 import { MessageOut } from './../../shared/websocket/models/message-out.model';
 import { LogRow } from '../../shared/models/log-row.model';
 import { MotifComponent } from '../../shared/components/motif.component';
@@ -6,11 +8,12 @@ import { AuthService } from '../../shared/login/auth.service';
 import { WebsocketService } from '../../shared/websocket/websocket.service';
 import { AgotCardHoverService, AgotCardHoverData } from './services/agot-card-hover.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Store, Action } from '@ngrx/store';
 
 import * as fromAgot from '../store/agot.reducer';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'agot-game',
@@ -18,7 +21,7 @@ import * as fromAgot from '../store/agot.reducer';
   styleUrls: ['./agot-game.component.css']
 })
 export class AgotGameComponent extends MotifComponent implements OnInit {
-  cardHover$: Observable<AgotCardHoverData>;
+  cardImage$: Observable<string>;
   round$: Observable<string>;
   phase$: Observable<string>;
   step$: Observable<string>;
@@ -26,6 +29,8 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
   user: string;
   gameStarted$: Observable<boolean>;
   
+  playerIds$: Observable<string[]>;
+
   @ViewChild ("sidenav", { static: true }) sidenav: MatSidenav;
   
   constructor (
@@ -33,14 +38,17 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     private hoverService: AgotCardHoverService,
     private webSocket: WebsocketService,
     private loginService: AuthService,
-    private requestService: AgotRequestService
+    private requestService: AgotRequestService,
+    private demoService: AgotDemoService
   ) { super (); }
   
   private sidenavWasOpen = false;
 
   ngOnInit () {
     this.gameStarted$ = this.store.select(fromAgot.selectGameStarted);
-    this.cardHover$ = this.hoverService.cardHover$;
+    this.cardImage$ = this.hoverService.cardHover$.pipe(
+      map(c => c ? c.card.imageSource : "./assets/card-back.jpg")
+    )
     this.round$ = this.store.select<string>(fromAgot.selectGameRound);
     this.phase$ = this.store.select<string>(fromAgot.selectGamePhase);
     this.step$ = this.store.select<string>(fromAgot.selectGameStep);
@@ -55,7 +63,7 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     
     this.subscribe (this.logRows$, l => {
       setTimeout (function () {
-        let objDiv = document.getElementById ("log-sidenav");
+        let objDiv = document.getElementById ("log-list");
         objDiv.scrollTop = objDiv.scrollHeight;
       });
     });
@@ -91,4 +99,10 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     this.sidenav.close ();
   } // closeSettings
 
-} // AgotGameComponent
+  testState() {
+    // this.store.dispatch(new InitState({ state: this.demoService.getEmptyState() }));
+    this.store.dispatch(new InitState({ state: this.demoService.getComplexState() }));
+  }
+
+}
+

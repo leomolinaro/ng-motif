@@ -1,3 +1,4 @@
+import { Card } from './../../models/card.model';
 import { Observable } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Component, OnInit, Inject } from '@angular/core';
@@ -11,13 +12,13 @@ import { AgotCardsDialogData } from './agot-cards-dialog-data';
 export class AgotCardsDialogComponent implements OnInit {
 
   horizontal: boolean;
-  cardIds$: Observable<number[]>;
+  cards$: Observable<Card[]>;
 
   constructor (
     public dialogRef: MatDialogRef<AgotCardsDialogComponent>,
     @Inject (MAT_DIALOG_DATA) data: AgotCardsDialogData
   ) {
-    this.cardIds$ = data.cardIds$;
+    this.cards$ = data.cards$;
     this.horizontal = true;
   } // constructor
 

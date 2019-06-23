@@ -4,7 +4,8 @@ export interface AgotRequest {
   playerId: string;
   instruction: string,
   type: string,
-  choices?: RequestChoice[]
+  choices?: RequestChoice[],
+  repeated: boolean
 }
 
 // export const SELECT_ACTION_TO_PERFORM = "selectActionToPerform";

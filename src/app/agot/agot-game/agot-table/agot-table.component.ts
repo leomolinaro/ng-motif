@@ -1,32 +1,35 @@
+import { Card } from './../../models/card.model';
 import { AgotCardsDialogData } from '../agot-cards-dialog/agot-cards-dialog-data';
-import { Store } from '@ngrx/store';
+import { Store, MemoizedSelector } from '@ngrx/store';
 import { Player } from '../../models/player.model';
 import { MotifComponent } from '../../../shared/components/motif.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AgotCardsDialogComponent } from '../agot-cards-dialog/agot-cards-dialog.component';
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import * as fromAgot from '../../store/agot.reducer';
 
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, share, tap } from 'rxjs/operators';
+import { DefaultProjectorFn } from '@ngrx/store/src/selector';
 
 interface PlayerUI {
+  reverseLayout: boolean;
   player$: Observable<Player>;
-  faction$: Observable<number>;
-  agenda$: Observable<number>;
-  hand$: Observable<number[]>;
-  characters$: Observable<number[]>;
-  locations$: Observable<number[]>;
-  discardPile$: Observable<number[]>;
+  faction$: Observable<Card>;
+  agenda$: Observable<Card>;
+  hand$: Observable<Card[]>;
+  characters$: Observable<Card[]>;
+  locations$: Observable<Card[]>;
+  discardPile$: Observable<Card[]>;
   drawDeckEmpty$: Observable<boolean>;
-  plotDeck$: Observable<number[]>;
-  usedPlotPile$: Observable<number[]>;
-  revealedPlot$: Observable<number>;
-  deadPile$: Observable<number[]>;
-  discardPileTop$: Observable<number>;
-  deadPileTop$: Observable<number>;
-  goldArray: number[]
+  plotDeck$: Observable<Card[]>;
+  usedPlotPile$: Observable<Card[]>;
+  revealedPlot$: Observable<Card>;
+  deadPile$: Observable<Card[]>;
+  discardPileTop$: Observable<Card>;
+  deadPileTop$: Observable<Card>;
+  goldArray$: Observable<number[]>
 }
 
 @Component({
@@ -36,44 +39,64 @@ interface PlayerUI {
 })
 export class AgotTableComponent extends MotifComponent implements OnInit {
  
-  playerUIs: PlayerUI[];
+  playerUIs: PlayerUI[] = [];
+  nPlayers = 2;
 
   constructor (
     private store: Store<any>,
     public dialog: MatDialog,
   ) { super (); }
   
+  selectFromStore<T>(playerIds$: Observable<string[]>, selector: (playerId: string) => MemoizedSelector<object, T, DefaultProjectorFn<T>>, i: number) {
+    return playerIds$.pipe(
+      switchMap(playerIds => this.store.select(selector(playerIds[i])))
+    );
+  }
+  
+  // selectCardFromStore(playerIds$: Observable<string[]>, selector: (playerId: string) => MemoizedSelector<object, number, DefaultProjectorFn<number>>, i: number) {
+  //   return this.selectFromStore(playerIds$, selector, i).pipe(
+  //     map(cardId => this.store.select(fromAgot.selectCardById(cardId)))
+  //   );
+  // }
+
+  // selectCardsFromStore(playerIds$: Observable<string[]>, selector: (playerId: string) => MemoizedSelector<object, number[], DefaultProjectorFn<number[]>>, i: number) {
+  //   return this.selectFromStore(playerIds$, selector, i).pipe(
+  //     switchMap(cardIds => cardIds.map(cardId => this.store.select(fromAgot.selectCardById(cardId))))
+  //   );
+  // }
+
   ngOnInit() {
-
-    this.subscribe(this.store.select(fromAgot.selectPlayerIds), playerIds => {
-      this.playerUIs = playerIds.map(playerId => {
-        const discardPile$ = this.store.select(fromAgot.selectDiscardPile(playerId));
-        const deadPile$ = this.store.select(fromAgot.selectDeadPile(playerId));
-        const gold$ = this.store.select(fromAgot.selectGold(playerId));
-        const goldArray = [];
-        this.subscribe (gold$, g => {
-          for (let i = 1; i <= g; i++) { goldArray.push (i); }
-        });
-        return {
-          player$: this.store.select (fromAgot.selectPlayerByUsername (playerId)),
-          faction$: this.store.select (fromAgot.selectFaction (playerId)),
-          agenda$: this.store.select (fromAgot.selectAgenda (playerId)),
-          hand$: this.store.select (fromAgot.selectHand (playerId)),
-          characters$: this.store.select (fromAgot.selectCharacters (playerId)),
-          locations$: this.store.select (fromAgot.selectLocations (playerId)),
-          discardPile$: discardPile$,
-          drawDeckEmpty$: this.store.select (fromAgot.selectDrawDeckEmpty (playerId)),
-          plotDeck$: this.store.select (fromAgot.selectPlotDeck (playerId)),
-          usedPlotPile$: this.store.select (fromAgot.selectUsedPlotPile (playerId)),
-          revealedPlot$: this.store.select (fromAgot.selectRevealedPlot (playerId)),
-          deadPile$: deadPile$,
-          discardPileTop$: discardPile$.pipe (map (this.getTopPile)),
-          deadPileTop$: deadPile$.pipe (map (this.getTopPile)),
-          goldArray: goldArray
-        }
-      });
-    });
-
+    const playerIds$ = this.store.select(fromAgot.selectPlayerIds);
+    let reverseLayout = true;
+    for (let i = 0; i < this.nPlayers; i++) {
+      const discardPile$ = this.selectFromStore(playerIds$, fromAgot.selectDiscardPile, i);
+      const deadPile$ = this.selectFromStore(playerIds$, fromAgot.selectDeadPile, i);
+      const gold$ = this.selectFromStore(playerIds$, fromAgot.selectGold, i);
+      reverseLayout = !reverseLayout;
+      const playerUI: PlayerUI = {
+        reverseLayout: reverseLayout,
+        player$: this.selectFromStore(playerIds$, fromAgot.selectPlayerById, i),
+        faction$: this.selectFromStore(playerIds$, fromAgot.selectFaction, i),
+        agenda$: this.selectFromStore(playerIds$, fromAgot.selectAgenda, i),
+        hand$: this.selectFromStore(playerIds$, fromAgot.selectHand, i),
+        characters$: this.selectFromStore(playerIds$, fromAgot.selectCharacters, i),
+        locations$: this.selectFromStore(playerIds$, fromAgot.selectLocations, i),
+        discardPile$: this.selectFromStore(playerIds$, fromAgot.selectDiscardPile, i),
+        drawDeckEmpty$: this.selectFromStore(playerIds$, fromAgot.selectDrawDeckEmpty, i),
+        plotDeck$: this.selectFromStore(playerIds$, fromAgot.selectPlotDeck, i),
+        usedPlotPile$: this.selectFromStore(playerIds$, fromAgot.selectUsedPlotPile, i),
+        revealedPlot$: this.selectFromStore(playerIds$, fromAgot.selectRevealedPlot, i),
+        deadPile$: this.selectFromStore(playerIds$, fromAgot.selectDeadPile, i),
+        discardPileTop$: discardPile$.pipe(map(this.getTopPile)),
+        deadPileTop$: deadPile$.pipe(map (this.getTopPile)),
+        goldArray$: gold$.pipe(map(gold => {
+          let goldArray = [];
+          for (let i = 1; i <= gold; i++) { goldArray.push (i); }
+          return goldArray;
+        }))
+      };
+      this.playerUIs.push(playerUI);
+    }
   }
 
   getTopPile(pile) {
@@ -85,12 +108,12 @@ export class AgotTableComponent extends MotifComponent implements OnInit {
   }
 
   openPlayerPlotDeckDialog(playerIndex: number) {
-    let cardIds$ = this.playerUIs[playerIndex].plotDeck$;
-    let dialogRef = this.dialog.open (AgotCardsDialogComponent, {
-      height: '500px',
-      width: '600px',
-      data: new AgotCardsDialogData(cardIds$, true)
-    });
+    // let cardIds$ = this.playerUIs[playerIndex].plotDeck$;
+    // let dialogRef = this.dialog.open (AgotCardsDialogComponent, {
+    //   height: '500px',
+    //   width: '600px',
+    //   data: new AgotCardsDialogData(cardIds$, true)
+    // });
   }
 
 }

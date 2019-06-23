@@ -44,7 +44,7 @@ export class AgotRequestService {
       for (const choice of request.choices) {
         if (choice.cardId) {
           let cardChoices = choicesByCard[choice.cardId];
-          if (!cardChoices) { cardChoices = []; this.choicesByCard[choice.cardId] = cardChoices; }
+          if (!cardChoices) { cardChoices = []; choicesByCard[choice.cardId] = cardChoices; }
           cardChoices.push(choice);
         } else {
           genChoices.push(choice);
@@ -69,13 +69,13 @@ export class AgotRequestService {
     }
     this.choicesByCard.next({});
     this.genChoices.next([]);
-    console.log("this.requestedPlayerId", this.requestedPlayerId);
+    //console.log("this.requestedPlayerId", this.requestedPlayerId);
     this.webSocket.send({ type: MessageOut.AGOT_ACTION_CHOICE, data: { choice: choice, playerId: this.requestedPlayerId }});
     this.requestedPlayerId = null;
   }
 
   showRequestSnackBar(requestTitle: string) {
-    this.requestSnackBarRef = this.snackBar.open (requestTitle);
+    this.requestSnackBarRef = this.snackBar.open (requestTitle, null, { verticalPosition: "top" });
   }
 
   openGenericRequestDialog (request: Request) {
