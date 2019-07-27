@@ -61,7 +61,7 @@ export function reducer (
   state = INITIAL_STATE,
   action: fromAgot.AgotAction
 ): AgotState {
-  //console.log(action);
+  // console.log(action);
   //console.log(JSON.stringify(state));
   switch (action.type) {
     case fromAgot.INIT_STATE: {

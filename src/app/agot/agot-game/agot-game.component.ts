@@ -3,7 +3,7 @@ import { InitState } from './../store/agot.actions';
 import { MessageOut } from './../../shared/websocket/models/message-out.model';
 import { LogRow } from '../../shared/models/log-row.model';
 import { MotifComponent } from '../../shared/components/motif.component';
-import { AgotRequestService } from './services/agot-request.service';
+import { AgotGameService } from './services/agot-game.service';
 import { AuthService } from '../../shared/login/auth.service';
 import { WebsocketService } from '../../shared/websocket/websocket.service';
 import { AgotCardHoverService, AgotCardHoverData } from './services/agot-card-hover.service';
@@ -38,7 +38,7 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     private hoverService: AgotCardHoverService,
     private webSocket: WebsocketService,
     private loginService: AuthService,
-    private requestService: AgotRequestService,
+    private requestService: AgotGameService,
     private demoService: AgotDemoService
   ) { super (); }
   
@@ -73,6 +73,8 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
         this.store.dispatch(action);
       }
     });
+
+
 
   } // ngOnInit
 

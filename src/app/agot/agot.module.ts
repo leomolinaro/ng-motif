@@ -2,7 +2,7 @@ import { AuthGuard } from './../shared/login/auth-guard.service';
 import { NotFoundComponent } from './../shared/not-found/not-found.component';
 import { Routes, RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { AgotRequestService } from './agot-game/services/agot-request.service';
+import { AgotGameService } from './agot-game/services/agot-game.service';
 import { AgotCardHoverService } from './agot-game/services/agot-card-hover.service';
 import { AgotCardComponent } from './agot-game/agot-card/agot-card.component';
 import { NgModule, NgZone } from '@angular/core';
@@ -37,7 +37,7 @@ const agotRoutes: Routes = [
   ],
   providers: [
     AgotCardHoverService,
-    AgotRequestService
+    AgotGameService
   ],
   declarations: [
     AgotGameComponent,

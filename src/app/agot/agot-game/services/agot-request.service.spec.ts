@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { AgotRequestService } from './agot-request.service';
+import { AgotGameService } from './agot-game.service';
 
-describe('AgotRequestService', () => {
+describe('AgotGameService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AgotRequestService]
+      providers: [AgotGameService]
     });
   });
 
-  it('should be created', inject([AgotRequestService], (service: AgotRequestService) => {
+  it('should be created', inject([AgotGameService], (service: AgotGameService) => {
     expect(service).toBeTruthy();
   }));
 });

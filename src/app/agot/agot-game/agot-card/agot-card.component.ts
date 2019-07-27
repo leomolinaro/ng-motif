@@ -2,7 +2,7 @@ import { RequestChoice } from '../../models/request-choice.model';
 import { Store, select, createSelector } from '@ngrx/store';
 import { Card } from '../../models/card.model';
 import { MotifComponent } from '../../../shared/components/motif.component';
-import { AgotRequestService } from '../services/agot-request.service';
+import { AgotGameService } from '../services/agot-game.service';
 import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap, share, tap, filter } from 'rxjs/operators';
@@ -42,7 +42,7 @@ export class AgotCardComponent extends MotifComponent {
   constructor (
     private store: Store<any>,
     private hoverService: AgotCardHoverService,
-    private requestService: AgotRequestService
+    private requestService: AgotGameService
   ) { super (); }
   
   ngOnChanges(changes: SimpleChanges) {

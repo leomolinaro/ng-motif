@@ -2,7 +2,7 @@ import { map, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { MessageOut } from './../../../shared/websocket/models/message-out.model';
 import { RequestChoice } from '../../models/request-choice.model';
-import { AgotRequestService } from '../services/agot-request.service';
+import { AgotGameService } from '../services/agot-game.service';
 import { MotifComponent } from '../../../shared/components/motif.component';
 import { WebsocketService } from '../../../shared/websocket/websocket.service';
 import { Component, OnInit } from '@angular/core';
@@ -21,11 +21,11 @@ interface ChoiceView {
 })
 export class AgotButtonListComponent extends MotifComponent implements OnInit {
   
-  private gameStarted$: Observable<boolean>;
+  gameStarted$: Observable<boolean>;
   
   constructor (
     private webSocket: WebsocketService,
-    private requestService: AgotRequestService,
+    private gameService: AgotGameService,
     private store: Store<any>
   ) { super (); }
 
@@ -33,7 +33,7 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
 
   ngOnInit () {
     this.gameStarted$ = this.store.select(fromAgot.selectGameStarted);
-    const choices$ = this.requestService.genChoices$;
+    const choices$ = this.gameService.genChoices$;
 
     this.choices$ = choices$.pipe(
       // tap(x => console.log("XXX", x)),
@@ -44,8 +44,8 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     );
   }
 
-  getLabelFromChoice(choice: RequestChoice) {
-    switch(choice.choiceType) {
+  getLabelFromChoice (choice: RequestChoice) {
+    switch (choice.choiceType) {
       case "PASS": return "Pass";
       case "SELECT_ICON": {
         switch (choice.icon) {
@@ -60,12 +60,16 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     return "---";
   }
 
-  startGame() {
-    this.webSocket.send({ type: MessageOut.AGOT_START });
+  startGame () {
+    this.webSocket.send ({ type: MessageOut.AGOT_START });
   }
 
-  onChoiceClick(choice: RequestChoice) {
-    this.requestService.respond(choice);
+  createGame () {
+    this.gameService.createGame ();
+  }
+
+  onChoiceClick (choice: RequestChoice) {
+    this.gameService.respond (choice);
   }
 
 }
