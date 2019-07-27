@@ -6,9 +6,9 @@
       Start game
     </button>
   </mat-list-item>
-  <mat-list-item *ngFor="let choice of choices">
-    <button color="primary" mat-raised-button (click)="onChoiceClick(choice)">
-      {{choice}}
+  <mat-list-item *ngFor="let choice of choices$ | async">
+    <button color="primary" mat-raised-button (click)="onChoiceClick(choice.requestChoice)">
+      {{choice.label}}
     </button>
   </mat-list-item>
 </mat-list>

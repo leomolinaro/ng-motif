@@ -34,10 +34,11 @@ export class AgotRequestService {
     public loginService: AuthService
   ) {
 
-    const request$ = this.store.select(fromAgot.selectNewRequest).pipe (filter (request => !!request));
+    const request$ = this.store.select(fromAgot.selectNewRequest).pipe(filter(request => !!request));
 
     request$.subscribe(request => {
       this.requestedPlayerId = request.playerId;
+      console.log(request);
       this.showRequestSnackBar(request.instruction);
       const choicesByCard: { [cardId: number]: RequestChoice[] } = {};
       const genChoices: RequestChoice[] = [];

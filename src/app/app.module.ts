@@ -16,6 +16,8 @@ import { StoreModule } from '@ngrx/store';
 import { SharedModule } from './shared/shared.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { GraphQLModule } from './shared/graphql/graphql.module';
+import { HttpClientModule } from '@angular/common/http';
 // import { motifReducers } from './store/reducers';
 
 const appRoutes: Routes = [
@@ -38,6 +40,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot (appRoutes),
     StoreModule.forRoot ({}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    GraphQLModule,
+    HttpClientModule,
     // StoreDevtoolsModule.instrumentOnlyWithExtension({
     //   maxAge: 5
     // })

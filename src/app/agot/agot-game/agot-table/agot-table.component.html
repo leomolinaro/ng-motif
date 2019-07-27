@@ -12,7 +12,7 @@
         <agot-card *ngIf="playerUI.deadPileTop$ | async as card" horizontal="true" [card]="card"></agot-card>
       </div>
       <div fxFlex="50%" fxLayoutAlign="center" fxLayoutWrap>
-        <agot-card *ngFor="let card of playerUI.locations$ | async" [card]="card"></agot-card>
+        <agot-card *ngFor="let card of playerUI.locations$ | async; trackBy: trackCard" [card]="card"></agot-card>
       </div>
     </div>
     <div [fxLayout]="playerUI.reverseLayout ? 'row-reverse' : 'row'" fxLayoutAlign="start center">
@@ -23,7 +23,7 @@
         <agot-card *ngIf="playerUI.agenda$ | async as card" [card]="card"></agot-card>
       </div>
       <div fxFlex="60%" fxLayoutAlign="center" fxLayoutWrap>
-        <agot-card *ngFor="let card of playerUI.characters$ | async" [card]="card"></agot-card>
+        <agot-card *ngFor="let card of playerUI.characters$ | async; trackBy: trackCard" [card]="card"></agot-card>
       </div>
       <div fxFlex="20%" fxLayoutAlign="start center" [fxLayout]="playerUI.reverseLayout ? 'column-reverse' : 'column'">
         <div fxFlex *ngIf="playerUI.plotDeck$ | async as deck">
@@ -42,16 +42,14 @@
     <mat-card fxLayout="row" fxLayoutAlign="start center">
     <!-- PLAYER TRESURE -->
       <div fxFlex="22%" fxLayoutAlign="center">
-        <img *ngFor="let gold of playerUI.goldArray$" class="gold-token" src="./assets/gold-token.png">
+        <img *ngFor="let gold of playerUI.goldArray$ | async" class="gold-token" src="./assets/gold-token.png">
       </div>
     <!-- PLAYER HAND -->
       <div fxFlex fxLayoutAlign="center" fxLayoutWrap>
-        <ng-container *ngFor="let card of playerUI.hand$ | async">
+        <ng-container *ngFor="let card of playerUI.hand$ | async; trackBy: trackCard">
           <agot-card [card]="card"></agot-card>
         </ng-container>
       </div>
     </mat-card>
   </mat-tab>
 </mat-tab-group>
-
-  

@@ -6,19 +6,22 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { LoginComponent } from './login/login.component';
+import { NgLetModule } from '@ngrx-utils/store';
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NgLetModule
   ],
   exports: [
     NotFoundComponent,
     MaterialModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NgLetModule
   ],
   declarations: [NotFoundComponent]
 })

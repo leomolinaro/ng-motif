@@ -1,17 +1,18 @@
 <span 
   [class]="'attachments-' + attSpan + ' duplicates-' + (dupSpan$ | async)">
   <span
+    *ngLet="(active$ | async) as active"
     class="card"
     [ngClass]="{'kneeling': card.kneeling, 'horizontal-card': horizontal, 'vertical-card': !horizontal, 'hint clickable': active }">
-    <div [matMenuTriggerFor]="cardMenu"></div><!--[matMenuTriggerFor]="cardMenu"-->
+    <div [matMenuTriggerFor]="cardMenu"></div>
   <!-- <span [class]="'card' 
       + (horizontal ? ' horizontal-card' : ' vertical-card')
       + (card.crdKne ? ' kneeling' : '')
       + ((!card.crdRvl && show) ? ' unrevealed' : '')" > -->
       <!-- <div [matMenuTriggerFor]="actionMenu"></div> -->
-    <img class="card-image"  
+    <img class="card-image" 
       [src]="card.imageSource"
-      (click)="onClick($event)"
+      (click)="onClick(active, $event)"
       (mouseenter)="onMouseEnter(card, $event)"
       (mouseleave)="onMouseLeave(card, $event)"
       alt="card">
@@ -21,9 +22,9 @@
   <mat-menu #cardMenu="matMenu">
     <button 
       mat-menu-item
-      *ngFor="let choice of choices"
-      (click)="onClickChoice(choice)">
-      {{choice.cardAction}}
+      *ngFor="let choice of choices$ | async"
+      (click)="onClickChoice(choice.requestChoice)">
+      {{choice.label}}
     </button>
   </mat-menu>
   <agot-card agotDuplicate *ngFor="let duplicate of duplicates$ | async; let i = index" [class]="'duplicate duplicate-' + (i + 1)" [card]="duplicate"></agot-card>

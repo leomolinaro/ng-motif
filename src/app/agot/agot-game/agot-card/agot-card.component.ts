@@ -11,6 +11,11 @@ import { MatMenuTrigger } from '@angular/material';
 
 import * as fromAgot from '../../store/agot.reducer';
 
+interface RequestChoiceView {
+  requestChoice: RequestChoice,
+  label: string
+}
+
 @Component({
   selector: 'agot-card',
   templateUrl: './agot-card.component.html',
@@ -19,17 +24,17 @@ import * as fromAgot from '../../store/agot.reducer';
 })
 export class AgotCardComponent extends MotifComponent {
 
-  @ViewChild (MatMenuTrigger, { static: true }) menuTrigger: MatMenuTrigger;
-  @Input () card: Card;
-  @Input () horizontal: boolean;
+  @ViewChild(MatMenuTrigger, { static: false }) menuTrigger: MatMenuTrigger;
+  @Input() card: Card;
+  @Input() horizontal: boolean;
   
   dupSpan$: Observable<number>;
   attSpan: number;
   powerArray: any[];
 
-  active: boolean;
+  active$: Observable<boolean>;
   entered: boolean;
-  choices: RequestChoice[];
+  choices$: Observable<RequestChoiceView[]>;
 
   attachments$: Observable<Card[]>;
   duplicates$: Observable<Card[]>;
@@ -41,7 +46,6 @@ export class AgotCardComponent extends MotifComponent {
   ) { super (); }
   
   ngOnChanges(changes: SimpleChanges) {
-    console.log("ngOnChanges cardId", this.card.id, changes);
     this.attSpan = this.card.attachmentIds ? this.card.attachmentIds.length : 0;
     this.powerArray = [];
     for (let i = 1; i <= this.card.power; i++) {
@@ -61,35 +65,39 @@ export class AgotCardComponent extends MotifComponent {
       return dupSpan;
     }));
 
+    const choices$ = this.requestService.getCardChoices$(this.card.id);
+
+    this.choices$ = choices$.pipe(
+      map(choices => choices ? choices.map(choice => ({
+        requestChoice: choice,
+        label: this.getLabelByChoice(choice)
+      })) : [])
+    );
+
+    this.active$ = choices$.pipe(map(choices => choices && choices.length > 0))
+
   }
 
-  ngOnInit () {
-    console.log("ngOnInit cardId", this.card.id);
-    
-    // const cardAndAttLst$ = this.card$.pipe(
-    //   switchMap(card => combineLatest([
-    //     of(card),
-    //     ...(card.attachmentIds ? card.attachmentIds.map(attId => this.store.select(fromAgot.selectCardById).pipe(map(c => c(attId)))) : [])
-    //   ]))
-    // );
-    // this.dupSpan$ = cardAndAttLst$.pipe(map(cardAndAttLst => {
-    //   let dupSpan = 0;
-    //   for (let card of cardAndAttLst) {
-    //     if (card.duplicateIds) {
-    //       if (card.duplicateIds.length > dupSpan) { dupSpan = card.duplicateIds.length; }
-    //     }
-    //   }
-    //   return dupSpan;
-    // }));
-
-    this.subscribe(this.requestService.getCardChoices$(this.card.id), cardChoices => {
-      this.choices = cardChoices;
-      this.active = cardChoices && cardChoices.length > 0;
-    });
+  getLabelByChoice(choice: RequestChoice): string {
+    switch (choice.choiceType) {
+      case "SELECT_CARD": return "Select";
+      case "SELECT_CARD_ACTION": {
+        switch (choice.cardAction) {
+          case "ACTION": return "Action";
+          case "INTERRUP": return "Interrupt";
+          case "MARSHALL": return "Marshall";
+          case "PLAY": return "Play";
+          case "REACTION": return "Reaction";
+        }
+      }
+    }
+    return "---";
   }
 
-  ngOnDestroy () {
-    console.log ("destroy card", this.card.id);
+  ngOnInit() {
+  }
+
+  ngOnDestroy() {
     this.unsubscribeAll ();
     if (this.entered) {
       this.entered = false;
@@ -97,8 +105,8 @@ export class AgotCardComponent extends MotifComponent {
     }
   }
 
-  onClick() {
-    if (this.choices) {
+  onClick(active: boolean) {
+    if (active) {
       this.menuTrigger.openMenu();
     }
   }
@@ -107,12 +115,12 @@ export class AgotCardComponent extends MotifComponent {
     this.requestService.respond(choice);
   }
 
-  private onMouseEnter (card: Card, event: MouseEvent) {
+  onMouseEnter(card: Card, event: MouseEvent) {
     this.entered = true;
     this.hoverService.onCardEnter(card, event.x/* , this.show */);
-  } // onMouseEnter
+  }
   
-  private onMouseLeave (card: Card, event: MouseEvent) {
+  onMouseLeave(card: Card, event: MouseEvent) {
     this.entered = false;
     this.hoverService.onCardLeave(card);
   }

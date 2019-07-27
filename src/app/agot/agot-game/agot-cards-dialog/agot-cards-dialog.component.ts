@@ -1,5 +1,4 @@
 import { Card } from './../../models/card.model';
-import { Observable } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Component, OnInit, Inject } from '@angular/core';
 import { AgotCardsDialogData } from './agot-cards-dialog-data';
@@ -12,46 +11,17 @@ import { AgotCardsDialogData } from './agot-cards-dialog-data';
 export class AgotCardsDialogComponent implements OnInit {
 
   horizontal: boolean;
-  cards$: Observable<Card[]>;
+  cards: Card[];
 
   constructor (
     public dialogRef: MatDialogRef<AgotCardsDialogComponent>,
     @Inject (MAT_DIALOG_DATA) data: AgotCardsDialogData
   ) {
-    this.cards$ = data.cards$;
-    this.horizontal = true;
-  } // constructor
+    this.cards = data.cards;
+    this.horizontal = data.horizontal;
+  }
 
   ngOnInit () {
-  } // ngOnInit
+  }
 
-} // AgotCardsDialogComponent
-
-
-
-// export class AgotCardsDialogData {
-//   constructor (public pla: Pla, public cards: FireCrd[], public actions: { uid: string, label: string }[], public horizontal: boolean) {}
-// } // AgotCardSelectorInput
-
-// export class AgotCardSelectorComponent implements OnInit {
-
-//   cards: FireCrd[];
-//   actions: { uid: string, label: string }[];
-//   pla: Pla;
-//   horizontal: boolean;
-
-//   constructor (public dialogRef: MatDialogRef<AgotCardSelectorComponent>, @Inject(MAT_DIALOG_DATA) data: AgotCardSelectorInput) {
-//     this.cards = data.cards;
-//     this.pla = data.pla;
-//     this.actions = data.actions;
-//     this.horizontal = data.horizontal;
-//   } // constructor
-
-//   ngOnInit () {
-//   } // ngOnInit
-
-//   onCardClick (card: Crd) { this.dialogRef.close (new AgotCardSelectorOutput (card, null)); }
-
-//   onCardAction (card: Crd, actionUid: string) { this.dialogRef.close (new AgotCardSelectorOutput (card, actionUid)); }
-
-// } // AgotCardSelectorComponent
+}

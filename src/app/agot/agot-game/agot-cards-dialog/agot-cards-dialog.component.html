@@ -19,7 +19,7 @@
 </p> -->
 
 <div fxFlex fxLayoutAlign="center" fxLayoutWrap>
-  <ng-container *ngFor="let card of cards$ | async">
+  <ng-container *ngFor="let card of cards">
     <agot-card [card]="card" [horizontal]="horizontal"></agot-card>
   </ng-container>
 </div>

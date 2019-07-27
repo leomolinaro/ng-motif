@@ -103,17 +103,16 @@ export class AgotTableComponent extends MotifComponent implements OnInit {
     if (pile && pile.length > 0) { return pile[pile.length - 1]; } else { return null; }
   }
 
-  onPlayerPlotDeckClick(playerIndex: number) {
-    this.openPlayerPlotDeckDialog(playerIndex);
+  onPlayerPlotDeckClick(deck: Card[]) {
+    let dialogRef = this.dialog.open(AgotCardsDialogComponent, {
+      height: '500px',
+      width: '600px',
+      data: new AgotCardsDialogData(deck, true)
+    });
   }
 
-  openPlayerPlotDeckDialog(playerIndex: number) {
-    // let cardIds$ = this.playerUIs[playerIndex].plotDeck$;
-    // let dialogRef = this.dialog.open (AgotCardsDialogComponent, {
-    //   height: '500px',
-    //   width: '600px',
-    //   data: new AgotCardsDialogData(cardIds$, true)
-    // });
+  trackCard(index: number, card: Card) {
+    return card.id;
   }
 
 }
