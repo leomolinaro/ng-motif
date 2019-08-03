@@ -1,23 +1,23 @@
 export type Maybe<T> = T | null;
 
-export interface InputPlayerInput {
-  deck?: Maybe<(Maybe<InputCardInput>)[]>;
+export interface MotifTokenInput {
+  token?: Maybe<string>;
+}
 
+export interface InputPlayerInput {
   name?: Maybe<string>;
 
-  faction?: Maybe<AngFaction>;
-
   id?: Maybe<string>;
+
+  deck?: Maybe<(Maybe<InputCardInput>)[]>;
+
+  faction?: Maybe<AngFaction>;
 }
 
 export interface InputCardInput {
-  card?: Maybe<AgotCardSeed>;
-
   quantity: number;
-}
 
-export interface MotifTokenInput {
-  token?: Maybe<string>;
+  card?: Maybe<AgotCardSeed>;
 }
 
 export enum AngPhase {
@@ -1337,6 +1337,22 @@ export type Unrepresentable = any;
 // Documents
 // ====================================================
 
+export namespace GetRequest {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+
+    request: Maybe<Request>;
+  };
+
+  export type Request = {
+    __typename?: "AAgotRequest";
+
+    instruction: Maybe<string>;
+  };
+}
+
 export namespace GetGame {
   export type Variables = {};
 
@@ -1349,12 +1365,153 @@ export namespace GetGame {
   export type Game = {
     __typename?: "AgotGame";
 
+    allCards: Maybe<(Maybe<AllCards>)[]>;
+
+    allPlayers: Maybe<(Maybe<AllPlayers>)[]>;
+
     round: Maybe<string>;
+
+    phase: Maybe<AngPhase>;
+
+    step: Maybe<string>;
+
+    log: Maybe<(Maybe<Log>)[]>;
+
+    started: boolean;
+
+    firstPlayer: Maybe<FirstPlayer>;
+  };
+
+  export type AllCards = {
+    __typename?: "Card";
+
+    id: Long;
+
+    imageSource: Maybe<string>;
+
+    power: number;
+
+    kneeling: boolean;
+
+    revealed: boolean;
+
+    attachmentIds: Maybe<(Maybe<Long>)[]>;
+
+    duplicateIds: Maybe<(Maybe<Long>)[]>;
+  };
+
+  export type AllPlayers = {
+    __typename?: "AgotPlayer";
+
+    id: Maybe<string>;
+
+    name: Maybe<string>;
+
+    gold: number;
+
+    agenda: Maybe<Agenda>;
+
+    faction: Maybe<Faction>;
+
+    hand: Maybe<(Maybe<Hand>)[]>;
+
+    characters: Maybe<(Maybe<Characters>)[]>;
+
+    locations: Maybe<(Maybe<Locations>)[]>;
+
+    discardPile: Maybe<(Maybe<DiscardPile>)[]>;
+
+    plotDeck: Maybe<(Maybe<PlotDeck>)[]>;
+
+    usedPlotPile: Maybe<(Maybe<UsedPlotPile>)[]>;
+
+    deadPile: Maybe<(Maybe<DeadPile>)[]>;
+
+    revealedPlot: Maybe<RevealedPlot>;
+
+    drawDeckEmpty: boolean;
+  };
+
+  export type Agenda = {
+    __typename?: "AgendaCard";
+
+    id: Long;
+  };
+
+  export type Faction = {
+    __typename?: "FactionCard";
+
+    id: Long;
+  };
+
+  export type Hand = {
+    __typename?: "DrawCard_AngDrawCard";
+
+    id: Long;
+  };
+
+  export type Characters = {
+    __typename?: "CharacterCard";
+
+    id: Long;
+  };
+
+  export type Locations = {
+    __typename?: "LocationCard";
+
+    id: Long;
+  };
+
+  export type DiscardPile = {
+    __typename?: "DrawCard_AngDrawCard";
+
+    id: Long;
+  };
+
+  export type PlotDeck = {
+    __typename?: "PlotCard";
+
+    id: Long;
+  };
+
+  export type UsedPlotPile = {
+    __typename?: "PlotCard";
+
+    id: Long;
+  };
+
+  export type DeadPile = {
+    __typename?: "CharacterCard";
+
+    id: Long;
+  };
+
+  export type RevealedPlot = {
+    __typename?: "PlotCard";
+
+    id: Long;
+  };
+
+  export type Log = {
+    __typename?: "GameLogRow";
+
+    message: Maybe<string>;
+
+    type: Maybe<GameLogRowType>;
+  };
+
+  export type FirstPlayer = {
+    __typename?: "AgotPlayer";
+
+    id: Maybe<string>;
   };
 }
 
 export namespace CreateSampleGame {
-  export type Variables = {};
+  export type Variables = {
+    inputPlayers: (Maybe<InputPlayerInput>)[];
+    token: MotifTokenInput;
+  };
 
   export type Mutation = {
     __typename?: "Mutation";
@@ -1383,11 +1540,19 @@ export namespace CreateSampleGame {
 
 /** Query root */
 export interface Query {
+  request?: Maybe<AAgotRequest>;
+
   game?: Maybe<AgotGame>;
+}
+
+export interface AAgotRequest {
+  instruction?: Maybe<string>;
 }
 
 export interface AgotGame {
   phase?: Maybe<AngPhase>;
+
+  firstPlayer?: Maybe<AgotPlayer>;
 
   round?: Maybe<string>;
 
@@ -1395,9 +1560,129 @@ export interface AgotGame {
 
   step?: Maybe<string>;
 
+  started: boolean;
+
   allCards?: Maybe<(Maybe<Card>)[]>;
 
   allPlayers?: Maybe<(Maybe<AgotPlayer>)[]>;
+}
+
+export interface AgotPlayer {
+  discardPile?: Maybe<(Maybe<DrawCardAngDrawCard>)[]>;
+
+  usedPlotPile?: Maybe<(Maybe<PlotCard>)[]>;
+
+  agenda?: Maybe<AgendaCard>;
+
+  revealedPlot?: Maybe<PlotCard>;
+
+  deadPile?: Maybe<(Maybe<CharacterCard>)[]>;
+
+  gold: number;
+
+  characters?: Maybe<(Maybe<CharacterCard>)[]>;
+
+  faction?: Maybe<FactionCard>;
+
+  drawDeckEmpty: boolean;
+
+  name?: Maybe<string>;
+
+  locations?: Maybe<(Maybe<LocationCard>)[]>;
+
+  plotDeck?: Maybe<(Maybe<PlotCard>)[]>;
+
+  id?: Maybe<string>;
+
+  hand?: Maybe<(Maybe<DrawCardAngDrawCard>)[]>;
+}
+
+export interface DrawCardAngDrawCard {
+  imageSource?: Maybe<string>;
+
+  revealed: boolean;
+
+  attachmentIds?: Maybe<(Maybe<Long>)[]>;
+
+  duplicateIds?: Maybe<(Maybe<Long>)[]>;
+
+  power: number;
+
+  id: Long;
+
+  kneeling: boolean;
+}
+
+export interface PlotCard {
+  imageSource?: Maybe<string>;
+
+  revealed: boolean;
+
+  attachmentIds?: Maybe<(Maybe<Long>)[]>;
+
+  duplicateIds?: Maybe<(Maybe<Long>)[]>;
+
+  power: number;
+
+  id: Long;
+
+  kneeling: boolean;
+}
+
+export interface AgendaCard {
+  imageSource?: Maybe<string>;
+
+  revealed: boolean;
+
+  attachmentIds?: Maybe<(Maybe<Long>)[]>;
+
+  duplicateIds?: Maybe<(Maybe<Long>)[]>;
+
+  power: number;
+
+  id: Long;
+
+  kneeling: boolean;
+}
+
+export interface CharacterCard {
+  revealed: boolean;
+
+  imageSource?: Maybe<string>;
+
+  power: number;
+
+  id: Long;
+
+  kneeling: boolean;
+}
+
+export interface FactionCard {
+  imageSource?: Maybe<string>;
+
+  revealed: boolean;
+
+  attachmentIds?: Maybe<(Maybe<Long>)[]>;
+
+  duplicateIds?: Maybe<(Maybe<Long>)[]>;
+
+  power: number;
+
+  id: Long;
+
+  kneeling: boolean;
+}
+
+export interface LocationCard {
+  revealed: boolean;
+
+  imageSource?: Maybe<string>;
+
+  power: number;
+
+  id: Long;
+
+  kneeling: boolean;
 }
 
 export interface GameLogRow {
@@ -1413,23 +1698,17 @@ export interface Card {
 
   attachmentIds?: Maybe<(Maybe<Long>)[]>;
 
+  power: number;
+
   duplicateIds?: Maybe<(Maybe<Long>)[]>;
 
   id: Long;
 
-  power: number;
-
   kneeling: boolean;
-}
-
-export interface AgotPlayer {
-  id?: Maybe<string>;
 }
 
 /** Mutation root */
 export interface Mutation {
-  test?: Maybe<string>;
-
   createGame?: Maybe<AgotGame>;
 }
 
@@ -1437,8 +1716,8 @@ export interface Mutation {
 // Arguments
 // ====================================================
 
-export interface TestMutationArgs {
-  ciao?: Maybe<string>;
+export interface RequestQueryArgs {
+  token?: Maybe<MotifTokenInput>;
 }
 export interface CreateGameMutationArgs {
   inputPlayers?: Maybe<(Maybe<InputPlayerInput>)[]>;

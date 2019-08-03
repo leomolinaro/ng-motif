@@ -68,6 +68,10 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     this.gameService.createGame ();
   }
 
+  getGame () {
+    this.gameService.getGame ();
+  }
+
   onChoiceClick (choice: RequestChoice) {
     this.gameService.respond (choice);
   }

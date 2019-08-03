@@ -10,7 +10,6 @@ import * as fromUtil from '../../shared/reducer.util';
 
 export interface AgotState {
 	game: AgotGame,
-	userPlayerIds: string[],
 	request?: AgotRequest
 }
 
@@ -25,8 +24,7 @@ export const INITIAL_STATE: AgotState = {
 		log: [],
     firstPlayer: null,
     started: false
-	},
-	userPlayerIds: []
+	}
 }
 
 function updateGame (game: AgotGame, state: AgotState): AgotState {

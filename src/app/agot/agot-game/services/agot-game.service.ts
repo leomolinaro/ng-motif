@@ -1,3 +1,4 @@
+import { InputPlayerInput, MotifTokenInput, AngFaction, AgotCardSeed, GetRequest } from './../../../graphql-types';
 import { MessageOut } from '../../../shared/websocket/models/message-out.model';
 import { filter } from 'rxjs/operators';
 import { RequestChoice } from '../../models/request-choice.model';
@@ -98,8 +99,95 @@ export class AgotGameService {
   }
 
   createGame () {
-    this.apollo.mutate<CreateSampleGame.Mutation>({
-      mutation: createSampleGame
+    this.apollo.mutate<CreateSampleGame.Mutation, { inputPlayers: InputPlayerInput[], token: MotifTokenInput }>({
+      mutation: createSampleGame,
+      variables: {
+        token: { token: "leo.molinaro" },
+        inputPlayers: [
+          {
+            id: "leo",
+            faction: AngFaction.Tyrell,
+            name: "Leo",
+            deck: [
+              { card: AgotCardSeed.FealtyCore, quantity: 1 },
+              { card: AgotCardSeed.AGameOfThronesCore, quantity: 1 },
+              { card: AgotCardSeed.CallingTheBannersCore, quantity: 1 },
+              { card: AgotCardSeed.ConfiscationCore, quantity: 1 },
+              { card: AgotCardSeed.JoustingContestCore, quantity: 2 },
+              { card: AgotCardSeed.MarchedToTheWallCore, quantity: 1 },
+              { card: AgotCardSeed.WildfireAssaultCore, quantity: 1 },
+              { card: AgotCardSeed.CourtesanOfTheRoseCore, quantity: 3 },
+              { card: AgotCardSeed.GardenCaretakerCore, quantity: 3 },
+              { card: AgotCardSeed.LeftCore, quantity: 2 },
+              { card: AgotCardSeed.MaesterLomysCore, quantity: 1 },
+              { card: AgotCardSeed.MargaeryTyrellCore, quantity: 3 },
+              { card: AgotCardSeed.OlennasInformantCore, quantity: 2 },
+              { card: AgotCardSeed.PaxterRedwyneCore, quantity: 3 },
+              { card: AgotCardSeed.RandyllTarlyCore, quantity: 2 },
+              { card: AgotCardSeed.RightCore, quantity: 2 },
+              { card: AgotCardSeed.TheKnightOfFlowersCore, quantity: 3 },
+              { card: AgotCardSeed.TheQueenOfThornsCore, quantity: 2 },
+              { card: AgotCardSeed.VarysCore, quantity: 2 },
+              { card: AgotCardSeed.WardensOfTheReachCore, quantity: 2 },
+              { card: AgotCardSeed.BodyguardCore, quantity: 2 },
+              { card: AgotCardSeed.HeartsbaneCore, quantity: 2 },
+              { card: AgotCardSeed.MilkOfThePoppyCore, quantity: 2 },
+              { card: AgotCardSeed.SealOfTheHandCore, quantity: 2 },
+              { card: AgotCardSeed.HighgardenCore, quantity: 3 },
+              { card: AgotCardSeed.RoseGardenCore, quantity: 3 },
+              { card: AgotCardSeed.TheManderCore, quantity: 3 },
+              { card: AgotCardSeed.TheRoseroadCore, quantity: 3 },
+              { card: AgotCardSeed.TheBearAndTheMaidenFairCore, quantity: 1 },
+              { card: AgotCardSeed.GrowingStrongCore, quantity: 2 },
+              { card: AgotCardSeed.OlennasCunningCore, quantity: 3 },
+              { card: AgotCardSeed.PutToTheSwordCore, quantity: 2 },
+              { card: AgotCardSeed.TheHandsJudgmentCore, quantity: 2 }
+            ]
+          },
+          {
+            id: "fede",
+            faction: AngFaction.Thenightswatch,
+            name: "Fede",
+            deck: [
+              { card: AgotCardSeed.FealtyCore, quantity: 1 },
+              { card: AgotCardSeed.ANobleCauseCore, quantity: 1 },
+              { card: AgotCardSeed.CalmOverWesterosCore, quantity: 1 },
+              { card: AgotCardSeed.ConfiscationCore, quantity: 1 },
+              { card: AgotCardSeed.FilthyAccusationsCore, quantity: 1 },
+              { card: AgotCardSeed.FortifiedPositionCore, quantity: 1 },
+              { card: AgotCardSeed.PowerBehindTheThroneCore, quantity: 1 },
+              { card: AgotCardSeed.WildfireAssaultCore, quantity: 1 },
+              { card: AgotCardSeed.BenjenStarkCore, quantity: 3 },
+              { card: AgotCardSeed.GhostCore, quantity: 3 },
+              { card: AgotCardSeed.JonSnowCore, quantity: 3 },
+              { card: AgotCardSeed.LittlefingerCore, quantity: 3 },
+              { card: AgotCardSeed.MaesterAemonCore, quantity: 3 },
+              { card: AgotCardSeed.MessengerRavenCore, quantity: 3 },
+              { card: AgotCardSeed.OldBearMormontCore, quantity: 3 },
+              { card: AgotCardSeed.OldForestHunterCore, quantity: 3 },
+              { card: AgotCardSeed.RangingPartyCore, quantity: 3 },
+              { card: AgotCardSeed.RattleshirtsRaidersCore, quantity: 3 },
+              { card: AgotCardSeed.SamwellTarlyCore, quantity: 3 },
+              { card: AgotCardSeed.SerWaymarRoyceCore, quantity: 3 },
+              { card: AgotCardSeed.StewardAtTheWallCore, quantity: 3 },
+              { card: AgotCardSeed.VarysCore, quantity: 3 },
+              { card: AgotCardSeed.VeteranBuilderCore, quantity: 3 },
+              { card: AgotCardSeed.WildlingHordeCore, quantity: 3 },
+              { card: AgotCardSeed.YorenCore, quantity: 3 },
+              { card: AgotCardSeed.LittleBirdCore, quantity: 3 },
+              { card: AgotCardSeed.LongclawCore, quantity: 3 },
+              { card: AgotCardSeed.MilkOfThePoppyCore, quantity: 3 },
+              { card: AgotCardSeed.CastleBlackCore, quantity: 3 },
+              { card: AgotCardSeed.TheKingsroadCore, quantity: 3 },
+              { card: AgotCardSeed.TheRoseroadCore, quantity: 3 },
+              { card: AgotCardSeed.TheWallCore, quantity: 3 },
+              { card: AgotCardSeed.AMeagerContributionCore, quantity: 3 },
+              { card: AgotCardSeed.TakeTheBlackCore, quantity: 3 },
+              { card: AgotCardSeed.TheHandsJudgmentCore, quantity: 3 }
+            ]
+          }
+        ]
+      }
     })
     .subscribe(x => console.log("Apollo mutation ", x.data));
   }
@@ -109,108 +197,128 @@ export class AgotGameService {
       query: getGame
     })
     .subscribe(x => console.log("Apollo query", x.data));
+
+    this.getRequest ();
+  }
+
+  getRequest () {
+    this.apollo.query<GetRequest.Query, { token: MotifTokenInput }>({
+      query: getRequest,
+      variables: {
+        token: { token: "leo.molinaro" }
+      }
+    })
+    .subscribe(x => console.log("Apollo query", x.data));
   }
   
 }
 
+const getRequest = gql`
+  query GetRequest($token: MotifTokenInput!) {
+    request(token: $token) {
+      instruction
+    }
+  }
+`;
+
 const getGame = gql`
   query GetGame {
     game {
+      allCards {
+        id
+        imageSource
+        power
+        kneeling
+        revealed
+        attachmentIds
+        duplicateIds
+      }
+      allPlayers {
+        id
+        name
+        gold
+        agenda {
+          id
+        }
+        faction {
+          id
+        }
+        hand {
+          id
+        }
+        characters {
+          id
+        }
+        locations {
+          id
+        }
+        discardPile {
+          id
+        }
+        plotDeck {
+          id
+        }
+        usedPlotPile {
+          id
+        }
+        deadPile {
+          id
+        }
+        revealedPlot {
+          id
+        }
+        drawDeckEmpty
+      }
       round
+      phase
+      step
+      log {
+        message
+        type
+      }
+      started
+      firstPlayer {
+        id
+      }
     }
   }
-`
+`;
 
 const createSampleGame = gql`
-  mutation CreateSampleGame {
-    createGame(inputPlayers: [
-      {
-        id: "leo",
-        faction: TYRELL,
-        name: "Leo",
-        deck: [
-          { card: FEALTY_Core, quantity: 1 },
-          { card: A_GAME_OF_THRONES_Core, quantity: 1 },
-          { card: CALLING_THE_BANNERS_Core, quantity: 1 },
-          { card: CONFISCATION_Core, quantity: 1 },
-          { card: JOUSTING_CONTEST_Core, quantity: 2 },
-          { card: MARCHED_TO_THE_WALL_Core, quantity: 1 },
-          { card: WILDFIRE_ASSAULT_Core, quantity: 1 },
-          { card: COURTESAN_OF_THE_ROSE_Core, quantity: 3 },
-          { card: GARDEN_CARETAKER_Core, quantity: 3 },
-          { card: LEFT_Core, quantity: 2 },
-          { card: MAESTER_LOMYS_Core, quantity: 1 },
-          { card: MARGAERY_TYRELL_Core, quantity: 3 },
-          { card: OLENNAS_INFORMANT_Core, quantity: 2 },
-          { card: PAXTER_REDWYNE_Core, quantity: 3 },
-          { card: RANDYLL_TARLY_Core, quantity: 2 },
-          { card: RIGHT_Core, quantity: 2 },
-          { card: THE_KNIGHT_OF_FLOWERS_Core, quantity: 3 },
-          { card: THE_QUEEN_OF_THORNS_Core, quantity: 2 },
-          { card: VARYS_Core, quantity: 2 },
-          { card: WARDENS_OF_THE_REACH_Core, quantity: 2 },
-          { card: BODYGUARD_Core, quantity: 2 },
-          { card: HEARTSBANE_Core, quantity: 2 },
-          { card: MILK_OF_THE_POPPY_Core, quantity: 2 },
-          { card: SEAL_OF_THE_HAND_Core, quantity: 2 },
-          { card: HIGHGARDEN_Core, quantity: 3 },
-          { card: ROSE_GARDEN_Core, quantity: 3 },
-          { card: THE_MANDER_Core, quantity: 3 },
-          { card: THE_ROSEROAD_Core, quantity: 3 },
-          { card: THE_BEAR_AND_THE_MAIDEN_FAIR_Core, quantity: 1 },
-          { card: GROWING_STRONG_Core, quantity: 2 },
-          { card: OLENNAS_CUNNING_Core, quantity: 3 },
-          { card: PUT_TO_THE_SWORD_Core, quantity: 2 },
-          { card: THE_HANDS_JUDGMENT_Core, quantity: 2 }
-        ]
-      },
-      {
-        id: "fede",
-        faction: THENIGHTSWATCH,
-        name: "Fede",
-        deck: [
-          { card: FEALTY_Core, quantity: 1 },
-          { card: A_NOBLE_CAUSE_Core, quantity: 1 },
-          { card: CALM_OVER_WESTEROS_Core, quantity: 1 },
-          { card: CONFISCATION_Core, quantity: 1 },
-          { card: FILTHY_ACCUSATIONS_Core, quantity: 1 },
-          { card: FORTIFIED_POSITION_Core, quantity: 1 },
-          { card: POWER_BEHIND_THE_THRONE_Core, quantity: 1 },
-          { card: WILDFIRE_ASSAULT_Core, quantity: 1 },
-          { card: BENJEN_STARK_Core, quantity: 3 },
-          { card: GHOST_Core, quantity: 3 },
-          { card: JON_SNOW_Core, quantity: 3 },
-          { card: LITTLEFINGER_Core, quantity: 3 },
-          { card: MAESTER_AEMON_Core, quantity: 3 },
-          { card: MESSENGER_RAVEN_Core, quantity: 3 },
-          { card: OLD_BEAR_MORMONT_Core, quantity: 3 },
-          { card: OLD_FOREST_HUNTER_Core, quantity: 3 },
-          { card: RANGING_PARTY_Core, quantity: 3 },
-          { card: RATTLESHIRTS_RAIDERS_Core, quantity: 3 },
-          { card: SAMWELL_TARLY_Core, quantity: 3 },
-          { card: SER_WAYMAR_ROYCE_Core, quantity: 3 },
-          { card: STEWARD_AT_THE_WALL_Core, quantity: 3 },
-          { card: VARYS_Core, quantity: 3 },
-          { card: VETERAN_BUILDER_Core, quantity: 3 },
-          { card: WILDLING_HORDE_Core, quantity: 3 },
-          { card: YOREN_Core, quantity: 3 },
-          { card: LITTLE_BIRD_Core, quantity: 3 },
-          { card: LONGCLAW_Core, quantity: 3 },
-          { card: MILK_OF_THE_POPPY_Core, quantity: 3 },
-          { card: CASTLE_BLACK_Core, quantity: 3 },
-          { card: THE_KINGSROAD_Core, quantity: 3 },
-          { card: THE_ROSEROAD_Core, quantity: 3 },
-          { card: THE_WALL_Core, quantity: 3 },
-          { card: A_MEAGER_CONTRIBUTION_Core, quantity: 3 },
-          { card: TAKE_THE_BLACK_Core, quantity: 3 },
-          { card: THE_HANDS_JUDGMENT_Core, quantity: 3 }
-        ]
-      }
-    ],
-    token: { token: "leo.molinaro" }) {
+  mutation CreateSampleGame($inputPlayers: [InputPlayerInput]!, $token: MotifTokenInput!) {
+    createGame(
+      inputPlayers: $inputPlayers,
+      token: $token
+    ) {
       phase
       round
       step
     }
   }
-`
+`;
+
+// game.initFaction (fede, AngFaction.TARGARYEN);
+// game.initCard (fede, AgotCardSeed.A_NOBLE_CAUSE_Core, 2);
+// game.initCard (fede, AgotCardSeed.BRAIDED_WARRIOR_Core, 3);
+// game.initCard (fede, AgotCardSeed.DAENERYS_TARGARYEN_Core, 3);
+// game.initCard (fede, AgotCardSeed.DROGON_Core, 3);
+// game.initCard (fede, AgotCardSeed.HANDMAIDEN_Core, 3);
+// game.initCard (fede, AgotCardSeed.KHAL_DROGO_Core, 3);
+// game.initCard (fede, AgotCardSeed.LITTLEFINGER_Core, 2);
+// game.initCard (fede, AgotCardSeed.MAGISTER_ILLYRIO_Core, 2);
+// game.initCard (fede, AgotCardSeed.RHAEGAL_Core, 3);
+// game.initCard (fede, AgotCardSeed.SER_JORAH_MORMONT_Core, 3);
+// game.initCard (fede, AgotCardSeed.TARGARYEN_LOYALIST_Core, 3);
+// game.initCard (fede, AgotCardSeed.UNSULLIED_Core, 3);
+// game.initCard (fede, AgotCardSeed.VISERION_Core, 3);
+// game.initCard (fede, AgotCardSeed.VISERYS_TARGARYEN_Core, 2);
+// game.initCard (fede, AgotCardSeed.MILK_OF_THE_POPPY_Core, 2);
+// game.initCard (fede, AgotCardSeed.SEAL_OF_THE_HAND_Core, 2);
+// game.initCard (fede, AgotCardSeed.ILLYRIOS_ESTATE_Core, 3);
+// game.initCard (fede, AgotCardSeed.PLAZA_OF_PUNISHMENT_Core, 3);
+// game.initCard (fede, AgotCardSeed.THE_IRON_THRONE_Core, 1);
+// game.initCard (fede, AgotCardSeed.THE_KINGSROAD_Core, 3);
+// game.initCard (fede, AgotCardSeed.THE_ROSEROAD_Core, 3);
+// game.initCard (fede, AgotCardSeed.DRACARYS_Core, 3);
+// game.initCard (fede, AgotCardSeed.FIRE_AND_BLOOD_Core, 2);
+// game.initCard (fede, AgotCardSeed.WAKING_THE_DRAGON_Core, 2);
