@@ -1,4 +1,4 @@
-import { AgotRequest } from './../models/request.model';
+import { AAgotRequest, AgotReduxActionType } from './../../graphql-types';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Card } from '../models/card.model';
 import { Area } from '../models/area.model';
@@ -10,7 +10,7 @@ import * as fromUtil from '../../shared/reducer.util';
 
 export interface AgotState {
 	game: AgotGame,
-	request?: AgotRequest
+	request?: AAgotRequest
 }
 
 export const INITIAL_STATE: AgotState = {
@@ -67,7 +67,7 @@ export function reducer (
         game: action.payload.game
       }
     }
-    case fromAgot.REMOVE_CARD: {
+    case AgotReduxActionType.RemoveCard: {
       let oldPlayer: Player = getPlayer (action.payload.fromPlayer, state);
       let newPlayer: Player;
       switch (action.payload.fromArea) {
@@ -86,7 +86,7 @@ export function reducer (
       } // switch - case
       return updatePlayer (newPlayer, state);
     }
-    case fromAgot.ADD_CARD: {
+    case AgotReduxActionType.AddCard: {
       if (action.payload.index != -1) { console.error ("addCard index non gestito"); return; }
       let oldPlayer: Player = getPlayer (action.payload.toPlayer, state);
       let newPlayer: Player;
@@ -106,39 +106,39 @@ export function reducer (
       } // switch - case
       return updatePlayer (newPlayer, state);
     }
-    case fromAgot.ADD_ATTACHMENT: {
+    case AgotReduxActionType.AddAttachment: {
       let oldCard: Card = getCard (action.payload.toCard, state);
       let newCard = { ...oldCard, attachmentIds: fromUtil.pushed (action.payload.cardId, oldCard.attachmentIds) };
       return updateCard (newCard, state);
     }
-    case fromAgot.REMOVE_ATTACHMENT: {
+    case AgotReduxActionType.RemoveAttachment: {
       let oldCard: Card = getCard (action.payload.fromCard, state);
       let newCard = { ...oldCard, attachmentIds: fromUtil.removed (action.payload.cardId, oldCard.attachmentIds) };
       return updateCard (newCard, state);
     }
-    case fromAgot.ADD_DUPLICATE: {
+    case AgotReduxActionType.AddDuplicate: {
       let oldCard: Card = getCard (action.payload.toCard, state);
       let newCard = { ...oldCard, duplicateIds: fromUtil.pushed (action.payload.cardId, oldCard.duplicateIds) };
       return updateCard (newCard, state);
     }
-    case fromAgot.REMOVE_DUPLICATE: {
+    case AgotReduxActionType.RemoveDuplicate: {
       let oldCard: Card = getCard (action.payload.fromCard, state);
       let newCard = { ...oldCard, duplicateIds: fromUtil.removed (action.payload.cardId, oldCard.duplicateIds) };
       return updateCard (newCard, state);
     }    
-    case fromAgot.SET_CARD_KNEELING: {
+    case AgotReduxActionType.SetCardKneeling: {
       return updateCard ({ ...getCard (action.payload.cardId, state), kneeling: action.payload.kneeling }, state);
     }
-    case fromAgot.SET_CARD_POWER: {
+    case AgotReduxActionType.SetCardPower: {
       return updateCard ({ ...getCard (action.payload.cardId, state), power: action.payload.power }, state);
     }    
-    case fromAgot.SET_CARD_REVEALED: {
+    case AgotReduxActionType.SetCardRevealed: {
       return updateCard ({ ...getCard (action.payload.cardId, state), revealed: action.payload.revealed }, state);
     }    
-    case fromAgot.EMPTY_DRAW_DECK: {
+    case AgotReduxActionType.EmptyDrawDeck: {
       return updatePlayer ({ ...getPlayer (action.payload.player, state), drawDeckEmpty: true }, state);
     }
-    case fromAgot.SET_PHASE: {
+    case AgotReduxActionType.SetPhase: {
       return { ...state,
         game: { ...state.game,
           round: action.payload.round,
@@ -150,24 +150,24 @@ export function reducer (
     case fromAgot.REQUEST: {
       return { ...state, request: action.payload.request }
     }
-    case fromAgot.SET_FIRST_PLAYER: {
+    case AgotReduxActionType.SetFirstPlayer: {
       return { ...state,
         game: { ...state.game,
           firstPlayer: action.payload.player
         }
       }
     }
-    case fromAgot.SET_GAME_STARTED: {
+    case AgotReduxActionType.SetGameStarted: {
       return { ...state,
         game: { ...state.game,
           started: action.payload.started
         }
       }
     }
-    case fromAgot.SET_GOLD: {
+    case AgotReduxActionType.SetGold: {
       return updatePlayer ({ ...getPlayer (action.payload.player, state), gold: action.payload.gold }, state)
     }    
-    case fromAgot.ADD_LOG: {
+    case AgotReduxActionType.AddLog: {
       return { ...state,
         game: { ...state.game,
           log: fromUtil.pushed (action.payload.log, state.game.log)

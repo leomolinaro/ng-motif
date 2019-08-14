@@ -1,10 +1,8 @@
 import { AgotChoice } from './../../../graphql-types';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { MessageOut } from './../../../shared/websocket/models/message-out.model';
 import { AgotGameService } from '../services/agot-game.service';
 import { MotifComponent } from '../../../shared/components/motif.component';
-import { WebsocketService } from '../../../shared/websocket/websocket.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as fromAgot from '../../store/agot.reducer';
@@ -24,7 +22,6 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
   gameStarted$: Observable<boolean>;
   
   constructor (
-    private webSocket: WebsocketService,
     private gameService: AgotGameService,
     private store: Store<any>
   ) { super (); }
@@ -61,7 +58,7 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
   }
 
   startGame () {
-    this.webSocket.send ({ type: MessageOut.AGOT_START });
+    this.gameService.startGame ();
   }
 
   createGame () {

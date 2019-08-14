@@ -1,0 +1,14 @@
+overwrite: true
+schema: "http://localhost:8080/motif-web-project/motif/graphql"
+documents: "./src/**/*.ts"
+generates:
+  ./src/app/graphql-types.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+  ./src/app/shared/graphql/fragment-types.json:
+    plugins:
+      - "fragment-matcher"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

@@ -5,8 +5,7 @@ import { LogRow } from '../../shared/models/log-row.model';
 import { MotifComponent } from '../../shared/components/motif.component';
 import { AgotGameService } from './services/agot-game.service';
 import { AuthService } from '../../shared/login/auth.service';
-import { WebsocketService } from '../../shared/websocket/websocket.service';
-import { AgotCardHoverService, AgotCardHoverData } from './services/agot-card-hover.service';
+import { AgotCardHoverService } from './services/agot-card-hover.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -36,7 +35,6 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
   constructor (
     private store: Store<any>,
     private hoverService: AgotCardHoverService,
-    private webSocket: WebsocketService,
     private loginService: AuthService,
     private gameService: AgotGameService,
     private demoService: AgotDemoService
@@ -56,12 +54,12 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
 
     this.gameService.loadAll ();
 
-    this.subscribe (this.loginService.user$, user => {
-      this.user = user;
-      if (user) {
-        this.webSocket.send({ type: MessageOut.AGOT_INIT_STATE });
-      }
-    });
+    // this.subscribe (this.loginService.user$, user => {
+    //   this.user = user;
+    //   if (user) {
+    //     this.webSocket.send({ type: MessageOut.AGOT_INIT_STATE });
+    //   }
+    // });
     
     this.subscribe (this.logRows$, l => {
       setTimeout (function () {
@@ -70,11 +68,11 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
       });
     });
 
-    this.subscribe (this.webSocket.agotReduxActions$, message => {
-      for (let action of message.data.actions) {
-        this.store.dispatch (action);
-      }
-    });
+    // this.subscribe (this.webSocket.agotReduxActions$, message => {
+    //   for (let action of message.data.actions) {
+    //     this.store.dispatch (action);
+    //   }
+    // });
 
   } // ngOnInit
 

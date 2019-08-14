@@ -1,12 +1,11 @@
+import { AgotApiService } from './../../api/agot-api.service';
 import { AgotChoice } from './../../../graphql-types';
 import { AgotRemoteService } from './../../store/agot-remote.service';
-import { MessageOut } from '../../../shared/websocket/models/message-out.model';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../../../shared/login/auth.service';
 import { AgotRequestDialogComponent } from '../agot-request-dialog/agot-request-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
-import { WebsocketService } from '../../../shared/websocket/websocket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
@@ -31,11 +30,11 @@ export class AgotGameService {
 
   constructor (
     private store: Store<any>,
-    private webSocket: WebsocketService,
     public snackBar: MatSnackBar,
     public dialog: MatDialog,
     public loginService: AuthService,
-    private remoteService: AgotRemoteService
+    private remoteService: AgotRemoteService,
+    private api: AgotApiService
   ) {
 
     const request$ = this.store.select(fromAgot.selectNewRequest).pipe(filter(request => !!request));
@@ -74,8 +73,11 @@ export class AgotGameService {
     }
     this.choicesByCard.next({});
     this.genChoices.next([]);
-    //console.log("this.requestedPlayerId", this.requestedPlayerId);
-    this.webSocket.send({ type: MessageOut.AGOT_ACTION_CHOICE, data: { choice: choice, playerId: this.requestedPlayerId }});
+
+    delete choice.__typename;
+    this.api.chooseAction ({ choice: choice, playerId: this.requestedPlayerId })
+    .subscribe (x => console.log ("Apollo mutation ", x.data));
+
     this.requestedPlayerId = null;
   }
 
@@ -100,15 +102,21 @@ export class AgotGameService {
     this.remoteService.loadGame ();
     this.remoteService.loadRequest ();
     this.remoteService.linkRequests ();
+    this.remoteService.linkChanges ();
   }
 
   getGame () {
     this.remoteService.loadGame ();
   }
 
-  createGame() {
+  createGame () {
     this.remoteService.createSampleGame ();
   }
+
+  startGame () {
+    this.api.startGame ()
+    .subscribe (x => console.log ("Apollo mutation ", x.data));
+  } // startGame
 
 }
 

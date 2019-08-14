@@ -1,101 +1,56 @@
-import { Observable } from 'rxjs';
+import { AgotApiService } from './../api/agot-api.service';
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { Store } from '@ngrx/store';
-import { InputPlayerInput, MotifTokenInput, AngFaction, AgotCardSeed, GetRequest, GetGame, CreateGame, SubscribeRequests } from './../../graphql-types';
-import gql from 'graphql-tag';
-import { Request } from './agot.actions';
-
-const requestFragment =  gql`
-  fragment RequestFragment on AAgotRequest {
-    repeated
-    instruction
-    type
-    player { id }
-    choices {
-      requestType
-      choiceType
-      cardId
-      icon
-      cardAction
-      player
-    }
-  }
-`;
+import { Store, Action } from '@ngrx/store';
+import { AngFaction, AgotCardSeed, SubscribeToRequestsSubscription } from './../../graphql-types';
+import { Request, InitGame } from './agot.actions';
+import { toNumberMap, toStringMap } from 'src/app/shared/map.util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgotRemoteService {
 
-  constructor (private apollo: Apollo, private store: Store<any>) {}
+  constructor (private api: AgotApiService, private store: Store<any>) {}
   
-  private getGame () {
-    return this.apollo.query<GetGame.Query>({
-      query: getGame
-    });
-  }
-
-  private getRequest () {
-    return this.apollo.query<GetRequest.Query, { token: MotifTokenInput }> ({
-      query: gql`
-        query GetRequest ($token: MotifTokenInput!) {
-          request (token: $token) {
-            ...RequestFragment
-          }
-        }
-        ${requestFragment}
-      `,
-      variables: {
-        token: { token: "leo.molinaro" }
-      }
-    });
-  }
-
-  private subscribeRequests (): Observable<{ data: SubscribeRequests.Subscription }> {
-    return this.apollo.subscribe<SubscribeRequests.Subscription, SubscribeRequests.Variables> ({
-      query: gql`
-        subscription SubscribeRequests ($token: MotifTokenInput!) {
-          request (token: $token) {
-            ...RequestFragment
-          }
-        }
-        ${requestFragment}
-      `,
-      variables: {
-        token: { token: "leo.molinaro" }
-      }
-    });
-  }
-
-  private createGame (inputPlayers: InputPlayerInput[]): Observable<{ data: CreateGame.Mutation }> {
-    return this.apollo.mutate<CreateGame.Mutation, CreateGame.Variables> ({
-      mutation: gql`
-        mutation CreateGame ($inputPlayers: [InputPlayerInput]!, $token: MotifTokenInput!) {
-          createGame(
-            inputPlayers: $inputPlayers,
-            token: $token
-          ) {
-            phase
-            round
-            step
-          }
-        }
-      `,
-      variables: {
-        token: { token: "leo.molinaro" },
-        inputPlayers: inputPlayers
-      }
-    });
-  }
-
   loadGame () {
-    this.getGame ()
-    .subscribe (x => console.log ("Apollo query", x.data));
-  }
+    this.api.getGame ()
+    .subscribe (x => {
+      console.log ("Apollo query", x.data);
+      const game = x.data.game;
+      if (!game) return;
+      this.store.dispatch (new InitGame ({
+        game: {
+          cardMap: toNumberMap (game.allCards, c => c.id),
+          playerMap: toStringMap (game.allPlayers.map (p => ({
+            id: p.id,
+            name: p.name,
+            gold: p.gold,
+            factionId: p.faction.id,
+            agendaId: p.agenda ? p.agenda.id : null,
+            revealedPlotId: p.revealedPlot ? p.revealedPlot.id : null,
+            handIds: p.hand.map (c => c.id),
+            charactersIds: p.characters.map (c => c.id),
+            locationsIds: p.locations.map (c => c.id),
+            discardPileIds: p.discardPile.map (c => c.id),
+            plotDeckIds: p.plotDeck.map (c => c.id),
+            usedPlotPileIds: p.usedPlotPile.map (c => c.id),
+            deadPileIds: p.deadPile.map (c => c.id),
+            drawDeckEmpty: p.drawDeckEmpty
+          })), p => p.id),
+          playerIds: game.allPlayers.map (p => p.id),
+          round: game.round,
+          phase: game.phase,
+          step: game.step,
+          log: game.log,
+          firstPlayer: game.firstPlayer ? game.firstPlayer.id : null,
+          started: game.started
+        } // game
+      })); // dispatch
+    }); // subscribe
+  } // loadGame
 
   loadRequest () {
-    this.getRequest ()
+    this.api.getRequest ()
     .subscribe (x => {
       console.log ("Apollo query", x.data);
       const request = x.data.request;
@@ -104,16 +59,25 @@ export class AgotRemoteService {
   }
 
   linkRequests () {
-    this.subscribeRequests ()
-    .subscribe ((x: { data: SubscribeRequests.Subscription }) => {
+    this.api.subscribeToRequests ()
+    .subscribe ((x: { data: SubscribeToRequestsSubscription }) => {
       console.log ("Apollo subscription", x.data);
       const request = x.data.request;
       this.store.dispatch (new Request ({ request: request }));
     });
-  }
+  } // linkRequests
+
+  linkChanges () {
+    this.api.subscribeToChanges ()
+    .subscribe (x => {
+      console.log ("Apollo subscription", x.data);
+      const changes = x.data.changes;
+      changes.actions.forEach (a => this.store.dispatch (<Action>a));
+    }); // subscribe
+  } // linkChanges
 
   createSampleGame () {
-    this.createGame ([
+    this.api.createGame ([
       {
         id: "leo",
         faction: AngFaction.Tyrell,
@@ -201,69 +165,6 @@ export class AgotRemoteService {
   }
 
 }
-
-const getGame = gql`
-  query GetGame {
-    game {
-      allCards {
-        id
-        imageSource
-        power
-        kneeling
-        revealed
-        attachmentIds
-        duplicateIds
-      }
-      allPlayers {
-        id
-        name
-        gold
-        agenda {
-          id
-        }
-        faction {
-          id
-        }
-        hand {
-          id
-        }
-        characters {
-          id
-        }
-        locations {
-          id
-        }
-        discardPile {
-          id
-        }
-        plotDeck {
-          id
-        }
-        usedPlotPile {
-          id
-        }
-        deadPile {
-          id
-        }
-        revealedPlot {
-          id
-        }
-        drawDeckEmpty
-      }
-      round
-      phase
-      step
-      log {
-        message
-        type
-      }
-      started
-      firstPlayer {
-        id
-      }
-    }
-  }
-`;
 
 // game.initFaction (fede, AngFaction.TARGARYEN);
 // game.initCard (fede, AgotCardSeed.A_NOBLE_CAUSE_Core, 2);

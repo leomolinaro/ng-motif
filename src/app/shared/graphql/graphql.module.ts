@@ -3,11 +3,16 @@ import { ApolloModule, APOLLO_OPTIONS, Apollo } from 'apollo-angular';
 import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
+import introspectionQueryResultData from './fragment-types.json';
 
 const HTTP_URL = "http://localhost:8080/motif-web-project/motif/graphql";
 const WS_URL = "ws://localhost:8080/motif-web-project/motif/graphql-ws";
+
+const fragmentMatcher = new IntrospectionFragmentMatcher ({
+  introspectionQueryResultData
+});
 
 @NgModule({
   exports: [ApolloModule, HttpLinkModule],
@@ -53,7 +58,7 @@ export class GraphQLModule {
 
     apollo.create ({
       link: link,
-      cache: new InMemoryCache ()
+      cache: new InMemoryCache ({ fragmentMatcher })
     });
 
   }

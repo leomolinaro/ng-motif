@@ -1,7 +1,6 @@
 import { BritUIService } from './services/brit-ui.service';
 import { BritRequestService } from './services/brit-request.service';
 import { AuthService } from '../shared/login/auth.service';
-import { WebsocketService } from './../shared/websocket/websocket.service';
 import { StoreModule } from '@ngrx/store';
 import { SharedModule } from './../shared/shared.module';
 import { Routes, RouterModule } from '@angular/router';
@@ -31,7 +30,6 @@ const britRoutes: Routes = [
     StoreModule.forFeature ('brit', reducer),
   ],
   providers: [
-    WebsocketService,
     BritRequestService,
     BritUIService,
     AuthService

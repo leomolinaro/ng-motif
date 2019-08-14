@@ -1,6 +1,3 @@
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
-import { WebsocketService } from './shared/websocket/websocket.service';
 import { AuthGuard } from './shared/login/auth-guard.service';
 import { AuthService } from './shared/login/auth.service';
 import { LoginComponent } from './shared/login/login.component';
@@ -46,7 +43,7 @@ const appRoutes: Routes = [
     //   maxAge: 5
     // })
   ],
-  providers: [AuthService, WebsocketService, AuthGuard],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

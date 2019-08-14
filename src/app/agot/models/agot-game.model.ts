@@ -1,5 +1,5 @@
+import { GameLogRow } from './../../graphql-types';
 import { Player } from './player.model';
-import { LogRow } from '../../shared/models/log-row.model';
 import { Card } from './card.model';
 
 export interface AgotGame {
@@ -9,7 +9,7 @@ export interface AgotGame {
 	round: string,
 	phase: string,
 	step: string,
-	log: LogRow[],
+	log: GameLogRow[],
   firstPlayer: string,
   started: boolean
 }

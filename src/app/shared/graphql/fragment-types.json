@@ -1,0 +1,57 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "AgotReduxActionData",
+        "possibleTypes": [
+          {
+            "name": "AddAttachmentData"
+          },
+          {
+            "name": "AddCardData"
+          },
+          {
+            "name": "AddDuplicateData"
+          },
+          {
+            "name": "AddLogData"
+          },
+          {
+            "name": "EmptyDrawDeckData"
+          },
+          {
+            "name": "RemoveAttachmentData"
+          },
+          {
+            "name": "RemoveCardData"
+          },
+          {
+            "name": "RemoveDuplicateData"
+          },
+          {
+            "name": "SetCardKneelingData"
+          },
+          {
+            "name": "SetCardPowerData"
+          },
+          {
+            "name": "SetCardRevealedData"
+          },
+          {
+            "name": "SetFirstPlayerData"
+          },
+          {
+            "name": "SetGameStartedData"
+          },
+          {
+            "name": "SetGoldData"
+          },
+          {
+            "name": "SetPhaseData"
+          }
+        ]
+      }
+    ]
+  }
+}

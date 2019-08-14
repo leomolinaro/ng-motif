@@ -1,4 +1,4 @@
-import { WebsocketService } from '../websocket/websocket.service';
+import { MotifApiService } from './../api/motif-api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { take, map } from 'rxjs/operators';
@@ -6,40 +6,48 @@ import { take, map } from 'rxjs/operators';
 @Injectable()
 export class AuthService {
 
-  private user = new BehaviorSubject<string>(null); 
+  private token = new BehaviorSubject<string>(null); 
 
-  user$ = this.user.asObservable();
+  token$ = this.token.asObservable();
 
-  getUser(): string {
-    return this.user.getValue();
-  }
+  getToken (): string {
+    return this.token.getValue();
+  } // getToken
 
-  isLoggedIn() {
-    return this.getUser() ? true : false;
-  }
+  isLoggedIn () {
+    return this.getToken () ? true : false;
+  } // isLoggedIn
 
-  constructor(private websocket: WebsocketService) {
-  }
+  constructor(private api: MotifApiService) { }
 
-  login(username: string): Observable<boolean> {
-    this.websocket.connect(username);
+  login (username: string): Observable<boolean> {
 
-    return this.websocket.notifyOpenConnection$.pipe(
-      take(1),
-      map(message => {
-        if (message.user) {
-          this.user.next(message.user.username);
-          return true;
-        } else {
-          return false;
-        }
+    return this.api.login (username).pipe (
+      map (x => {
+        const token = x.data.login.token;
+        this.token.next (token);
+        return true;
       })
     );
 
-  }
+    // this.websocket.connect(username);
 
-  logout() { 
-    this.user.next(null);
-  }
+    // return this.websocket.notifyOpenConnection$.pipe(
+    //   take(1),
+    //   map(message => {
+    //     if (message.user) {
+    //       this.user.next(message.user.username);
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   })
+    // );
 
-}
+  } // login
+
+  logout () { 
+    this.token.next(null);
+  } // logout
+
+} // AuthService

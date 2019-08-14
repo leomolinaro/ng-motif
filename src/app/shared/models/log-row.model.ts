@@ -1,4 +1,3 @@
-export interface LogRow {
-	message: string,
-	type: string
-}
+import { GameLogRow } from './../../graphql-types';
+
+export type LogRow = GameLogRow;

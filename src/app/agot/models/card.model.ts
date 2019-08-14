@@ -1,6 +1,6 @@
 export interface Card {
 	id: number;
-	imageSource: string;
+	imageSource?: string;
 	power?: number;
 	kneeling?: boolean;
 	revealed?: boolean;

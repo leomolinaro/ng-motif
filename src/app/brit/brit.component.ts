@@ -3,7 +3,6 @@ import { BritRequestService } from './services/brit-request.service';
 import { MessageOut } from './../shared/websocket/models/message-out.model';
 import { MotifComponent } from './../shared/components/motif.component';
 import { AuthService } from '../shared/login/auth.service';
-import { WebsocketService } from './../shared/websocket/websocket.service';
 import { LogRow } from './../shared/models/log-row.model';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -37,7 +36,6 @@ export class BritComponent extends MotifComponent implements OnInit {
 
   constructor (
     private store: Store<any>,
-    private webSocket: WebsocketService,
     private loginService: AuthService,
     private requestService: BritRequestService
   ) { super(); }
@@ -51,18 +49,18 @@ export class BritComponent extends MotifComponent implements OnInit {
     let request$ = this.store.select(fromBrit.selectRequest);
     let response$ = this.requestService.response$;
 
-    this.subscribe(this.loginService.user$, user => {
-      this.user = user;
-      if (user) {
-        this.webSocket.send({ type: MessageOut.BRIT_INIT_STATE });
-      }
-    });
+    // this.subscribe(this.loginService.user$, user => {
+    //   this.user = user;
+    //   if (user) {
+    //     this.webSocket.send({ type: MessageOut.BRIT_INIT_STATE });
+    //   }
+    // });
 
-    this.subscribe(this.webSocket.britReduxActions$, message => {
-      for (let action of message.data.actions) {
-        this.store.dispatch(action);
-      }
-    });
+    // this.subscribe(this.webSocket.britReduxActions$, message => {
+    //   for (let action of message.data.actions) {
+    //     this.store.dispatch(action);
+    //   }
+    // });
 
     this.subscribe(request$, request => {
       if (request) {
@@ -71,7 +69,7 @@ export class BritComponent extends MotifComponent implements OnInit {
     });
 
     this.subscribe(response$, data => {
-      this.webSocket.send({ type: MessageOut.BRIT_ACTION_CHOICE, data: data });
+      // this.webSocket.send({ type: MessageOut.BRIT_ACTION_CHOICE, data: data });
     });
 
     this.subscribe(this.logRows$, l => {
@@ -102,7 +100,7 @@ export class BritComponent extends MotifComponent implements OnInit {
   }
 
   startGame () {
-    this.webSocket.send({ type: MessageOut.BRIT_START });
+    // this.webSocket.send({ type: MessageOut.BRIT_START });
   }
 
   debugState () {
