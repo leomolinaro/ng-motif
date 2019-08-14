@@ -1,7 +1,7 @@
+import { AgotChoice } from './../../../graphql-types';
 import { map, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { MessageOut } from './../../../shared/websocket/models/message-out.model';
-import { RequestChoice } from '../../models/request-choice.model';
 import { AgotGameService } from '../services/agot-game.service';
 import { MotifComponent } from '../../../shared/components/motif.component';
 import { WebsocketService } from '../../../shared/websocket/websocket.service';
@@ -11,7 +11,7 @@ import * as fromAgot from '../../store/agot.reducer';
 
 interface ChoiceView {
   label: string;
-  requestChoice: RequestChoice;
+  requestChoice: AgotChoice;
 }
 
 @Component({
@@ -35,7 +35,7 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     this.gameStarted$ = this.store.select(fromAgot.selectGameStarted);
     const choices$ = this.gameService.genChoices$;
 
-    this.choices$ = choices$.pipe(
+    this.choices$ = choices$.pipe (
       // tap(x => console.log("XXX", x)),
       map(choices => choices ? choices.map(choice => ({
         requestChoice: choice,
@@ -44,7 +44,7 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     );
   }
 
-  getLabelFromChoice (choice: RequestChoice) {
+  getLabelFromChoice (choice: AgotChoice) {
     switch (choice.choiceType) {
       case "PASS": return "Pass";
       case "SELECT_ICON": {
@@ -72,7 +72,7 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     this.gameService.getGame ();
   }
 
-  onChoiceClick (choice: RequestChoice) {
+  onChoiceClick (choice: AgotChoice) {
     this.gameService.respond (choice);
   }
 

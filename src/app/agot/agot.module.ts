@@ -1,3 +1,4 @@
+import { AgotRemoteService } from './store/agot-remote.service';
 import { AuthGuard } from './../shared/login/auth-guard.service';
 import { NotFoundComponent } from './../shared/not-found/not-found.component';
 import { Routes, RouterModule } from '@angular/router';
@@ -37,7 +38,8 @@ const agotRoutes: Routes = [
   ],
   providers: [
     AgotCardHoverService,
-    AgotGameService
+    AgotGameService,
+    AgotRemoteService
   ],
   declarations: [
     AgotGameComponent,

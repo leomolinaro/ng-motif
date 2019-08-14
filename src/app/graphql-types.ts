@@ -5,19 +5,60 @@ export interface MotifTokenInput {
 }
 
 export interface InputPlayerInput {
-  name?: Maybe<string>;
-
-  id?: Maybe<string>;
-
   deck?: Maybe<(Maybe<InputCardInput>)[]>;
 
+  name?: Maybe<string>;
+
   faction?: Maybe<AngFaction>;
+
+  id?: Maybe<string>;
 }
 
 export interface InputCardInput {
   quantity: number;
 
   card?: Maybe<AgotCardSeed>;
+}
+
+export enum AgotRequestType {
+  SelectActionToPerform = "SELECT_ACTION_TO_PERFORM",
+  SelectReactionToPerform = "SELECT_REACTION_TO_PERFORM",
+  SelectInterruptToPerform = "SELECT_INTERRUPT_TO_PERFORM",
+  SelectCharacterToKill = "SELECT_CHARACTER_TO_KILL",
+  SelectCharacterToDefend = "SELECT_CHARACTER_TO_DEFEND",
+  SelectChallengeToInitiate = "SELECT_CHALLENGE_TO_INITIATE",
+  SelectCharacterToAttack = "SELECT_CHARACTER_TO_ATTACK",
+  SelectCharacterToBypass = "SELECT_CHARACTER_TO_BYPASS",
+  SelectDefender = "SELECT_DEFENDER",
+  SelectPlotToReveal = "SELECT_PLOT_TO_REVEAL",
+  SelectFirstPlayer = "SELECT_FIRST_PLAYER",
+  SelectCardToAttach = "SELECT_CARD_TO_ATTACH",
+  SelectCardToDiscard = "SELECT_CARD_TO_DISCARD",
+  ChooseCard = "CHOOSE_CARD",
+  Continue = "CONTINUE"
+}
+
+export enum AgotChoiceType {
+  SelectCard = "SELECT_CARD",
+  SelectCardAction = "SELECT_CARD_ACTION",
+  SelectPlayer = "SELECT_PLAYER",
+  SelectIcon = "SELECT_ICON",
+  Continue = "CONTINUE",
+  Pass = "PASS"
+}
+
+export enum AngIcon {
+  Military = "MILITARY",
+  Power = "POWER",
+  Intrigue = "INTRIGUE"
+}
+
+export enum AgotChoiceCardAction {
+  Marshall = "MARSHALL",
+  Play = "PLAY",
+  Action = "ACTION",
+  Reaction = "REACTION",
+  Interrupt = "INTERRUPT"
 }
 
 export enum AngPhase {
@@ -1330,6 +1371,9 @@ export enum AngFaction {
 /** Long type */
 export type Long = any;
 
+/** Built-in scalar for dynamic values */
+export type ObjectScalar = any;
+
 /** Unrepresentable type */
 export type Unrepresentable = any;
 
@@ -1338,7 +1382,9 @@ export type Unrepresentable = any;
 // ====================================================
 
 export namespace GetRequest {
-  export type Variables = {};
+  export type Variables = {
+    token: MotifTokenInput;
+  };
 
   export type Query = {
     __typename?: "Query";
@@ -1346,10 +1392,43 @@ export namespace GetRequest {
     request: Maybe<Request>;
   };
 
-  export type Request = {
-    __typename?: "AAgotRequest";
+  export type Request = RequestFragment.Fragment;
+}
 
-    instruction: Maybe<string>;
+export namespace SubscribeRequests {
+  export type Variables = {
+    token: MotifTokenInput;
+  };
+
+  export type Subscription = {
+    __typename?: "Subscription";
+
+    request: Maybe<Request>;
+  };
+
+  export type Request = RequestFragment.Fragment;
+}
+
+export namespace CreateGame {
+  export type Variables = {
+    inputPlayers: (Maybe<InputPlayerInput>)[];
+    token: MotifTokenInput;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+
+    createGame: Maybe<CreateGame>;
+  };
+
+  export type CreateGame = {
+    __typename?: "AgotGame";
+
+    phase: Maybe<AngPhase>;
+
+    round: Maybe<string>;
+
+    step: Maybe<string>;
   };
 }
 
@@ -1507,26 +1586,41 @@ export namespace GetGame {
   };
 }
 
-export namespace CreateSampleGame {
-  export type Variables = {
-    inputPlayers: (Maybe<InputPlayerInput>)[];
-    token: MotifTokenInput;
+export namespace RequestFragment {
+  export type Fragment = {
+    __typename?: "AAgotRequest";
+
+    repeated: boolean;
+
+    instruction: Maybe<string>;
+
+    type: Maybe<AgotRequestType>;
+
+    player: Maybe<Player>;
+
+    choices: Maybe<(Maybe<Choices>)[]>;
   };
 
-  export type Mutation = {
-    __typename?: "Mutation";
+  export type Player = {
+    __typename?: "AgotPlayer";
 
-    createGame: Maybe<CreateGame>;
+    id: Maybe<string>;
   };
 
-  export type CreateGame = {
-    __typename?: "AgotGame";
+  export type Choices = {
+    __typename?: "AgotChoice";
 
-    phase: Maybe<AngPhase>;
+    requestType: Maybe<AgotRequestType>;
 
-    round: Maybe<string>;
+    choiceType: Maybe<AgotChoiceType>;
 
-    step: Maybe<string>;
+    cardId: Maybe<Long>;
+
+    icon: Maybe<AngIcon>;
+
+    cardAction: Maybe<AgotChoiceCardAction>;
+
+    player: Maybe<string>;
   };
 }
 
@@ -1546,31 +1640,35 @@ export interface Query {
 }
 
 export interface AAgotRequest {
+  type?: Maybe<AgotRequestType>;
+
+  choices?: Maybe<(Maybe<AgotChoice>)[]>;
+
+  repeated: boolean;
+
   instruction?: Maybe<string>;
+
+  player?: Maybe<AgotPlayer>;
 }
 
-export interface AgotGame {
-  phase?: Maybe<AngPhase>;
+export interface AgotChoice {
+  choiceType?: Maybe<AgotChoiceType>;
 
-  firstPlayer?: Maybe<AgotPlayer>;
+  requestType?: Maybe<AgotRequestType>;
 
-  round?: Maybe<string>;
+  cardId?: Maybe<Long>;
 
-  log?: Maybe<(Maybe<GameLogRow>)[]>;
+  icon?: Maybe<AngIcon>;
 
-  step?: Maybe<string>;
+  cardAction?: Maybe<AgotChoiceCardAction>;
 
-  started: boolean;
-
-  allCards?: Maybe<(Maybe<Card>)[]>;
-
-  allPlayers?: Maybe<(Maybe<AgotPlayer>)[]>;
+  player?: Maybe<string>;
 }
 
 export interface AgotPlayer {
-  discardPile?: Maybe<(Maybe<DrawCardAngDrawCard>)[]>;
-
   usedPlotPile?: Maybe<(Maybe<PlotCard>)[]>;
+
+  discardPile?: Maybe<(Maybe<DrawCardAngDrawCard>)[]>;
 
   agenda?: Maybe<AgendaCard>;
 
@@ -1597,7 +1695,7 @@ export interface AgotPlayer {
   hand?: Maybe<(Maybe<DrawCardAngDrawCard>)[]>;
 }
 
-export interface DrawCardAngDrawCard {
+export interface PlotCard {
   imageSource?: Maybe<string>;
 
   revealed: boolean;
@@ -1613,7 +1711,7 @@ export interface DrawCardAngDrawCard {
   kneeling: boolean;
 }
 
-export interface PlotCard {
+export interface DrawCardAngDrawCard {
   imageSource?: Maybe<string>;
 
   revealed: boolean;
@@ -1685,6 +1783,24 @@ export interface LocationCard {
   kneeling: boolean;
 }
 
+export interface AgotGame {
+  phase?: Maybe<AngPhase>;
+
+  firstPlayer?: Maybe<AgotPlayer>;
+
+  round?: Maybe<string>;
+
+  log?: Maybe<(Maybe<GameLogRow>)[]>;
+
+  step?: Maybe<string>;
+
+  started: boolean;
+
+  allCards?: Maybe<(Maybe<Card>)[]>;
+
+  allPlayers?: Maybe<(Maybe<AgotPlayer>)[]>;
+}
+
 export interface GameLogRow {
   message?: Maybe<string>;
 
@@ -1712,6 +1828,23 @@ export interface Mutation {
   createGame?: Maybe<AgotGame>;
 }
 
+/** Subscription root */
+export interface Subscription {
+  request?: Maybe<AAgotRequest>;
+
+  changes?: Maybe<AgotReduxActionList>;
+}
+
+export interface AgotReduxActionList {
+  actions?: Maybe<(Maybe<AgotReduxActionAgotReduxActionData>)[]>;
+}
+
+export interface AgotReduxActionAgotReduxActionData {
+  type?: Maybe<string>;
+
+  payload?: Maybe<ObjectScalar>;
+}
+
 // ====================================================
 // Arguments
 // ====================================================
@@ -1722,5 +1855,11 @@ export interface RequestQueryArgs {
 export interface CreateGameMutationArgs {
   inputPlayers?: Maybe<(Maybe<InputPlayerInput>)[]>;
 
+  token?: Maybe<MotifTokenInput>;
+}
+export interface RequestSubscriptionArgs {
+  token?: Maybe<MotifTokenInput>;
+}
+export interface ChangesSubscriptionArgs {
   token?: Maybe<MotifTokenInput>;
 }

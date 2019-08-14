@@ -1,6 +1,5 @@
+import { AgotGame } from './../models/agot-game.model';
 import { AgotRequest } from './../models/request.model';
-
-import { AgotState } from './agot.reducer';
 import { LogRow } from '../../shared/models/log-row.model';
 import { Action } from '@ngrx/store';
 
@@ -9,7 +8,7 @@ export const ADD_CARD = "ADD_CARD";
 export const ADD_DUPLICATE = "ADD_DUPLICATE";
 export const ADD_LOG = "ADD_LOG";
 export const EMPTY_DRAW_DECK = "EMPTY_DRAW_DECK";
-export const INIT_STATE = "INIT_STATE";
+export const INIT_GAME = "INIT_GAME";
 export const REMOVE_ATTACHMENT = "REMOVE_ATTACHMENT";
 export const REMOVE_CARD = "REMOVE_CARD";
 export const REMOVE_DUPLICATE = "REMOVE_DUPLICATE";
@@ -27,7 +26,7 @@ export class AddCard implements Action { readonly type = ADD_CARD; constructor (
 export class AddDuplicate implements Action { readonly type = ADD_DUPLICATE; constructor (public payload: {cardId: number; toCard: number }) {} }
 export class AddLog implements Action { readonly type = ADD_LOG; constructor (public payload: {log: LogRow }) {} }
 export class EmptyDrawDeck implements Action { readonly type = EMPTY_DRAW_DECK; constructor (public payload: {player: string }) {} }
-export class InitState implements Action { readonly type = INIT_STATE; constructor (public payload: {state: AgotState }) {} }
+export class InitGame implements Action { readonly type = INIT_GAME; constructor (public payload: { game: AgotGame }) {} }
 export class RemoveCard implements Action { readonly type = REMOVE_CARD; constructor (public payload: {cardId: number; fromPlayer: string; fromArea: string }) {} }
 export class RemoveAttachment implements Action { readonly type = REMOVE_ATTACHMENT; constructor (public payload: {cardId: number; fromCard: number }) {} }
 export class RemoveDuplicate implements Action { readonly type = REMOVE_DUPLICATE; constructor (public payload: {cardId: number; fromCard: number }) {} }
@@ -40,5 +39,5 @@ export class SetGameStarted implements Action { readonly type = SET_GAME_STARTED
 export class SetGold implements Action { readonly type = SET_GOLD; constructor (public payload: {player: string; gold: number }) {} }
 export class SetPhase implements Action { readonly type = SET_PHASE; constructor (public payload: {round: string; phase: string; step: string }) {} }
 
-export type AgotAction = AddAttachment | AddCard | AddDuplicate | AddLog | EmptyDrawDeck | InitState | RemoveCard | RemoveAttachment |
+export type AgotAction = AddAttachment | AddCard | AddDuplicate | AddLog | EmptyDrawDeck | InitGame | RemoveCard | RemoveAttachment |
 RemoveDuplicate | Request | SetCardKneeling | SetCardPower | SetCardRevealed | SetFirstPlayer | SetGameStarted | SetGold | SetPhase;

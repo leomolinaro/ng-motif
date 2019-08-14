@@ -1,5 +1,5 @@
 import { AgotDemoService } from './services/agot-demo.service';
-import { InitState } from './../store/agot.actions';
+import { InitGame } from './../store/agot.actions';
 import { MessageOut } from './../../shared/websocket/models/message-out.model';
 import { LogRow } from '../../shared/models/log-row.model';
 import { MotifComponent } from '../../shared/components/motif.component';
@@ -38,7 +38,7 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     private hoverService: AgotCardHoverService,
     private webSocket: WebsocketService,
     private loginService: AuthService,
-    private requestService: AgotGameService,
+    private gameService: AgotGameService,
     private demoService: AgotDemoService
   ) { super (); }
   
@@ -54,7 +54,9 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     this.step$ = this.store.select<string>(fromAgot.selectGameStep);
     this.logRows$ = this.store.select<LogRow[]>(fromAgot.selectGameLog);
 
-    this.subscribe(this.loginService.user$, user => {
+    this.gameService.loadAll ();
+
+    this.subscribe (this.loginService.user$, user => {
       this.user = user;
       if (user) {
         this.webSocket.send({ type: MessageOut.AGOT_INIT_STATE });
@@ -68,13 +70,11 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
       });
     });
 
-    this.subscribe(this.webSocket.agotReduxActions$, message => {
+    this.subscribe (this.webSocket.agotReduxActions$, message => {
       for (let action of message.data.actions) {
-        this.store.dispatch(action);
+        this.store.dispatch (action);
       }
     });
-
-
 
   } // ngOnInit
 
@@ -84,7 +84,7 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
 
   login (username: string) {
     if (!this.user) {
-      this.loginService.login("leo.molinaro");
+      this.loginService.login ("leo.molinaro");
     }
   }
 
@@ -103,7 +103,7 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
 
   testState() {
     // this.store.dispatch(new InitState({ state: this.demoService.getEmptyState() }));
-    this.store.dispatch(new InitState({ state: this.demoService.getComplexState() }));
+    this.store.dispatch(new InitGame({ game: this.demoService.getComplexState().game }));
   }
 
 }

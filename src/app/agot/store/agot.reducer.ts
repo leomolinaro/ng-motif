@@ -62,8 +62,10 @@ export function reducer (
   // console.log(action);
   //console.log(JSON.stringify(state));
   switch (action.type) {
-    case fromAgot.INIT_STATE: {
-      return action.payload.state;
+    case fromAgot.INIT_GAME: {
+      return { ... state,
+        game: action.payload.game
+      }
     }
     case fromAgot.REMOVE_CARD: {
       let oldPlayer: Player = getPlayer (action.payload.fromPlayer, state);

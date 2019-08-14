@@ -1,4 +1,4 @@
-import { RequestChoice } from '../../models/request-choice.model';
+import { AgotChoice, AgotChoiceCardAction } from './../../../graphql-types';
 import { Store, select, createSelector } from '@ngrx/store';
 import { Card } from '../../models/card.model';
 import { MotifComponent } from '../../../shared/components/motif.component';
@@ -12,7 +12,7 @@ import { MatMenuTrigger } from '@angular/material';
 import * as fromAgot from '../../store/agot.reducer';
 
 interface RequestChoiceView {
-  requestChoice: RequestChoice,
+  requestChoice: AgotChoice,
   label: string
 }
 
@@ -78,16 +78,16 @@ export class AgotCardComponent extends MotifComponent {
 
   }
 
-  getLabelByChoice(choice: RequestChoice): string {
+  getLabelByChoice(choice: AgotChoice): string {
     switch (choice.choiceType) {
       case "SELECT_CARD": return "Select";
       case "SELECT_CARD_ACTION": {
         switch (choice.cardAction) {
-          case "ACTION": return "Action";
-          case "INTERRUP": return "Interrupt";
-          case "MARSHALL": return "Marshall";
-          case "PLAY": return "Play";
-          case "REACTION": return "Reaction";
+          case AgotChoiceCardAction.Action: return "Action";
+          case AgotChoiceCardAction.Interrupt: return "Interrupt";
+          case AgotChoiceCardAction.Marshall: return "Marshall";
+          case AgotChoiceCardAction.Play: return "Play";
+          case AgotChoiceCardAction.Reaction: return "Reaction";
         }
       }
     }
@@ -111,7 +111,7 @@ export class AgotCardComponent extends MotifComponent {
     }
   }
   
-  onClickChoice(choice: RequestChoice) {
+  onClickChoice(choice: AgotChoice) {
     this.requestService.respond(choice);
   }
 
