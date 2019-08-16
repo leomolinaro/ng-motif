@@ -1,3 +1,4 @@
+import { AgotChoiceWrapper } from './../services/agot-game.service';
 import { AgotChoice } from './../../../graphql-types';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -6,11 +7,6 @@ import { MotifComponent } from '../../../shared/components/motif.component';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as fromAgot from '../../store/agot.reducer';
-
-interface ChoiceView {
-  label: string;
-  requestChoice: AgotChoice;
-}
 
 @Component({
   selector: 'agot-button-list',
@@ -26,36 +22,12 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     private store: Store<any>
   ) { super (); }
 
-  choices$: Observable<ChoiceView[]>;
+  choices$: Observable<AgotChoiceWrapper[]>;
 
   ngOnInit () {
     this.gameStarted$ = this.store.select(fromAgot.selectGameStarted);
-    const choices$ = this.gameService.genChoices$;
-
-    this.choices$ = choices$.pipe (
-      // tap(x => console.log("XXX", x)),
-      map(choices => choices ? choices.map(choice => ({
-        requestChoice: choice,
-        label: this.getLabelFromChoice(choice)
-      })) : [])
-    );
-  }
-
-  getLabelFromChoice (choice: AgotChoice) {
-    switch (choice.choiceType) {
-      case "PASS": return "Pass";
-      case "SELECT_ICON": {
-        switch (choice.icon) {
-          case "INTRIGUE": return "Intrigue";
-          case "POWER": return "Power";
-          case "MILITARY": return "Military";
-        }
-      };
-      case "CONTINUE": return "Continue";
-      case "SELECT_PLAYER": return choice.player;
-    }
-    return "---";
-  }
+    this.choices$ = this.gameService.genChoices$;
+  } // ngOnInit
 
   startGame () {
     this.gameService.startGame ();
@@ -69,7 +41,7 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     this.gameService.getGame ();
   }
 
-  onChoiceClick (choice: AgotChoice) {
+  onChoiceClick (choice: AgotChoiceWrapper) {
     this.gameService.respond (choice);
   }
 

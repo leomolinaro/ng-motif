@@ -16,7 +16,6 @@ export type AAgotRequest = {
   __typename?: "AAgotRequest";
   type?: Maybe<AgotRequestType>;
   choices?: Maybe<Array<Maybe<AgotChoice>>>;
-  repeated: Scalars["Boolean"];
   instruction?: Maybe<Scalars["String"]>;
   player?: Maybe<AgotPlayer>;
 };
@@ -8919,7 +8918,9 @@ export type AgotChoice = {
   requestType?: Maybe<AgotRequestType>;
   cardId?: Maybe<Scalars["Long"]>;
   icon?: Maybe<AngIcon>;
+  yesNoAnswer?: Maybe<Scalars["Boolean"]>;
   cardAction?: Maybe<AgotChoiceCardAction>;
+  actionLabel?: Maybe<Scalars["String"]>;
   player?: Maybe<Scalars["String"]>;
 };
 
@@ -8932,12 +8933,14 @@ export enum AgotChoiceCardAction {
 }
 
 export type AgotChoiceInput = {
-  requestType?: Maybe<AgotRequestType>;
-  cardId?: Maybe<Scalars["Long"]>;
   icon?: Maybe<AngIcon>;
-  choiceType?: Maybe<AgotChoiceType>;
+  yesNoAnswer?: Maybe<Scalars["Boolean"]>;
+  cardId?: Maybe<Scalars["Long"]>;
   player?: Maybe<Scalars["String"]>;
   cardAction?: Maybe<AgotChoiceCardAction>;
+  requestType?: Maybe<AgotRequestType>;
+  actionLabel?: Maybe<Scalars["String"]>;
+  choiceType?: Maybe<AgotChoiceType>;
 };
 
 export enum AgotChoiceType {
@@ -8946,7 +8949,8 @@ export enum AgotChoiceType {
   SelectPlayer = "SELECT_PLAYER",
   SelectIcon = "SELECT_ICON",
   Continue = "CONTINUE",
-  Pass = "PASS"
+  Pass = "PASS",
+  YesNo = "YES_NO"
 }
 
 export type AgotGame = {
@@ -9040,13 +9044,9 @@ export enum AgotRequestType {
   SelectCardToAttach = "SELECT_CARD_TO_ATTACH",
   SelectCardToDiscard = "SELECT_CARD_TO_DISCARD",
   ChooseCard = "CHOOSE_CARD",
-  Continue = "CONTINUE"
+  Continue = "CONTINUE",
+  YesNo = "YES_NO"
 }
-
-export type AgotResponseInput = {
-  playerId?: Maybe<Scalars["String"]>;
-  choice?: Maybe<AgotChoiceInput>;
-};
 
 export enum AngFaction {
   Neutral = "NEUTRAL",
@@ -9142,10 +9142,10 @@ export type InputCardInput = {
 };
 
 export type InputPlayerInput = {
+  deck?: Maybe<Array<Maybe<InputCardInput>>>;
   id?: Maybe<Scalars["String"]>;
   faction?: Maybe<AngFaction>;
   name?: Maybe<Scalars["String"]>;
-  deck?: Maybe<Array<Maybe<InputCardInput>>>;
 };
 
 export type LocationCard = {
@@ -9169,10 +9169,18 @@ export type MotifTokenInput = {
 /** Mutation root */
 export type Mutation = {
   __typename?: "Mutation";
+  cheatDrawDeck: Scalars["Boolean"];
   createGame?: Maybe<AgotGame>;
   startGame: Scalars["Boolean"];
   login?: Maybe<MotifToken>;
   chooseAction: Scalars["Boolean"];
+};
+
+/** Mutation root */
+export type MutationCheatDrawDeckArgs = {
+  cardIds?: Maybe<Array<Maybe<Scalars["Long"]>>>;
+  token?: Maybe<MotifTokenInput>;
+  playerId?: Maybe<Scalars["String"]>;
 };
 
 /** Mutation root */
@@ -9193,8 +9201,9 @@ export type MutationLoginArgs = {
 
 /** Mutation root */
 export type MutationChooseActionArgs = {
-  response?: Maybe<AgotResponseInput>;
+  choice?: Maybe<AgotChoiceInput>;
   token?: Maybe<MotifTokenInput>;
+  playerId?: Maybe<Scalars["String"]>;
 };
 
 export type PlotCard = {
@@ -9211,12 +9220,12 @@ export type PlotCard = {
 /** Query root */
 export type Query = {
   __typename?: "Query";
-  request?: Maybe<AAgotRequest>;
   game?: Maybe<AgotGame>;
+  requests?: Maybe<Array<Maybe<AAgotRequest>>>;
 };
 
 /** Query root */
-export type QueryRequestArgs = {
+export type QueryRequestsArgs = {
   token?: Maybe<MotifTokenInput>;
 };
 
@@ -9283,13 +9292,8 @@ export type SetPhaseData = {
 /** Subscription root */
 export type Subscription = {
   __typename?: "Subscription";
-  request?: Maybe<AAgotRequest>;
   changes?: Maybe<AgotReduxActionList>;
-};
-
-/** Subscription root */
-export type SubscriptionRequestArgs = {
-  token?: Maybe<MotifTokenInput>;
+  requests?: Maybe<Array<Maybe<AAgotRequest>>>;
 };
 
 /** Subscription root */
@@ -9297,9 +9301,14 @@ export type SubscriptionChangesArgs = {
   token?: Maybe<MotifTokenInput>;
 };
 
+/** Subscription root */
+export type SubscriptionRequestsArgs = {
+  token?: Maybe<MotifTokenInput>;
+};
+
 export type RequestFragmentFragment = { __typename?: "AAgotRequest" } & Pick<
   AAgotRequest,
-  "repeated" | "instruction" | "type"
+  "instruction" | "type"
 > & {
     player: Maybe<{ __typename?: "AgotPlayer" } & Pick<AgotPlayer, "id">>;
     choices: Maybe<
@@ -9313,15 +9322,17 @@ export type RequestFragmentFragment = { __typename?: "AAgotRequest" } & Pick<
             | "icon"
             | "cardAction"
             | "player"
+            | "yesNoAnswer"
+            | "actionLabel"
           >
         >
       >
     >;
   };
 
-export type QueryGameQueryVariables = {};
+export type GetGameQueryVariables = {};
 
-export type QueryGameQuery = { __typename?: "Query" } & {
+export type GetGameQuery = { __typename?: "Query" } & {
   game: Maybe<
     { __typename?: "AgotGame" } & Pick<
       AgotGame,
@@ -9440,12 +9451,14 @@ export type QueryGameQuery = { __typename?: "Query" } & {
   >;
 };
 
-export type QueryRequestQueryVariables = {
+export type GetRequestsQueryVariables = {
   token: MotifTokenInput;
 };
 
-export type QueryRequestQuery = { __typename?: "Query" } & {
-  request: Maybe<{ __typename?: "AAgotRequest" } & RequestFragmentFragment>;
+export type GetRequestsQuery = { __typename?: "Query" } & {
+  requests: Maybe<
+    Array<Maybe<{ __typename?: "AAgotRequest" } & RequestFragmentFragment>>
+  >;
 };
 
 export type SubscribeToRequestsSubscriptionVariables = {
@@ -9455,7 +9468,9 @@ export type SubscribeToRequestsSubscriptionVariables = {
 export type SubscribeToRequestsSubscription = {
   __typename?: "Subscription";
 } & {
-  request: Maybe<{ __typename?: "AAgotRequest" } & RequestFragmentFragment>;
+  requests: Maybe<
+    Array<Maybe<{ __typename?: "AAgotRequest" } & RequestFragmentFragment>>
+  >;
 };
 
 export type SubscribeToChangesSubscriptionVariables = {
@@ -9568,13 +9583,25 @@ export type StartGameMutation = { __typename?: "Mutation" } & Pick<
 >;
 
 export type ChooseActionMutationVariables = {
-  response?: Maybe<AgotResponseInput>;
+  choice?: Maybe<AgotChoiceInput>;
+  playerId?: Maybe<Scalars["String"]>;
   token: MotifTokenInput;
 };
 
 export type ChooseActionMutation = { __typename?: "Mutation" } & Pick<
   Mutation,
   "chooseAction"
+>;
+
+export type CheatDrawDeckMutationVariables = {
+  cardIds?: Maybe<Array<Maybe<Scalars["Long"]>>>;
+  playerId?: Maybe<Scalars["String"]>;
+  token: MotifTokenInput;
+};
+
+export type CheatDrawDeckMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "cheatDrawDeck"
 >;
 
 export type LoginMutationVariables = {

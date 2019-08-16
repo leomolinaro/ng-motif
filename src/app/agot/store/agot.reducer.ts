@@ -10,8 +10,8 @@ import * as fromUtil from '../../shared/reducer.util';
 
 export interface AgotState {
 	game: AgotGame,
-	request?: AAgotRequest
-}
+	requests: AAgotRequest[]
+} // AgotState
 
 export const INITIAL_STATE: AgotState = {
 	game: {
@@ -24,8 +24,9 @@ export const INITIAL_STATE: AgotState = {
 		log: [],
     firstPlayer: null,
     started: false
-	}
-}
+  },
+  requests: []
+} // INITIAL_STATE
 
 function updateGame (game: AgotGame, state: AgotState): AgotState {
   return { ...state, game: game }
@@ -147,8 +148,15 @@ export function reducer (
         }
       }
     }    
-    case fromAgot.REQUEST: {
-      return { ...state, request: action.payload.request }
+    case fromAgot.ADD_REQUESTS: {
+      return { ...state,
+        requests: fromUtil.pushedMany (action.payload.requests, state.requests)
+      }
+    }
+    case fromAgot.REMOVE_REQUEST: {
+      return { ...state,
+        requests: fromUtil.removed (action.payload.request, state.requests)
+      }
     }
     case AgotReduxActionType.SetFirstPlayer: {
       return { ...state,
@@ -203,5 +211,5 @@ export const selectDrawDeckEmpty = (playerId: string) => createSelector(selectPl
 export const selectGold = (playerId: string) => createSelector(selectPlayerById(playerId), player => (player ? player.gold : 0));
 export const selectAttachments = (attachmentIds: number[]) => createSelector(selectCardMap, cardMap => attachmentIds ? attachmentIds.map(attId => cardMap[attId]) : []);
 export const selectDuplicates = (duplicateIds: number[]) => createSelector(selectCardMap, cardMap => duplicateIds ? duplicateIds.map(dupId => cardMap[dupId]) : []);
-export const selectNewRequest = createSelector (selectAgot, state => state.request);
+export const selectRequests = createSelector (selectAgot, state => state.requests);
 

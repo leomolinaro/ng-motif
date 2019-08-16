@@ -4,7 +4,8 @@ import { Action } from '@ngrx/store';
 import { TypedAction } from '@ngrx/store/src/models';
 
 export const INIT_GAME = "INIT_GAME";
-export const REQUEST = "REQUEST";
+export const ADD_REQUESTS = "ADD_REQUESTS";
+export const REMOVE_REQUEST = "REMOVE_REQUEST";
 
 abstract class ChangeAction<P extends AgotReduxActionData> implements TypedAction<AgotReduxActionType> {
   readonly type: AgotReduxActionType;
@@ -28,7 +29,8 @@ export class SetGold extends ChangeAction<SetGoldData> { readonly type = AgotRed
 export class SetPhase extends ChangeAction<SetPhaseData> { readonly type = AgotReduxActionType.SetPhase; }
 
 export class InitGame implements Action { readonly type = INIT_GAME; constructor (public payload: { game: AgotGame }) {} }
-export class Request implements Action { readonly type = REQUEST; constructor (public payload: {request: AAgotRequest }) {} }
+export class AddRequests implements Action { readonly type = ADD_REQUESTS; constructor (public payload: { requests: AAgotRequest[] }) {} }
+export class RemoveRequest implements Action { readonly type = REMOVE_REQUEST; constructor (public payload: { request: AAgotRequest }) {} }
 
 export type AgotAction = AddAttachment | AddCard | AddDuplicate | AddLog | EmptyDrawDeck | InitGame | RemoveCard | RemoveAttachment |
-RemoveDuplicate | Request | SetCardKneeling | SetCardPower | SetCardRevealed | SetFirstPlayer | SetGameStarted | SetGold | SetPhase;
+RemoveDuplicate | AddRequests | RemoveRequest | SetCardKneeling | SetCardPower | SetCardRevealed | SetFirstPlayer | SetGameStarted | SetGold | SetPhase;

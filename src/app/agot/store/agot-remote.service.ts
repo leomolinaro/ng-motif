@@ -2,7 +2,7 @@ import { AgotApiService } from './../api/agot-api.service';
 import { Injectable } from '@angular/core';
 import { Store, Action } from '@ngrx/store';
 import { AngFaction, AgotCardSeed, SubscribeToRequestsSubscription } from './../../graphql-types';
-import { Request, InitGame } from './agot.actions';
+import { InitGame, AddRequests } from './agot.actions';
 import { toNumberMap, toStringMap } from 'src/app/shared/map.util';
 
 @Injectable({
@@ -53,8 +53,10 @@ export class AgotRemoteService {
     this.api.getRequest ()
     .subscribe (x => {
       console.log ("Apollo query", x.data);
-      const request = x.data.request;
-      this.store.dispatch (new Request ({ request: request }));
+      const requests = x.data.requests;
+      if (requests) {
+        this.store.dispatch (new AddRequests ({ requests: requests }));
+      }
     });
   }
 
@@ -62,8 +64,8 @@ export class AgotRemoteService {
     this.api.subscribeToRequests ()
     .subscribe ((x: { data: SubscribeToRequestsSubscription }) => {
       console.log ("Apollo subscription", x.data);
-      const request = x.data.request;
-      this.store.dispatch (new Request ({ request: request }));
+      const requests = x.data.requests;
+      this.store.dispatch (new AddRequests ({ requests: requests }));
     });
   } // linkRequests
 

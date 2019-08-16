@@ -20,6 +20,7 @@ import { AgotRequestDialogComponent } from './agot-game/agot-request-dialog/agot
 import { AgotCardsDialogComponent } from './agot-game/agot-cards-dialog/agot-cards-dialog.component';
 import { AgotButtonListComponent } from './agot-game/agot-button-list/agot-button-list.component';
 import { reducer } from './store/agot.reducer';
+import { AgotRequestsSnackBarComponent } from './agot-game/agot-requests-snack-bar/agot-requests-snack-bar.component';
 
 const agotRoutes: Routes = [
   { path: '', component: AgotComponent, pathMatch: 'prefix', children: [
@@ -52,10 +53,12 @@ const agotRoutes: Routes = [
     AgotRequestDialogComponent,
     AgotCardsDialogComponent,
     AgotButtonListComponent,
+    AgotRequestsSnackBarComponent
   ],
   entryComponents: [
     AgotRequestDialogComponent,
-    AgotCardsDialogComponent
+    AgotCardsDialogComponent,
+    AgotRequestsSnackBarComponent
   ]
 })
 export class AgotModule {

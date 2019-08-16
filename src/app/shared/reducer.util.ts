@@ -8,6 +8,11 @@ export function pushed<T> (element: T, array: T[]): T[] {
   return <T[]> [ ...array, element ];
 } // pushed
 
+export function pushedMany<T> (elements: T[], array: T[]): T[] {
+  if (!array) { array = []; }
+  return <T[]> [ ...array, ...elements ];
+} // pushedMany
+
 export function unshifted<T> (element: T, array: T[]): T[] {
   if (!array) { array = []; }
   return <T[]> [ element, ...array ];

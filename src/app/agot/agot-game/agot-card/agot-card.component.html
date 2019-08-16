@@ -23,7 +23,7 @@
     <button 
       mat-menu-item
       *ngFor="let choice of choices$ | async"
-      (click)="onClickChoice(choice.requestChoice)">
+      (click)="onClickChoice(choice)">
       {{choice.label}}
     </button>
   </mat-menu>

@@ -56,7 +56,8 @@ export class AgotDemoService {
         step: "Apply claim result",
         log: [],
         firstPlayer: "leo"
-      }
+      },
+      requests: []
     };
   }
 
@@ -127,7 +128,8 @@ export class AgotDemoService {
         step: "Apply claim result",
         log: [],
         firstPlayer: "leo"
-      } // game
+      }, // game
+      requests: []
     }
   }
 

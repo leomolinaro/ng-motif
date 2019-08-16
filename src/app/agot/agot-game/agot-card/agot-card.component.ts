@@ -2,7 +2,7 @@ import { AgotChoice, AgotChoiceCardAction } from './../../../graphql-types';
 import { Store, select, createSelector } from '@ngrx/store';
 import { Card } from '../../models/card.model';
 import { MotifComponent } from '../../../shared/components/motif.component';
-import { AgotGameService } from '../services/agot-game.service';
+import { AgotGameService, AgotChoiceWrapper } from '../services/agot-game.service';
 import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap, share, tap, filter } from 'rxjs/operators';
@@ -10,11 +10,6 @@ import { AgotCardHoverService } from '../services/agot-card-hover.service';
 import { MatMenuTrigger } from '@angular/material';
 
 import * as fromAgot from '../../store/agot.reducer';
-
-interface RequestChoiceView {
-  requestChoice: AgotChoice,
-  label: string
-}
 
 @Component({
   selector: 'agot-card',
@@ -34,7 +29,7 @@ export class AgotCardComponent extends MotifComponent {
 
   active$: Observable<boolean>;
   entered: boolean;
-  choices$: Observable<RequestChoiceView[]>;
+  choices$: Observable<AgotChoiceWrapper[]>;
 
   attachments$: Observable<Card[]>;
   duplicates$: Observable<Card[]>;
@@ -45,7 +40,7 @@ export class AgotCardComponent extends MotifComponent {
     private requestService: AgotGameService
   ) { super (); }
   
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges (changes: SimpleChanges) {
     this.attSpan = this.card.attachmentIds ? this.card.attachmentIds.length : 0;
     this.powerArray = [];
     for (let i = 1; i <= this.card.power; i++) {
@@ -65,45 +60,22 @@ export class AgotCardComponent extends MotifComponent {
       return dupSpan;
     }));
 
-    const choices$ = this.requestService.getCardChoices$(this.card.id);
+    this.choices$ = this.requestService.getCardChoices$ (this.card.id);
 
-    this.choices$ = choices$.pipe(
-      map(choices => choices ? choices.map(choice => ({
-        requestChoice: choice,
-        label: this.getLabelByChoice(choice)
-      })) : [])
-    );
+    this.active$ = this.choices$.pipe (map (choices => choices && choices.length > 0));
 
-    this.active$ = choices$.pipe(map(choices => choices && choices.length > 0))
+  } // ngOnChanges
 
-  }
+  ngOnInit () {
+  } // ngOnInit
 
-  getLabelByChoice(choice: AgotChoice): string {
-    switch (choice.choiceType) {
-      case "SELECT_CARD": return "Select";
-      case "SELECT_CARD_ACTION": {
-        switch (choice.cardAction) {
-          case AgotChoiceCardAction.Action: return "Action";
-          case AgotChoiceCardAction.Interrupt: return "Interrupt";
-          case AgotChoiceCardAction.Marshall: return "Marshall";
-          case AgotChoiceCardAction.Play: return "Play";
-          case AgotChoiceCardAction.Reaction: return "Reaction";
-        }
-      }
-    }
-    return "---";
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
+  ngOnDestroy () {
     this.unsubscribeAll ();
     if (this.entered) {
       this.entered = false;
       this.hoverService.onCardLeave (null);
-    }
-  }
+    } // if
+  } // ngOnDestroy
 
   onClick(active: boolean) {
     if (active) {
@@ -111,8 +83,8 @@ export class AgotCardComponent extends MotifComponent {
     }
   }
   
-  onClickChoice(choice: AgotChoice) {
-    this.requestService.respond(choice);
+  onClickChoice (choice: AgotChoiceWrapper) {
+    this.requestService.respond (choice);
   }
 
   onMouseEnter(card: Card, event: MouseEvent) {
