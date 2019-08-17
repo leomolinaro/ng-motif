@@ -1,4 +1,4 @@
-<mat-toolbar>
+<!-- <mat-toolbar>
   <button mat-icon-button style="margin-right: 16px;" (click)="openSidenav ()">
     <mat-icon>menu</mat-icon>
   </button>
@@ -23,7 +23,7 @@
     <mat-icon style="color: red">person</mat-icon>
     Salv
   </button>
-</mat-toolbar>
+</mat-toolbar> -->
 <mat-sidenav-container>
   <mat-sidenav class="left-sidenav" id="left-sidenav" mode="over" [opened]="leftSidenavOpened" position="start" fixedInViewport="true" fixedTopGap="50">
     <button *ngIf="!(gameStarted$ | async)" mat-raised-button (click)="startGame ()">

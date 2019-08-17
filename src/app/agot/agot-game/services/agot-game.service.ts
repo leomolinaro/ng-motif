@@ -134,7 +134,7 @@ export class AgotGameService {
   respond (choiceWrapper: AgotChoiceWrapper): void {
     const { __typename, ...choiceInput } = choiceWrapper.choice;
     const request = choiceWrapper.request;
-    this.api.chooseAction (choiceInput, request.player.id)
+    this.api.chooseAction (choiceInput, request.player.id, 1)
     .subscribe (x => {
       console.log ("Apollo mutation ", x.data);
       this.store.dispatch (new RemoveRequest ({ request: request }));
@@ -183,7 +183,7 @@ export class AgotGameService {
   }
 
   startGame () {
-    this.api.startGame ()
+    this.api.startGame (1)
     .subscribe (x => console.log ("Apollo mutation ", x.data));
   } // startGame
 

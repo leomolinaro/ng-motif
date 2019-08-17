@@ -13,10 +13,10 @@ export class AgotRemoteService {
   constructor (private api: AgotApiService, private store: Store<any>) {}
   
   loadGame () {
-    this.api.getGame ()
+    this.api.getGame (1)
     .subscribe (x => {
       console.log ("Apollo query", x.data);
-      const game = x.data.game;
+      const game = x.data.agotGame;
       if (!game) return;
       this.store.dispatch (new InitGame ({
         game: {
@@ -50,10 +50,10 @@ export class AgotRemoteService {
   } // loadGame
 
   loadRequest () {
-    this.api.getRequest ()
+    this.api.getRequest (1)
     .subscribe (x => {
       console.log ("Apollo query", x.data);
-      const requests = x.data.requests;
+      const requests = x.data.agotRequests;
       if (requests) {
         this.store.dispatch (new AddRequests ({ requests: requests }));
       }
@@ -61,26 +61,26 @@ export class AgotRemoteService {
   }
 
   linkRequests () {
-    this.api.subscribeToRequests ()
+    this.api.subscribeToRequests (1)
     .subscribe ((x: { data: SubscribeToRequestsSubscription }) => {
       console.log ("Apollo subscription", x.data);
-      const requests = x.data.requests;
+      const requests = x.data.agotRequests;
       this.store.dispatch (new AddRequests ({ requests: requests }));
     });
   } // linkRequests
 
   linkChanges () {
-    this.api.subscribeToChanges ()
+    this.api.subscribeToChanges (1)
     .subscribe (x => {
       console.log ("Apollo subscription", x.data);
-      const changes = x.data.changes;
+      const changes = x.data.agotChanges;
       changes.actions.forEach (a => this.store.dispatch (<Action>a));
     }); // subscribe
   } // linkChanges
 
   createSampleGame () {
-    this.api.createGame ([
-      {
+    this.api.createGame ("Game 1",
+      [{
         id: "leo",
         faction: AngFaction.Tyrell,
         name: "Leo",

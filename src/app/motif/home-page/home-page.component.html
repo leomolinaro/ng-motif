@@ -1,0 +1,9 @@
+<div style="display: flex; justify-content: space-evenly; margin-top: 40px">
+  <div *ngFor="let app of apps">
+    <img [src]="app.imageUrl"
+      alt="logo"
+      style="width: 400px; height: 400px; cursor: pointer;"
+      class="mat-elevation-z10"
+      [routerLink]="app.route"
+    >
+</div>

@@ -21,13 +21,13 @@
   width: 450px;
 }
 
-mat-toolbar {
+/* mat-toolbar {
   position: fixed;
   height: 50px;
   z-index: 1000;
-}
+} */
 
 mat-sidenav-content {
-  margin-top: 50px;
+  /* margin-top: 50px; */
   margin-right: 200px
 }

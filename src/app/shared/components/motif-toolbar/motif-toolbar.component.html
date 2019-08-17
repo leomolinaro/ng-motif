@@ -1,0 +1,16 @@
+<mat-toolbar class="mat-elevation-z2">
+  <span>{{ title }}</span>
+  <span style="flex: 1 1 auto;"></span>
+  <button mat-button [matMenuTriggerFor]="appsMenu">
+    <mat-icon>apps</mat-icon>
+  </button>
+  <mat-menu #appsMenu="matMenu">
+    <button mat-menu-item routerLink="/home">Home</button>
+    <button mat-menu-item *ngFor="let app of apps">
+      <img [src]="app.imageUrl" style="width: 100px" [routerLink]="app.route">
+    </button>
+  </mat-menu>
+  <button mat-button>
+    <mat-icon>person</mat-icon>
+  </button>
+</mat-toolbar>
