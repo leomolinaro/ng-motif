@@ -20,23 +20,13 @@ export class AgotButtonListComponent extends MotifComponent implements OnInit {
     private store: Store<any>
   ) { super (); }
 
-  choices$: Observable<AgotChoiceWrapper[]>;
 
   ngOnInit () {
     this.gameStarted$ = this.store.select(fromAgot.getGameStarted);
-    this.choices$ = this.gameService.genChoices$;
   } // ngOnInit
 
   startGame () {
     this.gameService.startGame ();
-  }
-
-  createGame () {
-    this.gameService.createGame ();
-  }
-
-  getGame () {
-    this.gameService.getGame ();
   }
 
   onChoiceClick (choice: AgotChoiceWrapper) {

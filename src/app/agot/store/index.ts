@@ -1,3 +1,5 @@
+import { AgotGameEffects } from './agot-game.effects';
+import { AgotHomeEffects } from './agot-home.effects';
 import * as fromHome from './agot-home.reducer';
 import * as fromGame from './agot-game.reducer';
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
@@ -11,6 +13,8 @@ export const reducers: ActionReducerMap<State> = {
   game: fromGame.reducer,
   home: fromHome.reducer
 } // reducers
+
+export const effects = [AgotHomeEffects, AgotGameEffects];
 
 export const featureKey = "agot";
 

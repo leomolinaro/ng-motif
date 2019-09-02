@@ -40,4 +40,4 @@ export function reducer (state: State | undefined, action: Action) {
 }
 
 export const getGames = (state: State) => state.games;
-export const isLoaded = (state: State) => { console.log ("state.loaded", state.loaded); return state.loaded; }
+export const isLoaded = (state: State) => state.loaded;

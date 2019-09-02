@@ -4,8 +4,6 @@ import { AAgotRequest } from './../../../graphql-types';
 import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_SNACK_BAR_DATA} from '@angular/material/snack-bar';
 
-
-
 @Component({
   selector: 'app-agot-requests-snack-bar',
   templateUrl: './agot-requests-snack-bar.component.html',

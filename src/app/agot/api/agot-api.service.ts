@@ -122,14 +122,11 @@ export class AgotApiService extends GraphQLApiService {
           }
         }
       `,
-      {
-        gameId: gameId,
-        token: { token: "leo.molinaro" }
-      }
-    );
-  }
+      { gameId: gameId, token: { token: "leo.molinaro" } }
+    ).pipe (map (res => res.data.agotGame));
+  } // getGame
 
-  getRequest (gameId: number) {
+  getRequests (gameId: number) {
     return this.queryFromGql<GetRequestsQuery, GetRequestsQueryVariables> (
       gql`
         query GetRequests ($gameId: Long!, $token: MotifTokenInput!) {
@@ -139,14 +136,11 @@ export class AgotApiService extends GraphQLApiService {
         }
         ${requestFragment}
       `,
-      {
-        gameId: gameId,
-        token: { token: "leo.molinaro" }
-      }
-    );
-  }
+      { gameId: gameId, token: { token: "leo.molinaro" } }
+    ).pipe (map (res => res.data.agotRequests));
+  } // getRequests
 
-  subscribeToRequests (gameId: number): Observable<{ data: SubscribeToRequestsSubscription }> {
+  subscribeToRequests (gameId: number) {
     return this.subscribeFromGql<SubscribeToRequestsSubscription, SubscribeToChangesSubscriptionVariables> (
       gql`
         subscription SubscribeToRequests ($gameId: Long!, $token: MotifTokenInput!) {
@@ -160,7 +154,7 @@ export class AgotApiService extends GraphQLApiService {
         gameId: gameId,
         token: { token: "leo.molinaro" }
       }
-    );
+    ).pipe (map (res => res.data.agotRequests));
   } // subscribeToRequests
 
   subscribeToChanges (gameId: number) {
@@ -195,7 +189,7 @@ export class AgotApiService extends GraphQLApiService {
         gameId: gameId,
         token: { token: "leo.molinaro" }
       }
-    );
+    ).pipe (map (res => res.data.agotChanges));
   } // subscribeToChanges
 
   startGame (gameId: number): Observable<{ data: StartGameMutation }> {

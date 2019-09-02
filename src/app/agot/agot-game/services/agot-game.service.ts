@@ -1,18 +1,15 @@
 import { AgotRequestsSnackBarComponent } from './../agot-requests-snack-bar/agot-requests-snack-bar.component';
 import { AgotApiService } from './../../api/agot-api.service';
 import { AgotChoice, AAgotRequest, AgotChoiceCardAction, AgotChoiceType } from './../../../graphql-types';
-import { AgotRemoteService } from './../../store/agot-remote.service';
 import { filter, take } from 'rxjs/operators';
 import { AuthService } from '../../../shared/login/auth.service';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBarRef, MatSnackBar } from '@angular/material';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 import * as fromAgot from '../../store';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
-import { RemoveRequest } from '../../store/agot-game.actions';
+import * as fromGameActions from '../../store/agot-game.actions';
 
 export interface AgotChoiceWrapper {
   choice: AgotChoice,
@@ -28,32 +25,22 @@ export interface SnackBarRequest {
 @Injectable()
 export class AgotGameService {
 
-  private requestsSnackBarRef: MatSnackBarRef<AgotRequestsSnackBarComponent>;
-  private requestsSnackBarSubscription: Subscription;
-
   private choicesByCard = new BehaviorSubject<{ [cardId: number]: AgotChoiceWrapper[] }>({});
   private choicesByCard$ = this.choicesByCard.asObservable();
   
-  private genChoices = new BehaviorSubject<AgotChoiceWrapper[]>(null);
-  public genChoices$ = this.genChoices.asObservable ();
+  private snackBarRequests = new BehaviorSubject<SnackBarRequest[]>(null);
+  public snackBarRequests$ = this.snackBarRequests.asObservable ();
   
   constructor (
     private store: Store<any>,
-    public snackBar: MatSnackBar,
-    public dialog: MatDialog,
     public loginService: AuthService,
-    private remoteService: AgotRemoteService,
     private api: AgotApiService
   ) {
 
     const requests$ = this.store.select (fromAgot.getRequests).pipe (filter (requests => !!requests));
-
     requests$.subscribe (requests => {
-      
       const choicesByCard: { [cardId: number]: AgotChoiceWrapper[] } = {};
-      // const genChoices: AgotChoiceWrapper[] = [];
       const snackBarRequests: SnackBarRequest[] = [];
-
       requests.forEach (request => {
         console.log (request);
         const snackBarRequest: SnackBarRequest = {
@@ -67,21 +54,13 @@ export class AgotGameService {
             if (!cardChoices) { cardChoices = []; choicesByCard[choice.cardId] = cardChoices; }
             cardChoices.push (choiceWrapper);
           } else {
-            // genChoices.push (choiceWrapper);
             snackBarRequest.getChoices.push (choiceWrapper);
           }
         }
         snackBarRequests.push (snackBarRequest);
       });
       this.choicesByCard.next (choicesByCard);
-      // this.genChoices.next (genChoices);
-
-      if (requests.length) {
-        this.showRequestsSnackBar (snackBarRequests);
-      } else {
-        this.removeRequestsSnackBar ();
-      }
-
+      this.snackBarRequests.next (snackBarRequests);
     });
 
   } // constructor
@@ -135,51 +114,9 @@ export class AgotGameService {
     const request = choiceWrapper.request;
     this.api.chooseAction (choiceInput, request.player.id, 1)
     .subscribe (x => {
-      console.log ("Apollo mutation ", x.data);
-      this.store.dispatch (new RemoveRequest ({ request: request }));
+      this.store.dispatch (fromGameActions.requestRemove ({ request: request }));
     });
   } // respond
-
-  showRequestsSnackBar (requests: SnackBarRequest[]) {
-    this.requestsSnackBarRef = this.snackBar.openFromComponent (AgotRequestsSnackBarComponent, { data: requests, verticalPosition: "top" });
-    this.requestsSnackBarSubscription = this.requestsSnackBarRef.instance.choice$.subscribe (choice => this.respond (choice));
-  } // showRequestSnackBar
-
-  removeRequestsSnackBar () {
-    if (this.requestsSnackBarRef) {
-      this.requestsSnackBarSubscription.unsubscribe ();
-      this.requestsSnackBarRef.dismiss ();
-      this.requestsSnackBarRef = null;
-    } // if 
-  } // removeRequestSnackBar
-
-  // openGenericRequestDialog (request: Requests) {
-  //   let requestDialogRef = this.dialog.open (AgotRequestDialogComponent, {
-  //     height: '400px',
-  //     width: '600px',
-  //     data: request
-  //   });
-  //   requestDialogRef.afterClosed ().pipe(
-  //     filter(choice => !!choice)
-  //   ).subscribe (choice => {
-  //     this.respond (choice);
-  //   });
-  // }
-
-  loadAll () {
-    this.remoteService.loadGame ();
-    this.remoteService.loadRequest ();
-    this.remoteService.linkRequests ();
-    this.remoteService.linkChanges ();
-  }
-
-  getGame () {
-    this.remoteService.loadGame ();
-  }
-
-  createGame () {
-    this.remoteService.createSampleGame ();
-  }
 
   startGame () {
     this.api.startGame (1)

@@ -15,7 +15,7 @@ export class MotifRouterEffects {
     private location: Location,
     private store: Store<any>
   ) {
-      this.listenToRouter ();
+    this.listenToRouter ();
   } // constructor
 
 

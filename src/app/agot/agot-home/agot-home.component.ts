@@ -1,9 +1,9 @@
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import * as fromAgotHome from '../store/agot-home.actions';
 import * as fromAgot from '../store';
 import { Store } from '@ngrx/store';
 import { MotifComponent } from './../../shared/components/motif.component';
-import { AgotRemoteService } from './../store/agot-remote.service';
-import { AgotApiService } from './../api/agot-api.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -15,7 +15,11 @@ export class AgotHomeComponent extends MotifComponent implements OnInit {
 
   protected games$ = this.store.select (fromAgot.getHomeGames);
 
-  constructor (private api: AgotApiService, private remote: AgotRemoteService, private store: Store<any>) { super (); }
+  constructor (
+    private store: Store<any>,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { super (); }
 
   ngOnInit () {
     this.store.dispatch (fromAgotHome.gamesGet ());
@@ -24,5 +28,9 @@ export class AgotHomeComponent extends MotifComponent implements OnInit {
   newGame () {
     this.store.dispatch (fromAgotHome.gameNew ());
   } // newGame
+
+  openGame (gameId: number) {
+    this.router.navigate (["..", "game", gameId], { relativeTo: this.route });
+  } // openGame
 
 } // AgotHomeComponent

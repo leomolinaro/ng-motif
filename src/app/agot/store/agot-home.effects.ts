@@ -19,7 +19,6 @@ export class AgotHomeEffects {
     ofType (actions.gamesGet),
     exhaustMap ((action) => this.api.getGames ()
       .pipe (
-        tap (console.log),
         map (games => actions.gamesGetSuccess ({ games })),
         catchError (error => of (actions.gamesGetFailure ({ error })))
       )
@@ -123,3 +122,29 @@ export class AgotHomeEffects {
   } // createSampleGame
 
 } // AgotHomeEffects
+
+// game.initFaction (fede, AngFaction.TARGARYEN);
+// game.initCard (fede, AgotCardSeed.A_NOBLE_CAUSE_Core, 2);
+// game.initCard (fede, AgotCardSeed.BRAIDED_WARRIOR_Core, 3);
+// game.initCard (fede, AgotCardSeed.DAENERYS_TARGARYEN_Core, 3);
+// game.initCard (fede, AgotCardSeed.DROGON_Core, 3);
+// game.initCard (fede, AgotCardSeed.HANDMAIDEN_Core, 3);
+// game.initCard (fede, AgotCardSeed.KHAL_DROGO_Core, 3);
+// game.initCard (fede, AgotCardSeed.LITTLEFINGER_Core, 2);
+// game.initCard (fede, AgotCardSeed.MAGISTER_ILLYRIO_Core, 2);
+// game.initCard (fede, AgotCardSeed.RHAEGAL_Core, 3);
+// game.initCard (fede, AgotCardSeed.SER_JORAH_MORMONT_Core, 3);
+// game.initCard (fede, AgotCardSeed.TARGARYEN_LOYALIST_Core, 3);
+// game.initCard (fede, AgotCardSeed.UNSULLIED_Core, 3);
+// game.initCard (fede, AgotCardSeed.VISERION_Core, 3);
+// game.initCard (fede, AgotCardSeed.VISERYS_TARGARYEN_Core, 2);
+// game.initCard (fede, AgotCardSeed.MILK_OF_THE_POPPY_Core, 2);
+// game.initCard (fede, AgotCardSeed.SEAL_OF_THE_HAND_Core, 2);
+// game.initCard (fede, AgotCardSeed.ILLYRIOS_ESTATE_Core, 3);
+// game.initCard (fede, AgotCardSeed.PLAZA_OF_PUNISHMENT_Core, 3);
+// game.initCard (fede, AgotCardSeed.THE_IRON_THRONE_Core, 1);
+// game.initCard (fede, AgotCardSeed.THE_KINGSROAD_Core, 3);
+// game.initCard (fede, AgotCardSeed.THE_ROSEROAD_Core, 3);
+// game.initCard (fede, AgotCardSeed.DRACARYS_Core, 3);
+// game.initCard (fede, AgotCardSeed.FIRE_AND_BLOOD_Core, 2);
+// game.initCard (fede, AgotCardSeed.WAKING_THE_DRAGON_Core, 2);
