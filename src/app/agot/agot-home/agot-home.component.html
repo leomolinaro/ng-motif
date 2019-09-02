@@ -1,0 +1,22 @@
+<div style="display: flex; justify-content:space-around;">
+  <mat-nav-list>
+    <a mat-list-item (click)="newGame ()" class="mat-elevation-z2" style="margin: 10px; padding: 10px">
+      <mat-icon>add</mat-icon>
+      New game
+    </a>
+    <a mat-list-item (click)="openGame (game.id)"
+      *ngFor="let game of games$ | async"
+      class="mat-elevation-z2"
+      style="margin: 10px; height: auto; padding: 10px">
+      <h3 matLine>{{game.name}}</h3>
+      <div matLine style="display: flex; justify-content: space-around; align-items: center">
+        <div *ngFor="let player of game.allPlayers" style="display: flex; flex-direction: column; align-items: center">
+          <img
+            [src]="player.faction.imageSource"
+            style="height: 100px; margin: 5px">
+          <div>{{player.name}} ({{player.user.username}})</div>
+        </div>
+      </div>
+    </a>
+  </mat-nav-list>
+</div>

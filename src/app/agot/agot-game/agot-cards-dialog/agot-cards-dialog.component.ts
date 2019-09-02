@@ -1,4 +1,4 @@
-import { Card } from './../../models/card.model';
+import { Card } from './../../store/agot-game.reducer';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Component, OnInit, Inject } from '@angular/core';
 import { AgotCardsDialogData } from './agot-cards-dialog-data';

@@ -1,14 +1,13 @@
-import { Card } from './../../models/card.model';
+import { Player, Card } from './../../store/agot-game.reducer';
 import { AgotCardsDialogData } from '../agot-cards-dialog/agot-cards-dialog-data';
 import { Store, MemoizedSelector } from '@ngrx/store';
-import { Player } from '../../models/player.model';
 import { MotifComponent } from '../../../shared/components/motif.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AgotCardsDialogComponent } from '../agot-cards-dialog/agot-cards-dialog.component';
 import { Observable } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
 
-import * as fromAgot from '../../store/agot.reducer';
+import * as fromAgot from '../../store';
 
 import { map, switchMap, share, tap } from 'rxjs/operators';
 import { DefaultProjectorFn } from '@ngrx/store/src/selector';
@@ -53,40 +52,28 @@ export class AgotTableComponent extends MotifComponent implements OnInit {
     );
   }
   
-  // selectCardFromStore(playerIds$: Observable<string[]>, selector: (playerId: string) => MemoizedSelector<object, number, DefaultProjectorFn<number>>, i: number) {
-  //   return this.selectFromStore(playerIds$, selector, i).pipe(
-  //     map(cardId => this.store.select(fromAgot.selectCardById(cardId)))
-  //   );
-  // }
-
-  // selectCardsFromStore(playerIds$: Observable<string[]>, selector: (playerId: string) => MemoizedSelector<object, number[], DefaultProjectorFn<number[]>>, i: number) {
-  //   return this.selectFromStore(playerIds$, selector, i).pipe(
-  //     switchMap(cardIds => cardIds.map(cardId => this.store.select(fromAgot.selectCardById(cardId))))
-  //   );
-  // }
-
   ngOnInit() {
-    const playerIds$ = this.store.select(fromAgot.selectPlayerIds);
+    const playerIds$ = this.store.select(fromAgot.getPlayerIds);
     let reverseLayout = true;
     for (let i = 0; i < this.nPlayers; i++) {
-      const discardPile$ = this.selectFromStore(playerIds$, fromAgot.selectDiscardPile, i);
-      const deadPile$ = this.selectFromStore(playerIds$, fromAgot.selectDeadPile, i);
-      const gold$ = this.selectFromStore(playerIds$, fromAgot.selectGold, i);
+      const discardPile$ = this.selectFromStore(playerIds$, fromAgot.getDiscardPile, i);
+      const deadPile$ = this.selectFromStore(playerIds$, fromAgot.getDeadPile, i);
+      const gold$ = this.selectFromStore(playerIds$, fromAgot.getGold, i);
       reverseLayout = !reverseLayout;
       const playerUI: PlayerUI = {
         reverseLayout: reverseLayout,
-        player$: this.selectFromStore(playerIds$, fromAgot.selectPlayerById, i),
-        faction$: this.selectFromStore(playerIds$, fromAgot.selectFaction, i),
-        agenda$: this.selectFromStore(playerIds$, fromAgot.selectAgenda, i),
-        hand$: this.selectFromStore(playerIds$, fromAgot.selectHand, i),
-        characters$: this.selectFromStore(playerIds$, fromAgot.selectCharacters, i),
-        locations$: this.selectFromStore(playerIds$, fromAgot.selectLocations, i),
-        discardPile$: this.selectFromStore(playerIds$, fromAgot.selectDiscardPile, i),
-        drawDeckEmpty$: this.selectFromStore(playerIds$, fromAgot.selectDrawDeckEmpty, i),
-        plotDeck$: this.selectFromStore(playerIds$, fromAgot.selectPlotDeck, i),
-        usedPlotPile$: this.selectFromStore(playerIds$, fromAgot.selectUsedPlotPile, i),
-        revealedPlot$: this.selectFromStore(playerIds$, fromAgot.selectRevealedPlot, i),
-        deadPile$: this.selectFromStore(playerIds$, fromAgot.selectDeadPile, i),
+        player$: this.selectFromStore(playerIds$, fromAgot.getPlayerById, i),
+        faction$: this.selectFromStore(playerIds$, fromAgot.getFaction, i),
+        agenda$: this.selectFromStore(playerIds$, fromAgot.getAgenda, i),
+        hand$: this.selectFromStore(playerIds$, fromAgot.getHand, i),
+        characters$: this.selectFromStore(playerIds$, fromAgot.getCharacters, i),
+        locations$: this.selectFromStore(playerIds$, fromAgot.getLocations, i),
+        discardPile$: this.selectFromStore(playerIds$, fromAgot.getDiscardPile, i),
+        drawDeckEmpty$: this.selectFromStore(playerIds$, fromAgot.getDrawDeckEmpty, i),
+        plotDeck$: this.selectFromStore(playerIds$, fromAgot.getPlotDeck, i),
+        usedPlotPile$: this.selectFromStore(playerIds$, fromAgot.getUsedPlotPile, i),
+        revealedPlot$: this.selectFromStore(playerIds$, fromAgot.getRevealedPlot, i),
+        deadPile$: this.selectFromStore(playerIds$, fromAgot.getDeadPile, i),
         discardPileTop$: discardPile$.pipe(map(this.getTopPile)),
         deadPileTop$: deadPile$.pipe(map (this.getTopPile)),
         goldArray$: gold$.pipe(map(gold => {

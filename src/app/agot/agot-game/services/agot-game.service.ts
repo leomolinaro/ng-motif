@@ -4,16 +4,15 @@ import { AgotChoice, AAgotRequest, AgotChoiceCardAction, AgotChoiceType } from '
 import { AgotRemoteService } from './../../store/agot-remote.service';
 import { filter, take } from 'rxjs/operators';
 import { AuthService } from '../../../shared/login/auth.service';
-import { AgotRequestDialogComponent } from '../agot-request-dialog/agot-request-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBarRef, SimpleSnackBar, MatSnackBar } from '@angular/material';
+import { MatSnackBarRef, MatSnackBar } from '@angular/material';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import * as fromAgot from '../../store/agot.reducer';
+import * as fromAgot from '../../store';
 import { Store } from '@ngrx/store';
-import { map, switchMap } from 'rxjs/operators';
-import { RemoveRequest } from '../../store/agot.actions';
+import { map } from 'rxjs/operators';
+import { RemoveRequest } from '../../store/agot-game.actions';
 
 export interface AgotChoiceWrapper {
   choice: AgotChoice,
@@ -47,7 +46,7 @@ export class AgotGameService {
     private api: AgotApiService
   ) {
 
-    const requests$ = this.store.select (fromAgot.selectRequests).pipe (filter (requests => !!requests));
+    const requests$ = this.store.select (fromAgot.getRequests).pipe (filter (requests => !!requests));
 
     requests$.subscribe (requests => {
       
@@ -121,7 +120,7 @@ export class AgotGameService {
 
   private getPlayerNameById (playerId: string) {
     let name: string;
-    this.store.select (fromAgot.selectPlayerById (playerId)).pipe (take (1)).subscribe (p => name = p.name);
+    this.store.select (fromAgot.getPlayerById (playerId)).pipe (take (1)).subscribe (p => name = p.name);
     return name;
   } // getPlayerNameById
 

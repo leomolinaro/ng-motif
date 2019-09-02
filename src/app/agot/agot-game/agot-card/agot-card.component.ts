@@ -1,6 +1,5 @@
-import { AgotChoice, AgotChoiceCardAction } from './../../../graphql-types';
-import { Store, select, createSelector } from '@ngrx/store';
-import { Card } from '../../models/card.model';
+import { Card } from './../../store/agot-game.reducer';
+import { Store } from '@ngrx/store';
 import { MotifComponent } from '../../../shared/components/motif.component';
 import { AgotGameService, AgotChoiceWrapper } from '../services/agot-game.service';
 import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy } from '@angular/core';
@@ -9,7 +8,7 @@ import { map, switchMap, share, tap, filter } from 'rxjs/operators';
 import { AgotCardHoverService } from '../services/agot-card-hover.service';
 import { MatMenuTrigger } from '@angular/material';
 
-import * as fromAgot from '../../store/agot.reducer';
+import * as fromAgot from '../../store';
 
 @Component({
   selector: 'agot-card',
@@ -46,8 +45,8 @@ export class AgotCardComponent extends MotifComponent {
     for (let i = 1; i <= this.card.power; i++) {
       this.powerArray.push(i);
     }
-    this.attachments$ = this.store.select(fromAgot.selectAttachments(this.card.attachmentIds));
-    this.duplicates$ = this.store.select(fromAgot.selectAttachments(this.card.duplicateIds));
+    this.attachments$ = this.store.select (fromAgot.getCardsByIds (this.card.attachmentIds));
+    this.duplicates$ = this.store.select (fromAgot.getCardsByIds (this.card.duplicateIds));
     
     this.dupSpan$ = combineLatest(of(this.card), this.attachments$)
     .pipe(map(([card, attLst]) => {

@@ -10,6 +10,29 @@
         "description": "Query root",
         "fields": [
           {
+            "name": "agotGames",
+            "description": null,
+            "args": [
+              {
+                "name": "token",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "MotifTokenInput",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "AgotGame", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "agotRequests",
             "description": null,
             "args": [
@@ -82,16 +105,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "SCALAR",
-        "name": "Long",
-        "description": "Long type",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "INPUT_OBJECT",
         "name": "MotifTokenInput",
         "description": null,
@@ -120,23 +133,35 @@
       },
       {
         "kind": "OBJECT",
-        "name": "AAgotRequest",
+        "name": "AgotGame",
         "description": null,
         "fields": [
           {
-            "name": "type",
+            "name": "phase",
             "description": null,
             "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "AgotRequestType",
-              "ofType": null
-            },
+            "type": { "kind": "ENUM", "name": "AngPhase", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "choices",
+            "name": "firstPlayer",
+            "description": null,
+            "args": [],
+            "type": { "kind": "OBJECT", "name": "AgotPlayer", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "round",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "log",
             "description": null,
             "args": [],
             "type": {
@@ -144,7 +169,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "AgotChoice",
+                "name": "GameLogRow",
                 "ofType": null
               }
             },
@@ -152,7 +177,7 @@
             "deprecationReason": null
           },
           {
-            "name": "instruction",
+            "name": "name",
             "description": null,
             "args": [],
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
@@ -160,10 +185,62 @@
             "deprecationReason": null
           },
           {
-            "name": "player",
+            "name": "step",
             "description": null,
             "args": [],
-            "type": { "kind": "OBJECT", "name": "AgotPlayer", "ofType": null },
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "started",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "allCards",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "Card", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "allPlayers",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AgotPlayer",
+                "ofType": null
+              }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -175,324 +252,50 @@
       },
       {
         "kind": "ENUM",
-        "name": "AgotRequestType",
+        "name": "AngPhase",
         "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
-            "name": "SELECT_ACTION_TO_PERFORM",
+            "name": "CHALLENGES",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SELECT_REACTION_TO_PERFORM",
+            "name": "DOMINANCE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SELECT_INTERRUPT_TO_PERFORM",
+            "name": "DRAW",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SELECT_CHARACTER_TO_KILL",
+            "name": "MARSHALLING",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SELECT_CHARACTER_TO_DEFEND",
+            "name": "PLOT",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SELECT_CHALLENGE_TO_INITIATE",
+            "name": "STANDING",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SELECT_CHARACTER_TO_ATTACK",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_CHARACTER_TO_BYPASS",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_DEFENDER",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_PLOT_TO_REVEAL",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_FIRST_PLAYER",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_CARD_TO_ATTACH",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_CARD_TO_DISCARD",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CHOOSE_CARD",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CONTINUE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "YES_NO",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "AgotChoice",
-        "description": null,
-        "fields": [
-          {
-            "name": "choiceType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "AgotChoiceType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "requestType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "AgotRequestType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "cardId",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "Long", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "icon",
-            "description": null,
-            "args": [],
-            "type": { "kind": "ENUM", "name": "AngIcon", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "yesNoAnswer",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "cardAction",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "AgotChoiceCardAction",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "actionLabel",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "player",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "AgotChoiceType",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "SELECT_CARD",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_CARD_ACTION",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_PLAYER",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SELECT_ICON",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CONTINUE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PASS",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "YES_NO",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "AngIcon",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "MILITARY",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "POWER",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INTRIGUE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Boolean",
-        "description": "The `Boolean` scalar type represents `true` or `false`.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "AgotChoiceCardAction",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "MARSHALL",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PLAY",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ACTION",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "REACTION",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INTERRUPT",
+            "name": "TAXATION",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -505,18 +308,6 @@
         "name": "AgotPlayer",
         "description": null,
         "fields": [
-          {
-            "name": "usedPlotPile",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": { "kind": "OBJECT", "name": "PlotCard", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "discardPile",
             "description": null,
@@ -534,10 +325,30 @@
             "deprecationReason": null
           },
           {
+            "name": "usedPlotPile",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "PlotCard", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "agenda",
             "description": null,
             "args": [],
             "type": { "kind": "OBJECT", "name": "AgendaCard", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "revealedPlot",
+            "description": null,
+            "args": [],
+            "type": { "kind": "OBJECT", "name": "PlotCard", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -554,14 +365,6 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "revealedPlot",
-            "description": null,
-            "args": [],
-            "type": { "kind": "OBJECT", "name": "PlotCard", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -658,6 +461,14 @@
             "deprecationReason": null
           },
           {
+            "name": "user",
+            "description": null,
+            "args": [],
+            "type": { "kind": "OBJECT", "name": "MotifUser", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "hand",
             "description": null,
             "args": [],
@@ -681,7 +492,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "PlotCard",
+        "name": "DrawCard_AngDrawCard",
         "description": null,
         "fields": [
           {
@@ -772,6 +583,26 @@
       },
       {
         "kind": "SCALAR",
+        "name": "Boolean",
+        "description": "The `Boolean` scalar type represents `true` or `false`.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Long",
+        "description": "Long type",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
         "name": "Int",
         "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
         "fields": null,
@@ -782,7 +613,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "DrawCard_AngDrawCard",
+        "name": "PlotCard",
         "description": null,
         "fields": [
           {
@@ -1189,114 +1020,14 @@
       },
       {
         "kind": "OBJECT",
-        "name": "AgotGame",
+        "name": "MotifUser",
         "description": null,
         "fields": [
           {
-            "name": "phase",
-            "description": null,
-            "args": [],
-            "type": { "kind": "ENUM", "name": "AngPhase", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "firstPlayer",
-            "description": null,
-            "args": [],
-            "type": { "kind": "OBJECT", "name": "AgotPlayer", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "round",
+            "name": "username",
             "description": null,
             "args": [],
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "log",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "GameLogRow",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "name",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "step",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "started",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "allCards",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": { "kind": "OBJECT", "name": "Card", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "allPlayers",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "AgotPlayer",
-                "ofType": null
-              }
-            },
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -1304,59 +1035,6 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "AngPhase",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CHALLENGES",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DOMINANCE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DRAW",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "MARSHALLING",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PLOT",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STANDING",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TAXATION",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
         "possibleTypes": null
       },
       {
@@ -1463,18 +1141,6 @@
             "deprecationReason": null
           },
           {
-            "name": "duplicateIds",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "power",
             "description": null,
             "args": [],
@@ -1482,6 +1148,18 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "duplicateIds",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1514,6 +1192,378 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "AAgotRequest",
+        "description": null,
+        "fields": [
+          {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AgotRequestType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "choices",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AgotChoice",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "instruction",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "player",
+            "description": null,
+            "args": [],
+            "type": { "kind": "OBJECT", "name": "AgotPlayer", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "AgotRequestType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SELECT_ACTION_TO_PERFORM",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_REACTION_TO_PERFORM",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_INTERRUPT_TO_PERFORM",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CHARACTER_TO_KILL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CHARACTER_TO_DEFEND",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CHALLENGE_TO_INITIATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CHARACTER_TO_ATTACK",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CHARACTER_TO_BYPASS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_DEFENDER",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_PLOT_TO_REVEAL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_FIRST_PLAYER",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CARD_TO_ATTACH",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CARD_TO_DISCARD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CHOOSE_CARD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CONTINUE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YES_NO",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "AgotChoice",
+        "description": null,
+        "fields": [
+          {
+            "name": "choiceType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AgotChoiceType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "requestType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AgotRequestType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "cardId",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "Long", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "icon",
+            "description": null,
+            "args": [],
+            "type": { "kind": "ENUM", "name": "AngIcon", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "yesNoAnswer",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "cardAction",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AgotChoiceCardAction",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "actionLabel",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "player",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "AgotChoiceType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SELECT_CARD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_CARD_ACTION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_PLAYER",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_ICON",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CONTINUE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PASS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YES_NO",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "AngIcon",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "MILITARY",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "POWER",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTRIGUE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "AgotChoiceCardAction",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "MARSHALL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PLAY",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ACTION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REACTION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTERRUPT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -1733,9 +1783,9 @@
             "defaultValue": null
           },
           {
-            "name": "faction",
+            "name": "id",
             "description": null,
-            "type": { "kind": "ENUM", "name": "AngFaction", "ofType": null },
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "defaultValue": null
           },
           {
@@ -1745,9 +1795,9 @@
             "defaultValue": null
           },
           {
-            "name": "id",
+            "name": "faction",
             "description": null,
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "type": { "kind": "ENUM", "name": "AngFaction", "ofType": null },
             "defaultValue": null
           }
         ],
@@ -1762,12 +1812,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "card",
-            "description": null,
-            "type": { "kind": "ENUM", "name": "AgotCardSeed", "ofType": null },
-            "defaultValue": null
-          },
-          {
             "name": "quantity",
             "description": null,
             "type": {
@@ -1775,6 +1819,12 @@
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
             },
+            "defaultValue": null
+          },
+          {
+            "name": "card",
+            "description": null,
+            "type": { "kind": "ENUM", "name": "AgotCardSeed", "ofType": null },
             "defaultValue": null
           }
         ],
@@ -9515,46 +9565,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "cardAction",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "AgotChoiceCardAction",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "player",
-            "description": null,
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "defaultValue": null
-          },
-          {
-            "name": "actionLabel",
-            "description": null,
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "defaultValue": null
-          },
-          {
-            "name": "icon",
-            "description": null,
-            "type": { "kind": "ENUM", "name": "AngIcon", "ofType": null },
-            "defaultValue": null
-          },
-          {
-            "name": "yesNoAnswer",
-            "description": null,
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
-            "defaultValue": null
-          },
-          {
-            "name": "cardId",
-            "description": null,
-            "type": { "kind": "SCALAR", "name": "Long", "ofType": null },
-            "defaultValue": null
-          },
-          {
             "name": "choiceType",
             "description": null,
             "type": {
@@ -9565,6 +9575,12 @@
             "defaultValue": null
           },
           {
+            "name": "yesNoAnswer",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "defaultValue": null
+          },
+          {
             "name": "requestType",
             "description": null,
             "type": {
@@ -9572,6 +9588,40 @@
               "name": "AgotRequestType",
               "ofType": null
             },
+            "defaultValue": null
+          },
+          {
+            "name": "icon",
+            "description": null,
+            "type": { "kind": "ENUM", "name": "AngIcon", "ofType": null },
+            "defaultValue": null
+          },
+          {
+            "name": "cardAction",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "AgotChoiceCardAction",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "cardId",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Long", "ofType": null },
+            "defaultValue": null
+          },
+          {
+            "name": "actionLabel",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": null
+          },
+          {
+            "name": "player",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "defaultValue": null
           }
         ],

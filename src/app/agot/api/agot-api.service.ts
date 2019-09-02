@@ -1,8 +1,12 @@
+import { GraphQLApiService, CheckQuery, CheckMutation } from './../../shared/graphql/graphql.util';
 import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { InputPlayerInput, MotifTokenInput, GetGameQuery, GetRequestsQuery, SubscribeToRequestsSubscription, SubscribeToChangesSubscriptionVariables, SubscribeToChangesSubscription, MutateGameMutation, MutateGameMutationVariables, StartGameMutation, StartGameMutationVariables, ChooseActionMutation, ChooseActionMutationVariables, AgotChoiceInput, CheatDrawDeckMutation, CheatDrawDeckMutationVariables, GetRequestsQueryVariables, GetGameQueryVariables } from './../../graphql-types';
+import { Mutation, InputPlayerInput, GetGameQuery, GetRequestsQuery, SubscribeToRequestsSubscription, SubscribeToChangesSubscriptionVariables, SubscribeToChangesSubscription, MutateGameMutation, MutateGameMutationVariables, StartGameMutation, StartGameMutationVariables, ChooseActionMutation, ChooseActionMutationVariables, AgotChoiceInput, CheatDrawDeckMutation, CheatDrawDeckMutationVariables, GetRequestsQueryVariables, GetGameQueryVariables, Query, QueryAgotGameArgs, QueryAgotGamesArgs, MutationAgotNewGameArgs } from './../../graphql-types';
 import gql from 'graphql-tag';
+import { params, types, fragment } from 'typed-graphqlify'
+import { StrictlyIncludes, DeepRequired } from 'src/app/shared/types/types';
+import { map } from 'rxjs/operators';
 
 const requestFragment =  gql`
   fragment RequestFragment on AAgotRequest {
@@ -22,16 +26,62 @@ const requestFragment =  gql`
   }
 `;
 
+const homeGameFragment = fragment ("homeGameFragment", "AgotGame", {
+  id: types.number,
+  name: types.string,
+  allPlayers: [{
+    id: types.string,
+    name: types.string,
+    faction: {
+      imageSource: types.string
+    },
+    user: {
+      username: types.string,
+    }
+  }]
+});
+
+
 @Injectable({
   providedIn: 'root'
 })
-export class AgotApiService {
+export class AgotApiService extends GraphQLApiService {
 
-  constructor (private apollo: Apollo) { }
+  constructor (apollo: Apollo) { super (apollo); }
+
+  getGames () {
+    const q = params ({ $token: 'MotifTokenInput!' },
+      {
+        agotGames: params ({ token: '$token' },
+          [{ ...homeGameFragment }]
+        )
+      }
+    );
+    const typeCheck: CheckQuery<typeof q> = true;
+    return this.query (q, { token: { token: "leo.molinaro" } }).pipe (map (res => res.data.agotGames));
+  } // getGames
+
+  newGame (gameName: string, inputPlayers: InputPlayerInput[]) {
+    const m = params ({ $gameName: 'String!', $inputPlayers: '[InputPlayerInput]!', $token: 'MotifTokenInput!' },
+      {
+        agotNewGame: params ({ gameName: '$gameName', inputPlayers: '$inputPlayers', token: '$token' },
+          { ...homeGameFragment }
+        )
+      }
+    );
+    const typeCheck: CheckMutation<typeof m> = true;
+    return this.mutate (m, {
+      gameName: gameName,
+      token: { token: "leo.molinaro" },
+      inputPlayers: inputPlayers
+    }).pipe (
+      map (res => res.data.agotNewGame)
+    );
+  } // newGame
 
   getGame (gameId: number) {
-    return this.apollo.query<GetGameQuery, GetGameQueryVariables>({
-      query: gql`
+    return this.queryFromGql<GetGameQuery, GetGameQueryVariables>(
+      gql`
         query GetGame ($gameId: Long!, $token: MotifTokenInput!) {
           agotGame (gameId: $gameId, token: $token) {
             id
@@ -72,16 +122,16 @@ export class AgotApiService {
           }
         }
       `,
-      variables: {
+      {
         gameId: gameId,
         token: { token: "leo.molinaro" }
       }
-    });
+    );
   }
 
   getRequest (gameId: number) {
-    return this.apollo.query<GetRequestsQuery, GetRequestsQueryVariables> ({
-      query: gql`
+    return this.queryFromGql<GetRequestsQuery, GetRequestsQueryVariables> (
+      gql`
         query GetRequests ($gameId: Long!, $token: MotifTokenInput!) {
           agotRequests (gameId: $gameId, token: $token) {
             ...RequestFragment
@@ -89,16 +139,16 @@ export class AgotApiService {
         }
         ${requestFragment}
       `,
-      variables: {
+      {
         gameId: gameId,
         token: { token: "leo.molinaro" }
       }
-    });
+    );
   }
 
   subscribeToRequests (gameId: number): Observable<{ data: SubscribeToRequestsSubscription }> {
-    return this.apollo.subscribe<SubscribeToRequestsSubscription, SubscribeToChangesSubscriptionVariables> ({
-      query: gql`
+    return this.subscribeFromGql<SubscribeToRequestsSubscription, SubscribeToChangesSubscriptionVariables> (
+      gql`
         subscription SubscribeToRequests ($gameId: Long!, $token: MotifTokenInput!) {
           agotRequests (gameId: $gameId, token: $token) {
             ...RequestFragment
@@ -106,16 +156,16 @@ export class AgotApiService {
         }
         ${requestFragment}
       `,
-      variables: {
+      {
         gameId: gameId,
         token: { token: "leo.molinaro" }
       }
-    });
+    );
   } // subscribeToRequests
 
-  subscribeToChanges (gameId: number): Observable<{ data: SubscribeToChangesSubscription }> {
-    return this.apollo.subscribe<SubscribeToChangesSubscription, SubscribeToChangesSubscriptionVariables> ({
-      query: gql`
+  subscribeToChanges (gameId: number) {
+    return this.subscribeFromGql<SubscribeToChangesSubscription, SubscribeToChangesSubscriptionVariables> (
+      gql`
         subscription SubscribeToChanges ($gameId: Long!, $token: MotifTokenInput!) {
           agotChanges (gameId: $gameId, token: $token) {
             actions {
@@ -141,53 +191,30 @@ export class AgotApiService {
           }
         }
       `,
-      variables: {
+      {
         gameId: gameId,
         token: { token: "leo.molinaro" }
       }
-    });
+    );
   } // subscribeToChanges
 
-  createGame (gameName: string, inputPlayers: InputPlayerInput[]): Observable<{ data: MutateGameMutation }> {
-    return this.apollo.mutate<MutateGameMutation, MutateGameMutationVariables> ({
-      mutation: gql`
-        mutation MutateGame ($gameName: String!, $inputPlayers: [InputPlayerInput]!, $token: MotifTokenInput!) {
-          agotNewGame (
-            gameName: $gameName
-            inputPlayers: $inputPlayers
-            token: $token
-          ) {
-            phase
-            round
-            step
-          }
-        }
-      `,
-      variables: {
-        gameName: gameName,
-        token: { token: "leo.molinaro" },
-        inputPlayers: inputPlayers
-      }
-    });
-  }
-
   startGame (gameId: number): Observable<{ data: StartGameMutation }> {
-    return this.apollo.mutate<StartGameMutation, StartGameMutationVariables> ({
-      mutation: gql`
+    return this.mutateFromGql<StartGameMutation, StartGameMutationVariables> (
+      gql`
         mutation StartGame ($gameId: Long!, $token: MotifTokenInput!) {
           agotStartGame (gameId: $gameId, token: $token)
         }
       `,
-      variables: {
+      {
         gameId: gameId,
         token: { token: "leo.molinaro" },
       }
-    });
+    );
   } // startGame
 
   chooseAction (choice: AgotChoiceInput, playerId: string, gameId: number): Observable<{ data: ChooseActionMutation }> {
-    return this.apollo.mutate<ChooseActionMutation, ChooseActionMutationVariables> ({
-      mutation: gql`
+    return this.mutateFromGql<ChooseActionMutation, ChooseActionMutationVariables> (
+      gql`
         mutation ChooseAction ($choice: AgotChoiceInput, $playerId: String, $gameId: Long!, $token: MotifTokenInput!) {
           agotChooseAction (
             choice: $choice
@@ -197,18 +224,18 @@ export class AgotApiService {
           )
         }
       `,
-      variables: {
+      {
         choice: choice,
         playerId: playerId,
         gameId: gameId,
         token: { token: "leo.molinaro" },
       }
-    });
+    );
   } // chooseAction 
 
   cheatDrawDeck (cardIds: number[], playerId: string, gameId: number) {
-    return this.apollo.mutate<CheatDrawDeckMutation, CheatDrawDeckMutationVariables> ({
-      mutation: gql`
+    return this.mutateFromGql<CheatDrawDeckMutation, CheatDrawDeckMutationVariables> (
+      gql`
         mutation CheatDrawDeck ($cardIds: [Long], $playerId: String, $gameId: Long!, $token: MotifTokenInput!) {
           agotCheatDrawDeck (
             cardIds: $cardIds
@@ -218,13 +245,13 @@ export class AgotApiService {
           )
         }
       `,
-      variables: {
+      {
         cardIds: cardIds,
         playerId: playerId,
         gameId: gameId,
         token: { token: "leo.molinaro" },
       }
-    });
+    );
   } // cheatDrawDeck
 
 } // AgotApiService

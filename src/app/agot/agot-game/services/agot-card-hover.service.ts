@@ -1,4 +1,4 @@
-import { Card } from '../../models/card.model';
+import { Card } from './../../store/agot-game.reducer';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 

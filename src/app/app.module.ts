@@ -15,6 +15,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { GraphQLModule } from './shared/graphql/graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: "full" },
@@ -36,8 +38,12 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     SharedModule,
     RouterModule.forRoot (appRoutes, { enableTracing: false }), // enableTracing: true for debugging
-    StoreModule.forRoot ({ }),
+    StoreModule.forRoot ({
+      router: routerReducer,
+    }),
+    EffectsModule.forRoot ([]), 
     StoreDevtoolsModule.instrument ({ maxAge: 25, logOnly: environment.production }),
+    StoreRouterConnectingModule.forRoot (),
     GraphQLModule,
     HttpClientModule,
   ],

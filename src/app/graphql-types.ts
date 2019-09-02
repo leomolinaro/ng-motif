@@ -8933,14 +8933,14 @@ export enum AgotChoiceCardAction {
 }
 
 export type AgotChoiceInput = {
-  cardAction?: Maybe<AgotChoiceCardAction>;
-  player?: Maybe<Scalars["String"]>;
-  actionLabel?: Maybe<Scalars["String"]>;
-  icon?: Maybe<AngIcon>;
-  yesNoAnswer?: Maybe<Scalars["Boolean"]>;
-  cardId?: Maybe<Scalars["Long"]>;
   choiceType?: Maybe<AgotChoiceType>;
+  yesNoAnswer?: Maybe<Scalars["Boolean"]>;
   requestType?: Maybe<AgotRequestType>;
+  icon?: Maybe<AngIcon>;
+  cardAction?: Maybe<AgotChoiceCardAction>;
+  cardId?: Maybe<Scalars["Long"]>;
+  actionLabel?: Maybe<Scalars["String"]>;
+  player?: Maybe<Scalars["String"]>;
 };
 
 export enum AgotChoiceType {
@@ -8959,7 +8959,7 @@ export type AgotGame = {
   firstPlayer?: Maybe<AgotPlayer>;
   round?: Maybe<Scalars["String"]>;
   log?: Maybe<Array<Maybe<GameLogRow>>>;
-  name?: Maybe<Scalars["String"]>;
+  name: Maybe<Scalars["String"]>;
   step?: Maybe<Scalars["String"]>;
   started: Scalars["Boolean"];
   id: Scalars["Long"];
@@ -8969,11 +8969,11 @@ export type AgotGame = {
 
 export type AgotPlayer = {
   __typename?: "AgotPlayer";
-  usedPlotPile?: Maybe<Array<Maybe<PlotCard>>>;
   discardPile?: Maybe<Array<Maybe<DrawCard_AngDrawCard>>>;
+  usedPlotPile?: Maybe<Array<Maybe<PlotCard>>>;
   agenda?: Maybe<AgendaCard>;
-  deadPile?: Maybe<Array<Maybe<CharacterCard>>>;
   revealedPlot?: Maybe<PlotCard>;
+  deadPile?: Maybe<Array<Maybe<CharacterCard>>>;
   gold: Scalars["Int"];
   characters?: Maybe<Array<Maybe<CharacterCard>>>;
   faction?: Maybe<FactionCard>;
@@ -8981,7 +8981,8 @@ export type AgotPlayer = {
   name?: Maybe<Scalars["String"]>;
   locations?: Maybe<Array<Maybe<LocationCard>>>;
   plotDeck?: Maybe<Array<Maybe<PlotCard>>>;
-  id?: Maybe<Scalars["String"]>;
+  id: Maybe<Scalars["String"]>;
+  user?: Maybe<MotifUser>;
   hand?: Maybe<Array<Maybe<DrawCard_AngDrawCard>>>;
 };
 
@@ -9083,8 +9084,8 @@ export type Card = {
   imageSource?: Maybe<Scalars["String"]>;
   revealed: Scalars["Boolean"];
   attachmentIds?: Maybe<Array<Maybe<Scalars["Long"]>>>;
-  duplicateIds?: Maybe<Array<Maybe<Scalars["Long"]>>>;
   power: Scalars["Int"];
+  duplicateIds?: Maybe<Array<Maybe<Scalars["Long"]>>>;
   id: Scalars["Long"];
   kneeling: Scalars["Boolean"];
 };
@@ -9139,15 +9140,15 @@ export enum GameLogRowType {
 }
 
 export type InputCardInput = {
-  card?: Maybe<AgotCardSeed>;
   quantity: Scalars["Int"];
+  card?: Maybe<AgotCardSeed>;
 };
 
 export type InputPlayerInput = {
   deck?: Maybe<Array<Maybe<InputCardInput>>>;
-  faction?: Maybe<AngFaction>;
-  name?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["String"]>;
+  name?: Maybe<Scalars["String"]>;
+  faction?: Maybe<AngFaction>;
 };
 
 export type LocationCard = {
@@ -9166,6 +9167,11 @@ export type MotifToken = {
 
 export type MotifTokenInput = {
   token?: Maybe<Scalars["String"]>;
+};
+
+export type MotifUser = {
+  __typename?: "MotifUser";
+  username?: Maybe<Scalars["String"]>;
 };
 
 /** Mutation root */
@@ -9226,8 +9232,14 @@ export type PlotCard = {
 /** Query root */
 export type Query = {
   __typename?: "Query";
+  agotGames?: Maybe<Array<Maybe<AgotGame>>>;
   agotRequests?: Maybe<Array<Maybe<AAgotRequest>>>;
   agotGame?: Maybe<AgotGame>;
+};
+
+/** Query root */
+export type QueryAgotGamesArgs = {
+  token?: Maybe<MotifTokenInput>;
 };
 
 /** Query root */
@@ -9591,7 +9603,19 @@ export type MutateGameMutationVariables = {
 
 export type MutateGameMutation = { __typename?: "Mutation" } & {
   agotNewGame: Maybe<
-    { __typename?: "AgotGame" } & Pick<AgotGame, "phase" | "round" | "step">
+    { __typename?: "AgotGame" } & Pick<AgotGame, "id" | "name"> & {
+        allPlayers: Maybe<
+          Array<
+            Maybe<
+              { __typename?: "AgotPlayer" } & Pick<AgotPlayer, "id"> & {
+                  user: Maybe<
+                    { __typename?: "MotifUser" } & Pick<MotifUser, "username">
+                  >;
+                }
+            >
+          >
+        >;
+      }
   >;
 };
 

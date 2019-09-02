@@ -1,6 +1,5 @@
 import { AgotDemoService } from './services/agot-demo.service';
-import { InitGame } from './../store/agot.actions';
-import { MessageOut } from './../../shared/websocket/models/message-out.model';
+import { InitGame } from '../store/agot-game.actions';
 import { LogRow } from '../../shared/models/log-row.model';
 import { MotifComponent } from '../../shared/components/motif.component';
 import { AgotGameService } from './services/agot-game.service';
@@ -11,7 +10,7 @@ import { Observable, from } from 'rxjs';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Store, Action } from '@ngrx/store';
 
-import * as fromAgot from '../store/agot.reducer';
+import * as fromAgot from '../store';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -40,27 +39,20 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     private demoService: AgotDemoService
   ) { super (); }
   
-  private sidenavWasOpen = false;
+  protected sidenavWasOpen = false;
 
   ngOnInit () {
-    this.gameStarted$ = this.store.select(fromAgot.selectGameStarted);
+    this.gameStarted$ = this.store.select(fromAgot.getGameStarted);
     this.cardImage$ = this.hoverService.cardHover$.pipe(
       map(c => c ? c.card.imageSource : "./assets/card-back.jpg")
     )
-    this.round$ = this.store.select<string>(fromAgot.selectGameRound);
-    this.phase$ = this.store.select<string>(fromAgot.selectGamePhase);
-    this.step$ = this.store.select<string>(fromAgot.selectGameStep);
-    this.logRows$ = this.store.select<LogRow[]>(fromAgot.selectGameLog);
+    this.round$ = this.store.select (fromAgot.getGameRound);
+    this.phase$ = this.store.select (fromAgot.getGamePhase);
+    this.step$ = this.store.select (fromAgot.getGameStep);
+    this.logRows$ = this.store.select (fromAgot.getGameLog);
 
     this.gameService.loadAll ();
 
-    // this.subscribe (this.loginService.user$, user => {
-    //   this.user = user;
-    //   if (user) {
-    //     this.webSocket.send({ type: MessageOut.AGOT_INIT_STATE });
-    //   }
-    // });
-    
     this.subscribe (this.logRows$, l => {
       setTimeout (function () {
         let objDiv = document.getElementById ("log-list");
@@ -68,16 +60,10 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
       });
     });
 
-    // this.subscribe (this.webSocket.agotReduxActions$, message => {
-    //   for (let action of message.data.actions) {
-    //     this.store.dispatch (action);
-    //   }
-    // });
-
   } // ngOnInit
 
   debugState () {
-    this.store.select(fromAgot.selectAgot).subscribe(x => console.log(x));
+    this.store.select (fromAgot.getAgotState).subscribe (x => console.log (x));
   } // debugState
 
   login (username: string) {
@@ -99,9 +85,8 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     this.sidenav.close ();
   } // closeSettings
 
-  testState() {
-    // this.store.dispatch(new InitState({ state: this.demoService.getEmptyState() }));
-    this.store.dispatch(new InitGame({ game: this.demoService.getComplexState().game }));
+  testState () {
+    this.store.dispatch (new InitGame ({ game: this.demoService.getComplexGame () }));
   }
 
 }

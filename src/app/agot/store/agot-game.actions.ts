@@ -1,5 +1,5 @@
-import { AddAttachmentData, AddDuplicateData, AddCardData, AddLogData, EmptyDrawDeckData, AAgotRequest, AgotReduxActionType, AgotReduxActionData, RemoveCardData, RemoveAttachmentData, RemoveDuplicateData, SetCardKneelingData, SetCardPowerData, SetCardRevealedData, SetFirstPlayerData, SetGoldData, SetPhaseData, SetGameStartedData } from './../../graphql-types';
-import { AgotGame } from './../models/agot-game.model';
+import { AddAttachmentData, AddDuplicateData, AddCardData, AddLogData, EmptyDrawDeckData, AAgotRequest, AgotReduxActionType, AgotReduxActionData, RemoveCardData, RemoveAttachmentData, RemoveDuplicateData, SetCardKneelingData, SetCardPowerData, SetCardRevealedData, SetFirstPlayerData, SetGoldData, SetPhaseData, SetGameStartedData } from '../../graphql-types';
+import { AgotGame } from './agot-game.reducer';
 import { Action } from '@ngrx/store';
 import { TypedAction } from '@ngrx/store/src/models';
 

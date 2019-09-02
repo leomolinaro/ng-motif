@@ -1,19 +1,68 @@
-import { AAgotRequest, AgotReduxActionType } from './../../graphql-types';
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Card } from '../models/card.model';
-import { Area } from '../models/area.model';
-import { Player } from '../models/player.model';
-import { AgotGame } from '../models/agot-game.model';
+import { GameLogRow } from './../../graphql-types';
+import { AAgotRequest, AgotReduxActionType } from '../../graphql-types';
 
-import * as fromAgot from './agot.actions';
+import * as fromAgot from './agot-game.actions';
 import * as fromUtil from '../../shared/reducer.util';
 
-export interface AgotState {
+export interface Player {
+	id: string,
+	name: string,
+	gold: number,
+	factionId: number,
+	agendaId?: number,
+	handIds: number[],
+	charactersIds: number[],
+	locationsIds: number[],
+	discardPileIds: number[],
+	drawDeckEmpty: boolean,
+	plotDeckIds: number[],
+	usedPlotPileIds: number[],
+	revealedPlotId?: number,
+	deadPileIds: number[]
+} // Player
+
+export interface Card {
+	id: number;
+	imageSource?: string;
+	power?: number;
+	kneeling?: boolean;
+	revealed?: boolean;
+	attachmentIds?: number[];
+	duplicateIds?: number[];
+} // Card
+
+export class Area {
+	static readonly FACTION = "FACTION";
+	static readonly AGENDA = "AGENDA";
+	static readonly HAND = "HAND";
+	static readonly CHARACTERS = "CHARACTERS";
+	static readonly LOCATIONS = "LOCATIONS";
+	static readonly DISCARD_PILE = "DISCARD_PILE";
+	static readonly DRAW_DECK = "DRAW_DECK";
+	static readonly PLOT_DECK = "PLOT_DECK";
+	static readonly USED_PLOT_PILE = "USED_PLOT_PILE";
+	static readonly REVEALED_PLOT = "REVEALED_PLOT";
+	static readonly DEAD_PILE = "DEAD_PILE";
+} // Area
+
+export interface AgotGame {
+	cardMap: { [id: number]: Card },
+  playerMap: { [id: string]: Player },
+  playerIds: string[],
+	round: string,
+	phase: string,
+	step: string,
+	log: GameLogRow[],
+  firstPlayer: string,
+  started: boolean
+} // AgotGame
+
+export interface State {
 	game: AgotGame,
 	requests: AAgotRequest[]
-} // AgotState
+} // State
 
-export const INITIAL_STATE: AgotState = {
+export const INITIAL_STATE: State = {
 	game: {
 		cardMap: {},
     playerMap: {},
@@ -28,38 +77,38 @@ export const INITIAL_STATE: AgotState = {
   requests: []
 } // INITIAL_STATE
 
-function updateGame (game: AgotGame, state: AgotState): AgotState {
+function updateGame (game: AgotGame, state: State): State {
   return { ...state, game: game }
 } // updateGame
 
-function updatePlayerMap (playerMap: { [username: string]: Player }, state: AgotState): AgotState {
+function updatePlayerMap (playerMap: { [username: string]: Player }, state: State): State {
   let game = state.game;
   return updateGame ({ ...game, playerMap: playerMap }, state);
 } // updatePlayerMap
 
-function updateCardMap (cardMap: { [id: number]: Card }, state: AgotState): AgotState {
+function updateCardMap (cardMap: { [id: number]: Card }, state: State): State {
   let game = state.game;
   return updateGame ({ ...game, cardMap: cardMap }, state);
 } // updateCardMap
 
-function updatePlayer (player: Player, state: AgotState): AgotState {
+function updatePlayer (player: Player, state: State): State {
   let playerMap = state.game.playerMap;
   return updatePlayerMap ({ ...playerMap, [player.id]: player }, state);
 } // updatePlayer
 
-function updateCard (card: Card, state: AgotState): AgotState {
+function updateCard (card: Card, state: State): State {
   let cardMap = state.game.cardMap;
   return updateCardMap ({ ...cardMap, [card.id]: card }, state);
 } // updatePlayer
 
-function getCard (cardId: number, state: AgotState): Card { return state.game.cardMap[cardId]; }
+function getCard (cardId: number, state: State): Card { return state.game.cardMap[cardId]; }
 
-function getPlayer (playerId: string, state: AgotState): Player { return state.game.playerMap[playerId]; }
+function getPlayer (playerId: string, state: State): Player { return state.game.playerMap[playerId]; }
 
 export function reducer (
   state = INITIAL_STATE,
   action: fromAgot.AgotAction
-): AgotState {
+): State {
   // console.log(action);
   //console.log(JSON.stringify(state));
   switch (action.type) {
@@ -185,31 +234,3 @@ export function reducer (
   }
   return state;
 } // reducer
-
-export const selectAgot = createFeatureSelector<AgotState>('agot');
-export const selectGame = createSelector(selectAgot, state => state.game);
-export const selectGameStarted = createSelector(selectGame, game => game.started);
-export const selectGamePhase = createSelector(selectGame, game => game.phase);
-export const selectGameRound = createSelector(selectGame, game => game.round);
-export const selectGameStep = createSelector(selectGame, game => game.step);
-export const selectGameLog = createSelector(selectGame, game => game.log);
-export const selectCardMap = createSelector(selectGame, game => game.cardMap);
-export const selectCardById = (cardId: number) => createSelector(selectCardMap, cardMap => cardMap[cardId]);
-export const selectPlayerById = (playerId: string) => createSelector(selectGame, game => game.playerMap[playerId]);
-export const selectPlayerIds = createSelector(selectGame, game => game.playerIds);
-export const selectFaction = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => cardMap[player.factionId]);
-export const selectAgenda = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => cardMap[player.agendaId]);
-export const selectRevealedPlot = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => cardMap[player.revealedPlotId]);
-export const selectHand = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.handIds.map(handId => cardMap[handId]));
-export const selectCharacters = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.charactersIds.map(handId => cardMap[handId]));
-export const selectLocations = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.locationsIds.map(handId => cardMap[handId]));
-export const selectDiscardPile = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.discardPileIds.map(handId => cardMap[handId]));
-export const selectPlotDeck = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.plotDeckIds.map(handId => cardMap[handId]));
-export const selectUsedPlotPile = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.usedPlotPileIds.map(handId => cardMap[handId]));
-export const selectDeadPile = (playerId: string) => createSelector(selectPlayerById(playerId), selectCardMap, (player, cardMap) => player.deadPileIds.map(handId => cardMap[handId]));
-export const selectDrawDeckEmpty = (playerId: string) => createSelector(selectPlayerById(playerId), player => player.drawDeckEmpty);
-export const selectGold = (playerId: string) => createSelector(selectPlayerById(playerId), player => (player ? player.gold : 0));
-export const selectAttachments = (attachmentIds: number[]) => createSelector(selectCardMap, cardMap => attachmentIds ? attachmentIds.map(attId => cardMap[attId]) : []);
-export const selectDuplicates = (duplicateIds: number[]) => createSelector(selectCardMap, cardMap => duplicateIds ? duplicateIds.map(dupId => cardMap[dupId]) : []);
-export const selectRequests = createSelector (selectAgot, state => state.requests);
-

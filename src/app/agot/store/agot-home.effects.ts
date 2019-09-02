@@ -1,85 +1,42 @@
+import { AngFaction, AgotCardSeed } from './../../graphql-types';
+import { AgotGame } from './agot-home.reducer';
 import { AgotApiService } from './../api/agot-api.service';
 import { Injectable } from '@angular/core';
-import { Store, Action } from '@ngrx/store';
-import { AngFaction, AgotCardSeed, SubscribeToRequestsSubscription } from './../../graphql-types';
-import { InitGame, AddRequests } from './agot-game.actions';
-import { toNumberMap, toStringMap } from 'src/app/shared/map.util';
+import { Actions, Effect, ofType, createEffect } from '@ngrx/effects';
+import * as actions from './agot-home.actions';
+import { EMPTY, Observable, of } from 'rxjs';
+import { mergeMap, map, exhaustMap, catchError, tap, switchMap } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AgotRemoteService {
+@Injectable ()
+export class AgotHomeEffects {
 
-  constructor (private api: AgotApiService, private store: Store<any>) {}
-  
-  loadGame () {
-    this.api.getGame (1)
-    .subscribe (x => {
-      console.log ("Apollo query", x.data);
-      const game = x.data.agotGame;
-      if (!game) return;
-      this.store.dispatch (new InitGame ({
-        game: {
-          cardMap: toNumberMap (game.allCards, c => c.id),
-          playerMap: toStringMap (game.allPlayers.map (p => ({
-            id: p.id,
-            name: p.name,
-            gold: p.gold,
-            factionId: p.faction.id,
-            agendaId: p.agenda ? p.agenda.id : null,
-            revealedPlotId: p.revealedPlot ? p.revealedPlot.id : null,
-            handIds: p.hand.map (c => c.id),
-            charactersIds: p.characters.map (c => c.id),
-            locationsIds: p.locations.map (c => c.id),
-            discardPileIds: p.discardPile.map (c => c.id),
-            plotDeckIds: p.plotDeck.map (c => c.id),
-            usedPlotPileIds: p.usedPlotPile.map (c => c.id),
-            deadPileIds: p.deadPile.map (c => c.id),
-            drawDeckEmpty: p.drawDeckEmpty
-          })), p => p.id),
-          playerIds: game.allPlayers.map (p => p.id),
-          round: game.round,
-          phase: game.phase,
-          step: game.step,
-          log: game.log,
-          firstPlayer: game.firstPlayer ? game.firstPlayer.id : null,
-          started: game.started
-        } // game
-      })); // dispatch
-    }); // subscribe
-  } // loadGame
+  constructor(
+    private actions$: Actions,
+    private api: AgotApiService
+  ) {}
 
-  loadRequest () {
-    this.api.getRequest (1)
-    .subscribe (x => {
-      console.log ("Apollo query", x.data);
-      const requests = x.data.agotRequests;
-      if (requests) {
-        this.store.dispatch (new AddRequests ({ requests: requests }));
-      }
-    });
-  }
+  loadGames$ = createEffect (() => this.actions$.pipe (
+    ofType (actions.gamesGet),
+    exhaustMap ((action) => this.api.getGames ()
+      .pipe (
+        tap (console.log),
+        map (games => actions.gamesGetSuccess ({ games })),
+        catchError (error => of (actions.gamesGetFailure ({ error })))
+      )
+    )
+  ));
 
-  linkRequests () {
-    this.api.subscribeToRequests (1)
-    .subscribe ((x: { data: SubscribeToRequestsSubscription }) => {
-      console.log ("Apollo subscription", x.data);
-      const requests = x.data.agotRequests;
-      this.store.dispatch (new AddRequests ({ requests: requests }));
-    });
-  } // linkRequests
-
-  linkChanges () {
-    this.api.subscribeToChanges (1)
-    .subscribe (x => {
-      console.log ("Apollo subscription", x.data);
-      const changes = x.data.agotChanges;
-      changes.actions.forEach (a => this.store.dispatch (<Action>a));
-    }); // subscribe
-  } // linkChanges
+  newGame$ = createEffect (() => this.actions$.pipe (
+    ofType (actions.gameNew),
+    exhaustMap ((action) => this.createSampleGame ()
+      .pipe (
+        map (res => actions.gameNewSuccess ({ game: res })),
+        catchError (error => of (actions.gameNewFailure ({ error })))
+    ))
+  ));
 
   createSampleGame () {
-    return this.api.agotNewGame ("Game 1",
+    return this.api.newGame ("Game 1",
       [{
         id: "leo",
         faction: AngFaction.Tyrell,
@@ -163,32 +120,6 @@ export class AgotRemoteService {
         ]
       }
     ]);
-  }
+  } // createSampleGame
 
-}
-
-// game.initFaction (fede, AngFaction.TARGARYEN);
-// game.initCard (fede, AgotCardSeed.A_NOBLE_CAUSE_Core, 2);
-// game.initCard (fede, AgotCardSeed.BRAIDED_WARRIOR_Core, 3);
-// game.initCard (fede, AgotCardSeed.DAENERYS_TARGARYEN_Core, 3);
-// game.initCard (fede, AgotCardSeed.DROGON_Core, 3);
-// game.initCard (fede, AgotCardSeed.HANDMAIDEN_Core, 3);
-// game.initCard (fede, AgotCardSeed.KHAL_DROGO_Core, 3);
-// game.initCard (fede, AgotCardSeed.LITTLEFINGER_Core, 2);
-// game.initCard (fede, AgotCardSeed.MAGISTER_ILLYRIO_Core, 2);
-// game.initCard (fede, AgotCardSeed.RHAEGAL_Core, 3);
-// game.initCard (fede, AgotCardSeed.SER_JORAH_MORMONT_Core, 3);
-// game.initCard (fede, AgotCardSeed.TARGARYEN_LOYALIST_Core, 3);
-// game.initCard (fede, AgotCardSeed.UNSULLIED_Core, 3);
-// game.initCard (fede, AgotCardSeed.VISERION_Core, 3);
-// game.initCard (fede, AgotCardSeed.VISERYS_TARGARYEN_Core, 2);
-// game.initCard (fede, AgotCardSeed.MILK_OF_THE_POPPY_Core, 2);
-// game.initCard (fede, AgotCardSeed.SEAL_OF_THE_HAND_Core, 2);
-// game.initCard (fede, AgotCardSeed.ILLYRIOS_ESTATE_Core, 3);
-// game.initCard (fede, AgotCardSeed.PLAZA_OF_PUNISHMENT_Core, 3);
-// game.initCard (fede, AgotCardSeed.THE_IRON_THRONE_Core, 1);
-// game.initCard (fede, AgotCardSeed.THE_KINGSROAD_Core, 3);
-// game.initCard (fede, AgotCardSeed.THE_ROSEROAD_Core, 3);
-// game.initCard (fede, AgotCardSeed.DRACARYS_Core, 3);
-// game.initCard (fede, AgotCardSeed.FIRE_AND_BLOOD_Core, 2);
-// game.initCard (fede, AgotCardSeed.WAKING_THE_DRAGON_Core, 2);
+} // AgotHomeEffects
