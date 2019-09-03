@@ -1,10 +1,10 @@
+import { AgotApiService } from './../api/agot-api.service';
 import { AgotRequestsSnackBarComponent } from './agot-requests-snack-bar/agot-requests-snack-bar.component';
 import { ActivatedRoute } from '@angular/router';
 import { AgotDemoService } from './services/agot-demo.service';
 import { LogRow } from '../../shared/models/log-row.model';
 import { MotifComponent } from '../../shared/components/motif.component';
 import { AgotGameService, SnackBarRequest } from './services/agot-game.service';
-import { AuthService } from '../../shared/login/auth.service';
 import { AgotCardHoverService } from './services/agot-card-hover.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, from, Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { MatSnackBarRef, MatSnackBar } from '@angular/material';
 
 import * as fromAgot from '../store';
 import * as fromAgotGame from '../store/agot-game.actions';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap, concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'agot-game',
@@ -22,6 +22,9 @@ import { map, switchMap, tap } from 'rxjs/operators';
   styleUrls: ['./agot-game.component.css']
 })
 export class AgotGameComponent extends MotifComponent implements OnInit {
+  
+  gameId: number;
+  
   cardImage$: Observable<string>;
   round$: Observable<string>;
   phase$: Observable<string>;
@@ -41,10 +44,10 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
   constructor (
     private store: Store<any>,
     private hoverService: AgotCardHoverService,
-    private loginService: AuthService,
     private demoService: AgotDemoService,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
+    private api: AgotApiService,
     private gameService: AgotGameService
   ) {
     super ();
@@ -69,12 +72,12 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
   protected sidenavWasOpen = false;
 
   ngOnInit () {
-    const gameId = +this.route.snapshot.params["id"];
+    this.gameId = +this.route.snapshot.params["id"];
 
-    this.store.dispatch (fromAgotGame.gameGet ({ gameId: gameId }));
-    this.store.dispatch (fromAgotGame.requestsGet ({ gameId: gameId }));
-    this.store.dispatch (fromAgotGame.requestsSubscription ({ gameId: gameId }));
-    this.store.dispatch (fromAgotGame.changesSubscription ({ gameId: gameId }));
+    this.store.dispatch (fromAgotGame.gameGet ({ gameId: this.gameId }));
+    this.store.dispatch (fromAgotGame.requestsGet ({ gameId: this.gameId }));
+    this.store.dispatch (fromAgotGame.requestsSubscription ({ gameId: this.gameId }));
+    this.store.dispatch (fromAgotGame.changesSubscription ({ gameId: this.gameId }));
 
     this.subscribe (this.snackBarRequests$, snackBarRequests => {
       if (snackBarRequests.length) {
@@ -87,8 +90,11 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
   } // ngOnInit
 
   ngOnDestroy () {
+    this.store.dispatch (fromAgotGame.gameReset ());
+    this.store.dispatch (fromAgotGame.requestsReset ());
+    this.store.dispatch (fromAgotGame.requestsUnsubscription ({ gameId: this.gameId }));
+    this.store.dispatch (fromAgotGame.changesUnsubscription ({ gameId: this.gameId }));
     super.ngOnDestroy ();
-    this.removeRequestsSnackBar ();
   } // ngOnDestroy
 
   private showRequestsSnackBar (requests: SnackBarRequest[]) {
@@ -104,15 +110,13 @@ export class AgotGameComponent extends MotifComponent implements OnInit {
     } // if 
   } // removeRequestSnackBar
 
+  startGame () {
+    this.store.dispatch (fromAgotGame.gameStart ({ gameId: this.gameId }));
+  } // startGame
+
   debugState () {
     this.store.select (fromAgot.getAgotState).subscribe (x => console.log (x));
   } // debugState
-
-  login (username: string) {
-    if (!this.user) {
-      this.loginService.login ("leo.molinaro");
-    }
-  }
 
   testState () {
     this.store.dispatch (fromAgotGame.gameGetSuccess ({ game: this.demoService.getComplexGame () }));

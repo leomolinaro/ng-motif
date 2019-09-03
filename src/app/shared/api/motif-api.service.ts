@@ -11,7 +11,7 @@ export class MotifApiService {
 
   constructor (private apollo: Apollo) { }
 
-  login (username: string): Observable<{ data: LoginMutation }> {
+  login (username: string): Observable<{ data?: LoginMutation }> {
     return this.apollo.mutate<LoginMutation, LoginMutationVariables> ({
       mutation: gql`
         mutation Login ($username: String!) {

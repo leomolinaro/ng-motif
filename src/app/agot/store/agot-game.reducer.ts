@@ -49,6 +49,7 @@ export class Area {
 } // Area
 
 export interface AgotGame {
+  id: number,
 	cardMap: { [id: number]: Card },
   playerMap: { [id: string]: Player },
   playerIds: string[],
@@ -71,6 +72,7 @@ export interface State {
 
 const initialState: State = {
 	game: {
+    id: 0,
 		cardMap: {},
     playerMap: {},
     playerIds: [],
@@ -125,11 +127,15 @@ export const agotGameReducer = createReducer (
   on (actions.gameGetFailure, (state, payload) => ({ ...state,
     game: initialState.game, gameLoaded: false, gameLoading: false
   })),
+  on (actions.gameReset, (state) => ({ ...state, game: initialState.game })),
   on (actions.requestsGet, (state) => ({ ...state,
     requestsLoaded: false, requestsLoading: true
   })),
   on (actions.requestsGetSuccess, (state, payload) => ({ ...state,
-    requests: fromUtil.pushedMany (payload.requests, state.requests), requestsLoaded: true, requestsLoading: false
+    requests: payload.requests, requestsLoaded: true, requestsLoading: false
+  })),
+  on (actions.requestsNotification, (state, payload) => ({ ...state,
+    requests: fromUtil.pushedMany (payload.requests, state.requests)
   })),
   on (actions.requestsGetFailure, (state, payload) => ({ ...state,
     requestsLoaded: false, requestsLoading: false
@@ -137,6 +143,7 @@ export const agotGameReducer = createReducer (
   on (actions.requestRemove, (state, payload) => ({ ...state,
     requests: fromUtil.removed (payload.request, state.requests)
   })),
+  on (actions.requestsReset, (state) => ({ ...state, requests: initialState.requests })),
   on (actions.removeCard, (state, payload) => {
     let oldPlayer: Player = getPlayer (payload.payload.fromPlayer, state);
     let newPlayer: Player;

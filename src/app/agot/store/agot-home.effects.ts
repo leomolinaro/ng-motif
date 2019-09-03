@@ -17,8 +17,10 @@ export class AgotHomeEffects {
 
   loadGames$ = createEffect (() => this.actions$.pipe (
     ofType (actions.gamesGet),
+    // tap (x => console.log (x)),
     exhaustMap ((action) => this.api.getGames ()
       .pipe (
+        // tap (x => console.log (x)),
         map (games => actions.gamesGetSuccess ({ games })),
         catchError (error => of (actions.gamesGetFailure ({ error })))
       )

@@ -48,7 +48,7 @@ export class AgotTableComponent extends MotifComponent implements OnInit {
   
   selectFromStore<T>(playerIds$: Observable<string[]>, selector: (playerId: string) => MemoizedSelector<object, T, DefaultProjectorFn<T>>, i: number) {
     return playerIds$.pipe(
-      switchMap(playerIds => this.store.select(selector(playerIds[i])))
+      switchMap(playerIds => this.store.select (selector (playerIds[i])))
     );
   }
   

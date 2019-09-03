@@ -1,5 +1,5 @@
 <div *ngFor="let playerUI of playerUIs">
-  <div fxLayout="row">{{(playerUI.player$ | async).name}}</div>
+  <div fxLayout="row">{{(playerUI.player$ | async)?.name}}</div>
   <div [fxLayout]="playerUI.reverseLayout ? 'column-reverse' : 'column'">
     <div [fxLayout]="playerUI.reverseLayout ? 'row-reverse' : 'row'" fxLayoutAlign="start center">
       <div fxFlex="15%" fxLayoutAlign="center">
@@ -38,7 +38,7 @@
 </div>
 
 <mat-tab-group>
-  <mat-tab *ngFor="let playerUI of playerUIs" [label]="(playerUI.player$ | async).name">
+  <mat-tab *ngFor="let playerUI of playerUIs" [label]="(playerUI.player$ | async)?.name">
     <mat-card fxLayout="row" fxLayoutAlign="start center">
     <!-- PLAYER TRESURE -->
       <div fxFlex="22%" fxLayoutAlign="center">

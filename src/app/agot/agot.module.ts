@@ -16,7 +16,6 @@ import { AgotTableComponent } from './agot-game/agot-table/agot-table.component'
 import { AgotCardBackComponent } from './agot-game/agot-card-back/agot-card-back.component';
 import { AgotRequestDialogComponent } from './agot-game/agot-request-dialog/agot-request-dialog.component';
 import { AgotCardsDialogComponent } from './agot-game/agot-cards-dialog/agot-cards-dialog.component';
-import { AgotButtonListComponent } from './agot-game/agot-button-list/agot-button-list.component';
 import { reducers, featureKey, effects } from './store';
 import { AgotRequestsSnackBarComponent } from './agot-game/agot-requests-snack-bar/agot-requests-snack-bar.component';
 import { AgotHomeComponent } from './agot-home/agot-home.component';
@@ -50,7 +49,6 @@ const agotRoutes: Routes = [
     AgotCardBackComponent,
     AgotRequestDialogComponent,
     AgotCardsDialogComponent,
-    AgotButtonListComponent,
     AgotRequestsSnackBarComponent,
     AgotHomeComponent
   ],

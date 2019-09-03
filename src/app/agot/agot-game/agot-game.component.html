@@ -28,8 +28,12 @@
     </div>
     <mat-divider></mat-divider>
     <div style="display: flex">
-      <agot-button-list style="flex-basis: 50%"></agot-button-list>
-      <mat-list style="flex-basis: 50%" id="log-list">
+      <!-- <agot-button-list style="flex-basis: 50%"></agot-button-list> -->
+      <button mat-raised-button (click)="startGame ()" *ngIf="!(gameStarted$ | async)">
+        <mat-icon>play_arrow</mat-icon>
+        Start game
+      </button>
+      <mat-list id="log-list">
         <mat-list-item
           class="log-row"
           *ngFor="let logRow of logRows$ | async"
@@ -40,7 +44,7 @@
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    <agot-table *ngIf="gameStarted$ | async"></agot-table>
+    <agot-table></agot-table>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

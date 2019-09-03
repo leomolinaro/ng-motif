@@ -49,8 +49,11 @@ export class GraphQLModule {
     const link = split (
       // split based on operation type
       ({ query }) => {
-        const { kind, operation } = getMainDefinition (query);
-        return kind === 'OperationDefinition' && operation === 'subscription';
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
       },
       webSocketLink,
       httpLinkHandler
@@ -58,7 +61,17 @@ export class GraphQLModule {
 
     apollo.create ({
       link: link,
-      cache: new InMemoryCache ({ fragmentMatcher })
+      cache: new InMemoryCache ({ fragmentMatcher }),
+      defaultOptions: {
+        watchQuery: {
+          fetchPolicy: 'no-cache',
+          errorPolicy: 'all',
+        },
+        query: {
+          fetchPolicy: 'no-cache',
+          errorPolicy: 'all',
+        }
+      }
     });
 
   }

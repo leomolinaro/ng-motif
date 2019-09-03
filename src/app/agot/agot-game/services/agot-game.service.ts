@@ -1,9 +1,7 @@
-import { AgotRequestsSnackBarComponent } from './../agot-requests-snack-bar/agot-requests-snack-bar.component';
-import { AgotApiService } from './../../api/agot-api.service';
 import { AgotChoice, AAgotRequest, AgotChoiceCardAction, AgotChoiceType } from './../../../graphql-types';
 import { filter, take } from 'rxjs/operators';
 import { AuthService } from '../../../shared/login/auth.service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 import * as fromAgot from '../../store';
@@ -33,11 +31,10 @@ export class AgotGameService {
   
   constructor (
     private store: Store<any>,
-    public loginService: AuthService,
-    private api: AgotApiService
+    public loginService: AuthService
   ) {
 
-    const requests$ = this.store.select (fromAgot.getRequests).pipe (filter (requests => !!requests));
+    const requests$ = this.store.select (fromAgot.getRequests);
     requests$.subscribe (requests => {
       const choicesByCard: { [cardId: number]: AgotChoiceWrapper[] } = {};
       const snackBarRequests: SnackBarRequest[] = [];
@@ -112,15 +109,16 @@ export class AgotGameService {
   respond (choiceWrapper: AgotChoiceWrapper): void {
     const { __typename, ...choiceInput } = choiceWrapper.choice;
     const request = choiceWrapper.request;
-    this.api.chooseAction (choiceInput, request.player.id, 1)
-    .subscribe (x => {
-      this.store.dispatch (fromGameActions.requestRemove ({ request: request }));
+    this.store.select (fromAgot.getGame).pipe (
+      take (1),
+      map (game => game.id)
+    ).subscribe (gameId => {
+      this.store.dispatch (fromGameActions.actionChoice ({
+        choice: choiceInput,
+        request: request,
+        gameId: gameId
+      }))
     });
   } // respond
-
-  startGame () {
-    this.api.startGame (1)
-    .subscribe (x => console.log ("Apollo mutation ", x.data));
-  } // startGame
 
 } // AgotGameService

@@ -10,6 +10,7 @@ export class AgotDemoService {
 
   getEmptyGame (): AgotGame {
     return {
+      id: 0,
       started: true,
       cardMap: {
         2: { id: 2, imageSource: "https://thronesdb.com/bundles/app/images/factions/baratheon.png" },
@@ -60,6 +61,7 @@ export class AgotDemoService {
 
   getComplexGame (): AgotGame {
     return {
+      id: 0,
       started: true,
       cardMap: {
         1: { id: 1, imageSource: "https://thronesdb.com/bundles/app/images/factions/baratheon.png" },
