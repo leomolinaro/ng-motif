@@ -1,8 +1,9 @@
+import { DeepPartial } from './../../shared/types/types';
 import { GraphQLApiService, CheckQuery, CheckMutation } from './../../shared/graphql/graphql.util';
 import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Mutation, InputPlayerInput, GetGameQuery, GetRequestsQuery, SubscribeToRequestsSubscription, SubscribeToChangesSubscriptionVariables, SubscribeToChangesSubscription, MutateGameMutation, MutateGameMutationVariables, StartGameMutation, StartGameMutationVariables, ChooseActionMutation, ChooseActionMutationVariables, AgotChoiceInput, CheatDrawDeckMutation, CheatDrawDeckMutationVariables, GetRequestsQueryVariables, GetGameQueryVariables, Query, QueryAgotGameArgs, QueryAgotGamesArgs, MutationAgotNewGameArgs } from './../../graphql-types';
+import { Mutation, InputPlayerInput, GetGameQuery, GetRequestsQuery, SubscribeToRequestsSubscription, SubscribeToChangesSubscriptionVariables, SubscribeToChangesSubscription, StartGameMutation, StartGameMutationVariables, ChooseActionMutation, ChooseActionMutationVariables, AgotChoiceInput, CheatDrawDeckMutation, CheatDrawDeckMutationVariables, GetRequestsQueryVariables, GetGameQueryVariables, Query, QueryAgotGameArgs, QueryAgotGamesArgs, MutationAgotNewGameArgs } from './../../graphql-types';
 import gql from 'graphql-tag';
 import { params, types, fragment } from 'typed-graphqlify'
 import { StrictlyIncludes, DeepRequired } from 'src/app/shared/types/types';
@@ -79,6 +80,23 @@ export class AgotApiService extends GraphQLApiService {
     );
   } // newGame
 
+  removeGame (gameId: number) {
+    const m = params ({ $gameId: 'Long!', $token: 'MotifTokenInput!' },
+      {
+        agotRemoveGame: params ({ gameId: '$gameId', token: '$token' },
+          { id: types.number }
+        )
+      }
+    );
+    const typeCheck: CheckMutation<typeof m> = true;
+    return this.mutate (m, {
+      gameId: gameId,
+      token: { token: "leo.molinaro" },
+    }).pipe (
+      map (data => data.agotRemoveGame.id)
+    );
+  } // removeGame
+
   getGame (gameId: number) {
     return this.queryFromGql<GetGameQuery, GetGameQueryVariables>(
       gql`
@@ -87,6 +105,7 @@ export class AgotApiService extends GraphQLApiService {
             id
             allCards {
               id
+              seed
               imageSource
               power
               kneeling

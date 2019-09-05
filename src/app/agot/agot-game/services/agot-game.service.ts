@@ -20,7 +20,9 @@ export interface SnackBarRequest {
   getChoices: AgotChoiceWrapper[]
 } // SnackBarRequest
 
-@Injectable()
+@Injectable ({
+  providedIn: "root"
+})
 export class AgotGameService {
 
   private choicesByCard = new BehaviorSubject<{ [cardId: number]: AgotChoiceWrapper[] }>({});
@@ -83,6 +85,7 @@ export class AgotGameService {
         }
       };
       case "CONTINUE": return choice.actionLabel;
+      case "DRAW": return "Draw";
       case "SELECT_PLAYER": return this.getPlayerNameById (choice.player);
       case AgotChoiceType.YesNo: {
         switch (choice.yesNoAnswer) {

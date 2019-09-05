@@ -1,9 +1,10 @@
+import { AgotTestService } from './agot-test/agot-test.service';
+import { AgotHomeEffects } from './store/agot-home.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthGuard } from './../shared/login/auth-guard.service';
 import { NotFoundComponent } from './../shared/not-found/not-found.component';
 import { Routes, RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { AgotGameService } from './agot-game/services/agot-game.service';
 import { AgotCardHoverService } from './agot-game/services/agot-card-hover.service';
 import { AgotCardComponent } from './agot-game/agot-card/agot-card.component';
 import { NgModule, NgZone } from '@angular/core';
@@ -39,7 +40,7 @@ const agotRoutes: Routes = [
   ],
   providers: [
     AgotCardHoverService,
-    AgotGameService
+    AgotTestService
   ],
   declarations: [
     AgotGameComponent,

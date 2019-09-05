@@ -1,11 +1,10 @@
-import { Action, Store } from '@ngrx/store';
-import { exhaustMap, tap, map, catchError, concatMap, combineLatest, takeUntil } from 'rxjs/operators';
+import { Action } from '@ngrx/store';
+import { exhaustMap, tap, map, catchError, concatMap, takeUntil } from 'rxjs/operators';
 import { AgotApiService } from './../api/agot-api.service';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
 import * as actions from './agot-game.actions';
-import * as fromAgot from '../store';
 import { toNumberMap, toStringMap } from 'src/app/shared/map.util';
 import { of } from 'rxjs';
 
@@ -14,9 +13,9 @@ export class AgotGameEffects {
 
   constructor(
     private actions$: Actions,
-    private api: AgotApiService,
-    private store: Store<any>
-  ) {}
+    private api: AgotApiService
+  ) {
+  }
 
   loadGame$ = createEffect (() => this.actions$.pipe (
     ofType (actions.gameGet),

@@ -3,6 +3,11 @@ export function removed<T> (element: T, array: T[]): T[] {
   return <T[]> [ ...array.slice (0, index), ...array.slice (index + 1)];
 } // removed
 
+export function removedIf<T> (ifCondition: (element: T) => boolean, array: T[]): T[] {
+  let index = array.findIndex (ifCondition);
+  return <T[]> [ ...array.slice (0, index), ...array.slice (index + 1)];
+} // removed
+
 export function pushed<T> (element: T, array: T[]): T[] {
   if (!array) { array = []; }
   return <T[]> [ ...array, element ];

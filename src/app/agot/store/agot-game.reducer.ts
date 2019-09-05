@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { GameLogRow } from './../../graphql-types';
+import { GameLogRow, AngArea } from './../../graphql-types';
 import { AAgotRequest } from '../../graphql-types';
 
 // import * as fromAgot from './agot-game.actions';
@@ -34,19 +34,19 @@ export interface Card {
 	duplicateIds?: number[];
 } // Card
 
-export class Area {
-	static readonly FACTION = "FACTION";
-	static readonly AGENDA = "AGENDA";
-	static readonly HAND = "HAND";
-	static readonly CHARACTERS = "CHARACTERS";
-	static readonly LOCATIONS = "LOCATIONS";
-	static readonly DISCARD_PILE = "DISCARD_PILE";
-	static readonly DRAW_DECK = "DRAW_DECK";
-	static readonly PLOT_DECK = "PLOT_DECK";
-	static readonly USED_PLOT_PILE = "USED_PLOT_PILE";
-	static readonly REVEALED_PLOT = "REVEALED_PLOT";
-	static readonly DEAD_PILE = "DEAD_PILE";
-} // Area
+// export class Area {
+// 	static readonly FACTION = "FACTION";
+// 	static readonly AGENDA = "AGENDA";
+// 	static readonly HAND = "HAND";
+// 	static readonly CHARACTERS = "CHARACTERS";
+// 	static readonly LOCATIONS = "LOCATIONS";
+// 	static readonly DISCARD_PILE = "DISCARD_PILE";
+// 	static readonly DRAW_DECK = "DRAW_DECK";
+// 	static readonly PLOT_DECK = "PLOT_DECK";
+// 	static readonly USED_PLOT_PILE = "USED_PLOT_PILE";
+// 	static readonly REVEALED_PLOT = "REVEALED_PLOT";
+// 	static readonly DEAD_PILE = "DEAD_PILE";
+// } // Area
 
 export interface AgotGame {
   id: number,
@@ -148,14 +148,14 @@ export const agotGameReducer = createReducer (
     let oldPlayer: Player = getPlayer (payload.payload.fromPlayer, state);
     let newPlayer: Player;
     switch (payload.payload.fromArea) {
-      case Area.HAND: newPlayer = { ...oldPlayer, handIds: fromUtil.removed (payload.payload.cardId, oldPlayer.handIds) }; break;
-      case Area.CHARACTERS: newPlayer = { ...oldPlayer, charactersIds: fromUtil.removed (payload.payload.cardId, oldPlayer.charactersIds) }; break;
-      case Area.LOCATIONS: newPlayer = { ...oldPlayer, locationsIds: fromUtil.removed (payload.payload.cardId, oldPlayer.locationsIds) }; break;
-      case Area.DISCARD_PILE: newPlayer = { ...oldPlayer, discardPileIds: fromUtil.removed (payload.payload.cardId, oldPlayer.discardPileIds) }; break;
-      case Area.PLOT_DECK: newPlayer = { ...oldPlayer, plotDeckIds: fromUtil.removed (payload.payload.cardId, oldPlayer.plotDeckIds) }; break;
-      case Area.USED_PLOT_PILE: newPlayer = { ...oldPlayer, usedPlotPileIds: fromUtil.removed (payload.payload.cardId, oldPlayer.usedPlotPileIds) }; break;
-      case Area.DEAD_PILE: newPlayer = { ...oldPlayer, deadPileIds: fromUtil.removed (payload.payload.cardId, oldPlayer.deadPileIds) }; break;
-      case Area.REVEALED_PLOT:
+      case AngArea.Hand: newPlayer = { ...oldPlayer, handIds: fromUtil.removed (payload.payload.cardId, oldPlayer.handIds) }; break;
+      case AngArea.Characters: newPlayer = { ...oldPlayer, charactersIds: fromUtil.removed (payload.payload.cardId, oldPlayer.charactersIds) }; break;
+      case AngArea.Locations: newPlayer = { ...oldPlayer, locationsIds: fromUtil.removed (payload.payload.cardId, oldPlayer.locationsIds) }; break;
+      case AngArea.DiscardPile: newPlayer = { ...oldPlayer, discardPileIds: fromUtil.removed (payload.payload.cardId, oldPlayer.discardPileIds) }; break;
+      case AngArea.PlotDeck: newPlayer = { ...oldPlayer, plotDeckIds: fromUtil.removed (payload.payload.cardId, oldPlayer.plotDeckIds) }; break;
+      case AngArea.UsedPlotPile: newPlayer = { ...oldPlayer, usedPlotPileIds: fromUtil.removed (payload.payload.cardId, oldPlayer.usedPlotPileIds) }; break;
+      case AngArea.DeadPile: newPlayer = { ...oldPlayer, deadPileIds: fromUtil.removed (payload.payload.cardId, oldPlayer.deadPileIds) }; break;
+      case AngArea.RevealedPlot:
         if (oldPlayer.revealedPlotId == payload.payload.cardId) {
           newPlayer = { ...oldPlayer, revealedPlotId: null }; break;
         } // if
@@ -168,14 +168,14 @@ export const agotGameReducer = createReducer (
     let oldPlayer: Player = getPlayer (payload.payload.toPlayer, state);
     let newPlayer: Player;
     switch (payload.payload.toArea) {
-      case Area.HAND: newPlayer = { ...oldPlayer, handIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.handIds) }; break;
-      case Area.CHARACTERS: newPlayer = { ...oldPlayer, charactersIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.charactersIds) }; break;
-      case Area.LOCATIONS: newPlayer = { ...oldPlayer, locationsIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.locationsIds) }; break;
-      case Area.DISCARD_PILE: newPlayer = { ...oldPlayer, discardPileIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.discardPileIds) }; break;
-      case Area.PLOT_DECK: newPlayer = { ...oldPlayer, plotDeckIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.plotDeckIds) }; break;
-      case Area.USED_PLOT_PILE: newPlayer = { ...oldPlayer, usedPlotPileIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.usedPlotPileIds) }; break;
-      case Area.DEAD_PILE: newPlayer = { ...oldPlayer, deadPileIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.deadPileIds) }; break;
-      case Area.REVEALED_PLOT:
+      case AngArea.Hand: newPlayer = { ...oldPlayer, handIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.handIds) }; break;
+      case AngArea.Characters: newPlayer = { ...oldPlayer, charactersIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.charactersIds) }; break;
+      case AngArea.Locations: newPlayer = { ...oldPlayer, locationsIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.locationsIds) }; break;
+      case AngArea.DiscardPile: newPlayer = { ...oldPlayer, discardPileIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.discardPileIds) }; break;
+      case AngArea.PlotDeck: newPlayer = { ...oldPlayer, plotDeckIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.plotDeckIds) }; break;
+      case AngArea.UsedPlotPile: newPlayer = { ...oldPlayer, usedPlotPileIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.usedPlotPileIds) }; break;
+      case AngArea.DeadPile: newPlayer = { ...oldPlayer, deadPileIds: fromUtil.pushed (payload.payload.cardId, oldPlayer.deadPileIds) }; break;
+      case AngArea.RevealedPlot:
       if (!oldPlayer.revealedPlotId) {
         newPlayer = { ...oldPlayer, revealedPlotId: payload.payload.cardId }; break;
       } // if

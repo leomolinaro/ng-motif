@@ -32,7 +32,8 @@ const agotHomeReducer = createReducer (
   on (actions.gamesGetSuccess, (state, { games }) => ({ ...state, games: games, loading: false, loaded: true })),
   on (actions.gameNew, (state) => ({ ...state, loading: true, loaded: false })),
   on (actions.gameNewFailure, (state) => ({ ...state, loading: false, loaded: false })),
-  on (actions.gameNewSuccess, (state, { game }) => ({ ...state, loading: false, loaded: true, games: fromUtil.pushed (game, state.games) }))
+  on (actions.gameNewSuccess, (state, { game }) => ({ ...state, loading: false, loaded: true, games: fromUtil.pushed (game, state.games) })),
+  on (actions.gameRemoveSuccess, (state, { gameId }) => ({ ...state, games: fromUtil.removedIf (g => g.id == gameId, state.games) }))
 )
 
 export function reducer (state: State | undefined, action: Action) {
