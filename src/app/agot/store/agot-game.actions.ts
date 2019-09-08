@@ -32,7 +32,7 @@ export const gameStartFailure = createAction ("[Agot Game Page] Game Start Failu
 export const requestsGet = createAction ("[Agot Game Page] Requests Get", props<{ gameId: number }> ());
 export const requestsGetSuccess = createAction ("[Agot Game Page] Requests Get Success", props<{ requests: AAgotRequest[] }> ());
 export const requestsGetFailure = createAction ("[Agot Game Page] Requests Get Failure", props<{ error: any }> ());
-export const requestRemove = createAction ("[Agot Game Page] Request Remove", props<{ request: AAgotRequest }> ());
+export const requestRemove = createAction ("[Agot Game Page] Request Remove", props<{ playerId: string }> ());
 export const requestsReset = createAction ("[Agot Game Page] Requests Reset");
 
 export const requestsSubscription = createAction ("[Agot Game Page] Requests Subscription", props<{ gameId: number }> ());
@@ -41,4 +41,6 @@ export const requestsNotification = createAction ("[Agot Game Page] Requests Not
 export const changesSubscription = createAction ("[Agot Game Page] Changes Subscription", props<{ gameId: number }> ());
 export const changesUnsubscription = createAction ("[Agot Game Page] Changes Unsubscription", props<{ gameId: number }> ());
 
-export const actionChoice = createAction ("[Agot Game Page] Action Choice", props<{ choice: AgotChoiceInput, request: AAgotRequest, gameId: number }> ());
+export const actionChoice = createAction ("[Agot Game Page] Action Choice", props<{ choice: AgotChoiceInput, playerId: string, gameId: number }> ());
+export const actionChoiceSuccess = createAction ("[Agot Game Page] Action Choice Success");
+export const actionChoiceFailure = createAction ("[Agot Game Page] Action Choice Failure", props<{ error: any }> ());

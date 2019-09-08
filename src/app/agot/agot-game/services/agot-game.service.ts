@@ -41,7 +41,7 @@ export class AgotGameService {
       const choicesByCard: { [cardId: number]: AgotChoiceWrapper[] } = {};
       const snackBarRequests: SnackBarRequest[] = [];
       requests.forEach (request => {
-        console.log (request);
+        // console.log (request);
         const snackBarRequest: SnackBarRequest = {
           instruction: request.instruction,
           getChoices: []
@@ -118,7 +118,7 @@ export class AgotGameService {
     ).subscribe (gameId => {
       this.store.dispatch (fromGameActions.actionChoice ({
         choice: choiceInput,
-        request: request,
+        playerId: request.player.id,
         gameId: gameId
       }))
     });

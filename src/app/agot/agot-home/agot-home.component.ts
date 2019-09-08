@@ -7,6 +7,8 @@ import * as fromAgot from '../store';
 import { Store } from '@ngrx/store';
 import { MotifComponent } from './../../shared/components/motif.component';
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
+import * as decks from '../agot-test/decks/agot-core-decks';
 
 @Component({
   selector: 'app-agot-home',
@@ -32,7 +34,12 @@ export class AgotHomeComponent extends MotifComponent implements OnInit {
     this.store.dispatch (fromAgotHome.gameNew ({
       gameName: "Game 1",
       inputPlayers: [
-        getDemoTyrellPlayer ("leo", "Leo"),
+        {
+          id: "leo",
+          name: "Leo",
+          ...decks.greyjoyDeck ()
+        },
+        // getDemoTyrellPlayer ("leo", "Leo"),
         getDemoThenightswatchPlayer ("fede", "Fede")
       ] // inputPlayers
     })); // dispatch
@@ -46,6 +53,11 @@ export class AgotHomeComponent extends MotifComponent implements OnInit {
     event.stopPropagation ();
     this.store.dispatch (fromAgotHome.gameRemove ({ gameId: gameId }));
   } // removeGame
+
+  removeAllGames () {
+    this.store.select (fromAgot.getHomeGames).pipe (take (1))
+    .subscribe (games => games.forEach (game => this.store.dispatch (fromAgotHome.gameRemove ({ gameId: game.id }))));
+  } // removeAllGames
 
   async launchTests () {
     this.testService.launchTests ();

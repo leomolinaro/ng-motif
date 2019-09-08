@@ -37,6 +37,7 @@ export const getCardsByIds = (cardIds: number[]) => createSelector (getCardMap, 
 export const getPlayerById = (playerId: string) => createSelector (getGame, game => game.playerMap[playerId]);
 export const getPlayerIds = createSelector (getGame, game => game.playerIds);
 export const getFaction = (playerId: string) => createSelector (getPlayerById (playerId), getCardMap, (player, cardMap) => player ? cardMap[player.factionId]: null);
+export const getFactionPower = (playerId: string) => createSelector (getFaction (playerId), (faction) => faction.power);
 export const getAgenda = (playerId: string) => createSelector (getPlayerById (playerId), getCardMap, (player, cardMap) => player ? cardMap[player.agendaId]: null);
 export const getRevealedPlot = (playerId: string) => createSelector (getPlayerById (playerId), getCardMap, (player, cardMap) => player ? cardMap[player.revealedPlotId]: null);
 export const getHand = (playerId: string) => createSelector (getPlayerById (playerId), getCardMap, (player, cardMap) => player ? player.handIds.map(handId => cardMap[handId]) : []);

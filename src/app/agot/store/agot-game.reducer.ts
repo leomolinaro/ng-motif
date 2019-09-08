@@ -141,7 +141,7 @@ export const agotGameReducer = createReducer (
     requestsLoaded: false, requestsLoading: false
   })),
   on (actions.requestRemove, (state, payload) => ({ ...state,
-    requests: fromUtil.removed (payload.request, state.requests)
+    requests: fromUtil.removedIf (r => r.player.id == payload.playerId, state.requests)
   })),
   on (actions.requestsReset, (state) => ({ ...state, requests: initialState.requests })),
   on (actions.removeCard, (state, payload) => {

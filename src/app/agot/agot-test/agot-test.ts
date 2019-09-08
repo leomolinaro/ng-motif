@@ -1,182 +1,166 @@
-import { TypedAction } from '@ngrx/store/src/models';
+import { DefaultProjectorFn } from '@ngrx/store/src/selector';
+import { AgotTestPlayer } from './agot-test-player';
+import { TypedAction, ActionCreator } from '@ngrx/store/src/models';
 import { Actions, ofType } from '@ngrx/effects';
-import { AgotGameService } from './../agot-game/services/agot-game.service';
-import { AgotGameEffects } from './../store/agot-game.effects';
-import { take, filter, map, share, reduce, toArray } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
+import { take, filter, map, share, reduce, toArray, switchMap, debounceTime, tap, delay, concatMap, finalize } from 'rxjs/operators';
+import { combineLatest, race, forkJoin, interval, Observable, concat, of, empty, throwError } from 'rxjs';
 import { AgotHomeEffects } from './../store/agot-home.effects';
-import { InputPlayerInput, AgotChoiceInput, AgotChoiceType, AgotRequestType, AgotCardSeed, PlotCard, AngPhase, DrawCard_AngDrawCard, AngArea, AddCardData, AgotReduxActionType } from './../../graphql-types';
-import { Store } from '@ngrx/store';
+import { InputPlayerInput, AgotChoiceInput, AgotChoiceType, AgotRequestType, AgotCardSeed, PlotCard, AngPhase, DrawCard_AngDrawCard, AngArea, AddCardData, AgotReduxActionType, AgotChoiceCardAction, AngFaction } from './../../graphql-types';
+import { Store, Action, MemoizedSelector } from '@ngrx/store';
 import { Router, NavigationEnd } from '@angular/router';
 
 import * as fromAgot from '../store';
 import * as fromAgotHome from '../store/agot-home.actions';
 import * as fromAgotGame from '../store/agot-game.actions';
 
-const WAITING_MILLISECONDS = 1000;
+const WAITING_MILLISECONDS = 200;
 
 export abstract class AgotTest {
 
   constructor (
     private store: Store<any>,
     public actions$: Actions,
-    private router: Router,
-    private gameService: AgotGameService
+    private router: Router
   ) {}
 
-  async abstract execute ();
+  async abstract execute (): Promise<boolean>;
 
-  async newGame (gameName: string, inputPlayers: InputPlayerInput[]) {
-    const promise = this.actions$.pipe (
-      ofType (fromAgotHome.gameNewSuccess),
-      take (1)
+  private waitForAction$<T extends string, P> (actionCreator: ActionCreator<T, (props: P) => P & TypedAction<T>>): Observable<P> {
+    return forkJoin (
+      this.actions$.pipe (
+        ofType (actionCreator),
+        take (1),
+      ),
+      this.wait$ ()
+    ).pipe (
+      map (([toReturn]) => toReturn)
+    );
+  } // waitForAction$
+
+  private wait$ () {
+    return interval (WAITING_MILLISECONDS).pipe (take (1));
+  } // wait$
+
+  async newGame (
+    gameName: string,
+    leoDeck: { faction: AngFaction, deck: { card: AgotCardSeed, quantity: number }[] },
+    fedeDeck: { faction: AngFaction, deck: { card: AgotCardSeed, quantity: number }[] }
+  ) {
+    this.store.dispatch (fromAgotHome.gameNew ({
+      gameName,
+      inputPlayers: [
+        {
+          id: "leo",
+          name: "Leo",
+          ...leoDeck
+        },
+        {
+          id: "fede",
+          name: "Fede",
+          ...fedeDeck
+        }
+      ]
+    }));
+    return this.waitForAction$ (fromAgotHome.gameNewSuccess).pipe (
+      map (a => ({
+        game: a.game,
+        leo: new AgotTestPlayer (a.game.allPlayers[0].id, this),
+        fede: new AgotTestPlayer (a.game.allPlayers[1].id, this)
+      })),
     ).toPromise ();
-    this.store.dispatch (fromAgotHome.gameNew ({ gameName, inputPlayers }));
-    const [toReturn] = await Promise.all ([promise, this.wait ()]);
-    const game = toReturn.game;
-    const p1 = new AgotTestPlayer (game.allPlayers[0].id, this);
-    const p2 = new AgotTestPlayer (game.allPlayers[1].id, this);
-    return { game, p1, p2 };
   } // newGame
 
+  private async goTo (commands: any[]) {
+    if (this.router.url == ("/" + commands.join ("/"))) {
+      return;
+    } else {
+      this.router.navigate (commands);
+      return forkJoin (
+        this.router.events.pipe (
+          filter (e => e instanceof NavigationEnd),
+          take (1)
+        ),
+        this.wait$ ()
+      ).pipe (
+        map (([toReturn]) => toReturn)
+      ).toPromise ();
+    } // if - else
+  } // goTo
+
   async goToGamePage (gameId: number) {
-    const promise = this.router.events.pipe (
-      filter (e => e instanceof NavigationEnd),
-      take (1)
-    ).toPromise ();
-    this.router.navigate (["agot", "game", gameId]);
-    await Promise.all ([promise, this.wait ()]);
+    return this.goTo (["agot", "game", gameId]);
   } // goToGamePage
 
+  async goToHomePage () {
+    return this.goTo (["agot", "home"]);
+  } // goToHomePage
+
   async startGame (gameId: number) {
-    const promise = this.actions$.pipe (
-      ofType (fromAgotGame.gameStartSuccess),
-      take (1)
-    ).toPromise ();
     this.store.dispatch (fromAgotGame.gameStart ({ gameId }));
-    await Promise.all ([promise, this.wait ()]);
+    return this.waitForAction$ (fromAgotGame.gameStartSuccess)
+    .toPromise ();
   } // startGame
 
-  async wait () {
-    return new Promise<void> ((resolve, reject) => {
-      setTimeout (() => resolve (), WAITING_MILLISECONDS);
-    });
-  } // wait
+  pass$ () {
+    return this.gameState$ ().pipe (
+      tap (gameState => {
+        this.store.dispatch (fromAgotGame.actionChoice ({
+          choice: {
+            choiceType: AgotChoiceType.Pass,
+            requestType: gameState.requests[0].type
+          },
+          playerId: gameState.requests[0].player.id,
+          gameId: gameState.game.id
+        }));
+      }),
+      switchMap (() => this.waitForAction$ (fromAgotGame.actionChoiceSuccess)),
+      // tap (x => console.log (x))
+    );
+  } // pass$
 
-  async chooseAction (choiceInput: AgotChoiceInput, playerId: string) {
-    const promise = this.actions$.pipe (
-      ofType (fromAgotGame.requestRemove),
-      take (1)
+  chooseActionOrPass$ (choiceInput: AgotChoiceInput, playerId: string): Observable<void> {
+    // console.log ("chooseActionOrPass");
+    return this.gameState$ ().pipe (
+      tap (gameState => {
+        this.store.dispatch (fromAgotGame.actionChoice ({
+          choice: choiceInput,
+          playerId: playerId,
+          gameId: gameState.game.id
+        }));
+      }),
+      switchMap (() => race (
+        this.waitForAction$ (fromAgotGame.actionChoiceSuccess),
+        this.waitForAction$ (fromAgotGame.actionChoiceFailure)
+      )),
+      // tap (x => console.log (x)),
+      switchMap ((x: any) => {
+        if (x.error) {
+          return this.pass$ ().pipe (
+            concatMap (() => this.chooseActionOrPass$ (choiceInput, playerId))
+          );
+        } else {
+          return empty ();
+        }
+      })
+    );
+  } // chooseActionOrPass$
+
+  public gameState$ () {
+    return this.store.select (fromAgot.getGameState).pipe (take (1));
+  } // gameState$
+
+  async assertsEqual<T> (selector: MemoizedSelector<object, T, DefaultProjectorFn<T>>, value: T) {
+    return this.store.select (selector).pipe (
+      take (1),
+      switchMap (storeValue => {
+        if (storeValue == value) {
+          return of (true);
+        } else {
+          return throwError ("Check failed");
+        } // if - else
+      }) // switchMap
     ).toPromise ();
-
-    combineLatest (
-      this.store.select (fromAgot.getGame),
-      this.store.select (fromAgot.getRequests)
-    ).pipe (
-      take (1)
-    ).subscribe (([game, requests]) => {
-      this.store.dispatch (fromAgotGame.actionChoice ({
-        choice: choiceInput,
-        request: requests.find (request => request.player.id == playerId),
-        gameId: game.id
-      }));
-    });
-
-    await Promise.all ([promise, this.wait ()]);
-  } // chooseAction
-
-  async getGameState () {
-    return this.store.select (fromAgot.getGameState).pipe (take (1)).toPromise ();
-  } // getGameState
+  } // assertsEqual
 
 } // AgotTest
 
-export class AgotTestPlayer {
-  
-  constructor (
-    private playerId: string,
-    private test: AgotTest
-  ) {}
-
-  async rejectMulligan () {
-    await this.test.chooseAction ({
-      choiceType: AgotChoiceType.YesNo,
-      requestType: AgotRequestType.YesNo,
-      yesNoAnswer: false
-    }, this.playerId);
-  } // rejectMulligan
-
-  async acceptMulligan () {
-    await this.test.chooseAction ({
-      choiceType: AgotChoiceType.YesNo,
-      requestType: AgotRequestType.YesNo,
-      yesNoAnswer: true
-    }, this.playerId);
-  } // acceptMulligan
-
-  async getPlayer () {
-    const gameState = await this.test.getGameState ();
-    return gameState.game.playerMap[this.playerId];
-  } // getPlayer
-
-  async getCardFromPlotDeck (seed: AgotCardSeed) {
-    const gameState = await this.test.getGameState ();
-    const player = gameState.game.playerMap[this.playerId];
-    return player.plotDeckIds
-    .map (cardId => gameState.game.cardMap[cardId] as PlotCard)
-    .find (card => card.seed == seed);
-  } // getCardFromPlotDeck
-
-  async choosePlot (plotCard: PlotCard) {
-    await this.test.chooseAction ({
-      choiceType: AgotChoiceType.SelectCard,
-      requestType: AgotRequestType.SelectPlotToReveal,
-      cardId: plotCard.id
-    }, this.playerId);
-  } // choosePlot
-
-  async selectFirstPlayer (testPlayer: AgotTestPlayer) {
-    await this.test.chooseAction ({
-      choiceType: AgotChoiceType.SelectPlayer,
-      requestType: AgotRequestType.SelectFirstPlayer,
-      player: testPlayer.playerId
-    }, this.playerId);
-  } // selectFirstPlayer
-
-  async endPlotPhase () { await this.endPhase (AngPhase.Plot); }
-  async endDrawPhase () { await this.endPhase (AngPhase.Draw); }
-  async endMarshallingPhase () { await this.endPhase (AngPhase.Marshalling); }
-  async endChallengePhase () { await this.endPhase (AngPhase.Challenges); }
-  async endDominancePhase () { await this.endPhase (AngPhase.Dominance); }
-  async endStandingPhase () { await this.endPhase (AngPhase.Standing); }
-  async endTaxationPhase () { await this.endPhase (AngPhase.Taxation); }
-
-  async endPhase (phase: AngPhase) {
-    await this.test.chooseAction ({
-      choiceType: AgotChoiceType.Continue,
-      requestType: AgotRequestType.Continue,
-      actionLabel: "Continue"
-    }, this.playerId);
-  } // endPhase
-
-  async draw (...seeds: AgotCardSeed[]) {
-
-    const promise = this.test.actions$.pipe (
-      ofType (fromAgotGame.addCard),
-      filter (addCardAction => addCardAction.payload.toArea == AngArea.Hand),
-      map (addCardAction => addCardAction.payload.cardId as number),
-      take (seeds.length),
-      toArray ()
-    ).toPromise ();
-
-    const [drawCardIds] = await Promise.all ([promise, this.test.chooseAction ({
-      choiceType: AgotChoiceType.Draw,
-      requestType: AgotRequestType.Draw,
-      drawCardSeeds: seeds
-    }, this.playerId)]);
-
-    const s = await this.test.getGameState ();
-    return drawCardIds.map (cardId => s.game.cardMap[cardId] as DrawCard_AngDrawCard);
-  } // draw
-
-} // AgotTestPlayer

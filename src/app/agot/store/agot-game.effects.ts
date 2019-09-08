@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { exhaustMap, tap, map, catchError, concatMap, takeUntil } from 'rxjs/operators';
+import { exhaustMap, tap, map, catchError, concatMap, takeUntil, switchMap } from 'rxjs/operators';
 import { AgotApiService } from './../api/agot-api.service';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
@@ -14,8 +14,7 @@ export class AgotGameEffects {
   constructor(
     private actions$: Actions,
     private api: AgotApiService
-  ) {
-  }
+  ) {}
 
   loadGame$ = createEffect (() => this.actions$.pipe (
     ofType (actions.gameGet),
@@ -72,15 +71,23 @@ export class AgotGameEffects {
 
   chooseAction$ = createEffect (() => this.actions$.pipe (
     ofType (actions.actionChoice),
-    exhaustMap ((action) => this.api.chooseAction (action.choice, action.request.player.id, action.gameId).pipe(
-      map (() => actions.requestRemove ({ request: action.request })),
-      // catchError (error => of (actions.gameStartFailure ({ error })))
+    tap (action => console.log (action.choice, action.playerId)),
+    switchMap ((action) => this.api.chooseAction (action.choice, action.playerId, action.gameId).pipe (
+      concatMap (() => [
+        actions.actionChoiceSuccess (),
+        actions.requestRemove ({ playerId: action.playerId })
+      ]),
+      catchError (error => {
+        console.log (error);
+        return of (actions.actionChoiceFailure ({ error }));
+      })
     ))
   ));
 
   subscribeRequests$ = createEffect (() => this.actions$.pipe (
     ofType (actions.requestsSubscription),
     exhaustMap ((action) => this.api.subscribeToRequests (action.gameId).pipe (
+      tap (requests => requests.forEach (request => console.log (request))),
       map (requests => actions.requestsNotification ({ requests })),
       takeUntil (this.actions$.pipe (
         ofType (actions.requestsUnsubscription)

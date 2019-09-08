@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType, createEffect } from '@ngrx/effects';
 import * as actions from './agot-home.actions';
 import { of } from 'rxjs';
-import { mergeMap, map, exhaustMap, catchError, tap, switchMap } from 'rxjs/operators';
+import { mergeMap, map, exhaustMap, catchError, tap, switchMap, concatMap } from 'rxjs/operators';
 
 @Injectable ()
 export class AgotHomeEffects {
@@ -38,7 +38,7 @@ export class AgotHomeEffects {
 
   removeGame$ = createEffect (() => this.actions$.pipe (
     ofType (actions.gameRemove),
-    exhaustMap ((action) => this.api.removeGame (action.gameId)
+    concatMap ((action) => this.api.removeGame (action.gameId)
       .pipe (
         map (gameId => actions.gameRemoveSuccess ({ gameId: gameId })),
         catchError (error => of (actions.gameRemoveFailure ({ error })))
