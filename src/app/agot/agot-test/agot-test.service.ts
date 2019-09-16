@@ -1,3 +1,4 @@
+import { T003_ANobleCause } from './list/agot-test.003_ANobleCause';
 import { T047_Melisandre } from './list/agot-test.047_Melisandre';
 import { T046_MasterCressen } from './list/agot-test.046_MasterCressen';
 import { T002_AFeastForCrows } from './list/agot-test.002_AFeastForCrows';
@@ -23,9 +24,11 @@ export class AgotTestService {
     const deps: [Store<any>, Actions<Action>, Router] = [this.store, this.actions$, this.router];
     // await new T001_AClashOfKings (...deps).execute ();
     // await new T002_AFeastForCrows (...deps).execute ();
+    // await new T003_ANobleCause (...deps).execute ();
     // await new T005_AStormOfSwords (...deps).execute ();
     // await new T046_MasterCressen (...deps).execute ();
     await new T047_Melisandre (...deps).execute ();
+
     // await new T188_GardenCaretaker (...deps).execute ();
     console.log ("Test successfull!");
   } // launchTests

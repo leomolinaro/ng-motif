@@ -2,6 +2,8 @@ import { AgotCardSeed as s, AngIcon } from './../../../graphql-types';
 import { AgotTest } from '../agot-test';
 import * as decks from '../decks/agot-core-decks';
 
+import * as fromAgot from '../../store';
+
 export class T047_Melisandre extends AgotTest {
   
   async execute () {
@@ -30,17 +32,17 @@ export class T047_Melisandre extends AgotTest {
     await fede.endDrawPhase ();
     await fede.marshall (burnedMen1);
     await fede.marshall (burnedMen2);
-    // await leo.marshall (dragonstonePort1);
-    // await leo.marshall (dragonstonePort2);
-    // await leo.marshall (dragonstonePort3);
-    // await leo.action (dragonstonePort1);
-    // await leo.action (dragonstonePort2);
-    // await leo.action (dragonstonePort3);
-    // await leo.marshall (melisandre);
+    await leo.marshall (melisandre);
+    await leo.reaction (melisandre);
+    await leo.chooseTarget (burnedMen1);
+    await this.assertsEqual (fromAgot.isKneeling (burnedMen1.id), true);
+    await leo.marshall (dragonstonePort1);
     // await leo.marshall (fieryFollowers);
     // await fede.marshallAttachment (nobleLineage, burnedMen);
+
+      // TODO test fiery followers next turn
 
     return true;
   } // execute
 
-} // T005_AStormOfSwordsCore
+} // T047_Melisandre

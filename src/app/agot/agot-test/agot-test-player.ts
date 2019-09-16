@@ -116,6 +116,15 @@ export class AgotTestPlayer {
     return drawCardIds.map (cardId => s.game.cardMap[cardId] as DrawCard_AngDrawCard);
   } // draw
 
+  async setup (card: Card) {
+    return this.test.chooseActionOrPass$ ({
+      choiceType: AgotChoiceType.SelectCardAction,
+      requestType: AgotRequestType.SelectCardToSetup,
+      cardId: card.id,
+      cardAction: AgotChoiceCardAction.Setup
+    }, this.playerId).toPromise ();
+  } // setup
+
   async marshall (card: Card) {
     return this.test.chooseActionOrPass$ ({
       choiceType: AgotChoiceType.SelectCardAction,
@@ -174,6 +183,14 @@ export class AgotTestPlayer {
       cardId: card.id
     }, this.playerId).toPromise ();
   } // reaction
+
+  async chooseTarget (card: Card) {
+    return this.test.chooseActionOrPass$ ({
+      choiceType: AgotChoiceType.SelectCard,
+      requestType: AgotRequestType.ChooseCard,
+      cardId: card.id
+    }, this.playerId).toPromise ();
+  } // chooseTarget
 
   async action (card: Card) {
     return this.test.chooseActionOrPass$ ({

@@ -74,16 +74,20 @@ export class AgotGameService {
           case AgotChoiceCardAction.Marshall: return "Marshall";
           case AgotChoiceCardAction.Play: return "Play";
           case AgotChoiceCardAction.Reaction: return "Reaction";
-        }
-      }
+          case AgotChoiceCardAction.Setup: return "Setup";
+          case AgotChoiceCardAction.WhenRevealed: return "When Revealed";
+          default: return "---";
+        } // switch
+      } // case
       case "PASS": return "Pass";
       case "SELECT_ICON": {
         switch (choice.icon) {
           case "INTRIGUE": return "Intrigue";
           case "POWER": return "Power";
           case "MILITARY": return "Military";
-        }
-      };
+          default: return "---";
+        } // switch
+      } // case
       case "CONTINUE": return choice.actionLabel;
       case "DRAW": return "Draw";
       case "SELECT_PLAYER": return this.getPlayerNameById (choice.player);
@@ -91,10 +95,11 @@ export class AgotGameService {
         switch (choice.yesNoAnswer) {
           case true: return "Yes";
           case false: return "No";
-        }
-      }
-    }
-    return "---";
+          default: return "---";
+        } // switch
+      } // case
+      default: return "---";
+    } // switch
   } // getLabelByChoice
 
   private getPlayerNameById (playerId: string) {

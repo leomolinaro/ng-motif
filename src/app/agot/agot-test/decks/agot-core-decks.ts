@@ -34,6 +34,7 @@ export function baratheonDeck () {
 
       { card: s.SuperiorClaimCore, quantity: 3 },
       { card: s.TheIronThroneCore, quantity: 3 },
+      { card: s.TheKingsroadCore, quantity: 3 },
     ]
   };
 }

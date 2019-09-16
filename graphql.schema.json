@@ -145,18 +145,18 @@
             "deprecationReason": null
           },
           {
-            "name": "round",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "firstPlayer",
             "description": null,
             "args": [],
             "type": { "kind": "OBJECT", "name": "AgotPlayer", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "round",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -349,14 +349,6 @@
             "deprecationReason": null
           },
           {
-            "name": "revealedPlot",
-            "description": null,
-            "args": [],
-            "type": { "kind": "OBJECT", "name": "PlotCard", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "deadPile",
             "description": null,
             "args": [],
@@ -369,6 +361,14 @@
                 "ofType": null
               }
             },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "revealedPlot",
+            "description": null,
+            "args": [],
+            "type": { "kind": "OBJECT", "name": "PlotCard", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -409,14 +409,6 @@
             "deprecationReason": null
           },
           {
-            "name": "name",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "drawDeckEmpty",
             "description": null,
             "args": [],
@@ -425,6 +417,14 @@
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
             },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -445,14 +445,6 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "plotDeck",
             "description": null,
             "args": [],
@@ -461,6 +453,14 @@
               "name": null,
               "ofType": { "kind": "OBJECT", "name": "PlotCard", "ofType": null }
             },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -552,18 +552,6 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "power",
             "description": null,
             "args": [],
@@ -571,6 +559,18 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8342,18 +8342,6 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "power",
             "description": null,
             "args": [],
@@ -8361,6 +8349,18 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8441,18 +8441,6 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "power",
             "description": null,
             "args": [],
@@ -8460,6 +8448,18 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8516,18 +8516,6 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "power",
             "description": null,
             "args": [],
@@ -8535,6 +8523,18 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8607,18 +8607,6 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "power",
             "description": null,
             "args": [],
@@ -8626,6 +8614,18 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8682,18 +8682,6 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "power",
             "description": null,
             "args": [],
@@ -8701,6 +8689,18 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8854,13 +8854,13 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
+            "name": "power",
             "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
+              "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8878,13 +8878,13 @@
             "deprecationReason": null
           },
           {
-            "name": "power",
+            "name": "id",
             "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+              "ofType": { "kind": "SCALAR", "name": "Long", "ofType": null }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8971,6 +8971,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "SELECT_CARD_TO_SETUP",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SELECT_ACTION_TO_PERFORM",
             "description": null,
             "isDeprecated": false,
@@ -9026,6 +9032,12 @@
           },
           {
             "name": "SELECT_PLOT_TO_REVEAL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELECT_WHEN_REVEALED_TO_PERFORM",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -9303,6 +9315,18 @@
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "SETUP",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WHEN_REVEALED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -9539,7 +9563,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "id",
+            "name": "name",
             "description": null,
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "defaultValue": null
@@ -9548,12 +9572,6 @@
             "name": "faction",
             "description": null,
             "type": { "kind": "ENUM", "name": "AngFaction", "ofType": null },
-            "defaultValue": null
-          },
-          {
-            "name": "name",
-            "description": null,
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "defaultValue": null
           },
           {
@@ -9568,6 +9586,12 @@
                 "ofType": null
               }
             },
+            "defaultValue": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "defaultValue": null
           }
         ],
@@ -9680,39 +9704,15 @@
             "defaultValue": null
           },
           {
-            "name": "drawCardSeeds",
+            "name": "icon",
             "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "AgotCardSeed",
-                "ofType": null
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "requestType",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "AgotRequestType",
-              "ofType": null
-            },
+            "type": { "kind": "ENUM", "name": "AngIcon", "ofType": null },
             "defaultValue": null
           },
           {
             "name": "player",
             "description": null,
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-            "defaultValue": null
-          },
-          {
-            "name": "yesNoAnswer",
-            "description": null,
-            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
             "defaultValue": null
           },
           {
@@ -9732,6 +9732,12 @@
             "defaultValue": null
           },
           {
+            "name": "yesNoAnswer",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null },
+            "defaultValue": null
+          },
+          {
             "name": "cardAction",
             "description": null,
             "type": {
@@ -9742,9 +9748,27 @@
             "defaultValue": null
           },
           {
-            "name": "icon",
+            "name": "requestType",
             "description": null,
-            "type": { "kind": "ENUM", "name": "AngIcon", "ofType": null },
+            "type": {
+              "kind": "ENUM",
+              "name": "AgotRequestType",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "drawCardSeeds",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "AgotCardSeed",
+                "ofType": null
+              }
+            },
             "defaultValue": null
           }
         ],

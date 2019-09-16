@@ -33,6 +33,7 @@ export const getGameStep = createSelector (getGame, game => game.step);
 export const getGameLog = createSelector (getGame, game => game.log);
 export const getCardMap = createSelector (getGame, game => game.cardMap);
 // export const getCardById = (cardId: number) => createSelector (getCardMap, cardMap => cardMap[cardId]);
+export const isKneeling = (cardId: number) => createSelector (getCardMap, cardMap => cardMap[cardId].kneeling);
 export const getCardsByIds = (cardIds: number[]) => createSelector (getCardMap, cardMap => cardIds ? cardIds.map(cardId => cardMap[cardId]) : []);
 export const getPlayerById = (playerId: string) => createSelector (getGame, game => game.playerMap[playerId]);
 export const getPlayerIds = createSelector (getGame, game => game.playerIds);
